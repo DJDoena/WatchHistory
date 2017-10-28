@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DoenaSoft.WatchHistory.Main.Implementations"
         mc:Ignorable="d"
-        Title="{Binding Title, Mode=OneTime}" Height="718" Width="1024" WindowStartupLocation="CenterScreen" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO"
+        Title="{Binding Title, Mode=OneTime}" Height="900" Width="1200" WindowStartupLocation="CenterScreen" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO"
         FocusManager.FocusedElement="{Binding ElementName=FilterTextBox}">
     <DockPanel>
         <Menu DockPanel.Dock="Top">
@@ -57,14 +57,26 @@
                 </ListView.ContextMenu>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="File" Width="850" >
+                        <GridViewColumn Width="850">
+                            <GridViewColumnHeader Content="File"
+                                                  Command="{Binding SortCommand}" 
+                                                  CommandParameter="File" />
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}" Foreground="{Binding Color}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Last Watched" DisplayMemberBinding="{Binding LastWatched}" Width="100" />
+                        <GridViewColumn DisplayMemberBinding="{Binding LastWatched}" Width="100">
+                            <GridViewColumnHeader Content="Last Watched"
+                                                  Command="{Binding SortCommand}" 
+                                                  CommandParameter="LastWatched" />
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding CreationTime}" Width="100">
+                            <GridViewColumnHeader Content="Creation Time"
+                                                  Command="{Binding SortCommand}" 
+                                                  CommandParameter="CreationTime" />
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

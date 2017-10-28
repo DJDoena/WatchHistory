@@ -12,6 +12,8 @@ namespace DoenaSoft.WatchHistory.Data
 
         String LastWatched { get; }
 
+        String CreationTime { get; }
+
         Brush Color { get; }
     }
 }

@@ -27,6 +27,26 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         private event PropertyChangedEventHandler m_PropertyChanged;
 
+        private SortColumn m_SortColumn;
+
+        private Boolean SortAscending { get; set; }
+
+        private SortColumn SortColumn
+        {
+            get
+            {
+                return (m_SortColumn);
+            }
+            set
+            {
+                SortAscending = (value != m_SortColumn) ? true : (SortAscending == false);
+                
+                m_SortColumn = value;
+
+                RaisePropertyChanged(nameof(Entries));
+            }
+        }
+
         public MainViewModel(IMainModel model
             , IDataManager dataManager
             , IIOServices ioServices
@@ -38,6 +58,9 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             IOServices = ioServices;
             WindowFactory = windowFactory;
             UserName = userName;
+
+            m_SortColumn = SortColumn.File;
+            SortAscending = true;
         }
 
         #region INotifyPropertyChanged
@@ -111,7 +134,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             {
                 IEnumerable<FileEntry> modelEntries = Model.GetFiles();
 
-                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, UserName, DataManager, IOServices);
+                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, UserName, DataManager, IOServices, SortColumn, SortAscending);
 
                 return (viewModelEntries);
             }
@@ -134,6 +157,9 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         public ICommand PlayFileCommand
             => (new ParameterizedRelayCommand(PlayFile));
+
+        public ICommand SortCommand
+            => (new ParameterizedRelayCommand(Sort));
 
         #endregion
 
@@ -182,6 +208,11 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             {
                 Process.Start(selected.FileEntry.FullName);
             }
+        }
+
+        private void Sort(Object parameter)
+        {
+            SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (String)parameter));
         }
 
         private void ImportCollection()

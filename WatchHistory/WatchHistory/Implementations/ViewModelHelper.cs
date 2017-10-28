@@ -13,16 +13,78 @@ namespace DoenaSoft.WatchHistory.Implementations
         internal static ObservableCollection<IFileEntryViewModel> GetSortedEntries(IEnumerable<FileEntry> modelEntries
             , String userName
             , IDataManager dataManager
-            , IIOServices ioServices)
+            , IIOServices ioServices
+            , SortColumn sortColumn = SortColumn.File
+            , Boolean ascending = true)
         {
             List<FileEntryViewModel> viewModelEntries = modelEntries.Select(item => new FileEntryViewModel(item, userName, dataManager, ioServices)).ToList();
 
-            viewModelEntries.Sort(Compare);
+            viewModelEntries.Sort((left, right) => Compare(left, right, sortColumn, ascending, userName, dataManager));
 
             return (new ObservableCollection<IFileEntryViewModel>(viewModelEntries));
         }
 
         private static Int32 Compare(FileEntryViewModel left
+            , FileEntryViewModel right
+            , SortColumn sortColumn
+            , Boolean ascending
+            , String userName
+            , IDataManager dataManager)
+        {
+            Int32 compare = 0;
+
+            switch (sortColumn)
+            {
+                case (SortColumn.LastWatched):
+                    {
+                        compare = ascending
+                            ? CompareLastWatched(left, right, userName, dataManager)
+                            : CompareLastWatched(right, left, userName, dataManager);
+
+                        break;
+                    }
+                case (SortColumn.CreationTime):
+                    {
+                        compare = ascending
+                            ? CompareCreationTime(left, right, dataManager)
+                            : CompareCreationTime(right, left, dataManager);
+
+                        break;
+                    }
+            }
+
+            if (compare == 0)
+            {
+                compare = ascending ? CompareName(left, right) : CompareName(right, left);
+            }
+
+            return (compare);
+        }
+
+        private static Int32 CompareLastWatched(FileEntryViewModel left
+            , FileEntryViewModel right
+            , String userName
+            , IDataManager dataManager)
+        {
+            DateTime leftLastWatched = dataManager.GetLastWatched(left.FileEntry, userName);
+
+            DateTime rightLastWatched = dataManager.GetLastWatched(right.FileEntry, userName);
+
+            return (leftLastWatched.CompareTo(rightLastWatched));
+        }
+
+        private static Int32 CompareCreationTime(FileEntryViewModel left
+            , FileEntryViewModel right
+            , IDataManager dataManager)
+        {
+            DateTime leftCreationTime = left.FileEntry.GetCreationTime(dataManager);
+
+            DateTime rightCreationTime = right.FileEntry.GetCreationTime(dataManager);
+
+            return (leftCreationTime.CompareTo(rightCreationTime));
+        }
+
+        private static Int32 CompareName(FileEntryViewModel left
             , FileEntryViewModel right)
         {
             String leftName = PadName(left.Name);

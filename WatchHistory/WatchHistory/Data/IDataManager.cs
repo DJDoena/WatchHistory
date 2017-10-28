@@ -10,7 +10,7 @@ namespace DoenaSoft.WatchHistory.Data
         IEnumerable<String> RootFolders { get; set; }
 
         IEnumerable<String> FileExtensions { get; set; }
-        
+
         event EventHandler FilesChanged;
 
         IEnumerable<FileEntry> GetFiles();
@@ -33,6 +33,8 @@ namespace DoenaSoft.WatchHistory.Data
 
         void Suspend();
 
-        void Resume();        
+        void Resume();
+
+        DateTime GetCreationTime(FileEntry fileEntry);
     }
 }

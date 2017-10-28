@@ -45,7 +45,6 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Last Watched" DisplayMemberBinding="{Binding LastWatched}" Width="100" />
                 </GridView>
             </ListView.View>
         </ListView>

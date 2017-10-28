@@ -53,6 +53,7 @@
     <Compile Include="Ignore\Implementations\IgnoreWindow.xaml.cs">
       <DependentUpon>IgnoreWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Implementations\SortColumn.cs" />
     <Compile Include="Implementations\ViewModelHelper.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Main\Implementations\CollectionProcessor.cs" />

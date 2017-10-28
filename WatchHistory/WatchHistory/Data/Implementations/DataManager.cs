@@ -174,17 +174,28 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         {
             User user = TryGetUser(entry, userName);
 
-            DateTime lastWatched;
+            DateTime lastWatched = new DateTime(0);
+
             if (user?.Watches?.HasItems() == true)
             {
                 lastWatched = user.Watches.Max();
             }
-            else
-            {
-                lastWatched = new DateTime(0);
-            }
 
             return (lastWatched);
+        }
+
+        public DateTime GetCreationTime(FileEntry fileEntry)
+        {
+            IFileInfo fi = IOServices.GetFileInfo(fileEntry.FullName);
+
+            DateTime creationTime = new DateTime(0);
+
+            if (fi.Exists)
+            {
+                creationTime = fi.LastWriteTime;
+            }
+
+            return (creationTime);
         }
 
         public void SaveSettingsFile(String file)

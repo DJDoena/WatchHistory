@@ -15,6 +15,8 @@ namespace DoenaSoft.WatchHistory.Data
     {
         private User[] m_Users;
 
+        private Nullable<DateTime> m_CreationTime;
+
         [XmlElement]
         public String FullName { get; set; }
 
@@ -35,6 +37,16 @@ namespace DoenaSoft.WatchHistory.Data
         }
 
         public event EventHandler UsersChanged;
+
+        internal DateTime GetCreationTime(IDataManager dataManager)
+        {
+            if (m_CreationTime.HasValue == false)
+            {
+                m_CreationTime = dataManager.GetCreationTime(this);
+            }
+
+            return (m_CreationTime.Value);
+        }
     }
 
     public class User

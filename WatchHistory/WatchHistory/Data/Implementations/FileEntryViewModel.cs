@@ -113,6 +113,23 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
             }
         }
 
+        public String CreationTime
+        {
+            get
+            {
+                DateTime creationTime = FileEntry.GetCreationTime(DataManager);
+
+                String text = String.Empty;
+
+                if (creationTime.Ticks != 0)
+                {
+                    text = $"{creationTime.ToShortDateString()} {creationTime.ToShortTimeString()}";
+                }
+
+                return (text);
+            }
+        }
+
         public Brush Color
             => (IOServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red);            
 

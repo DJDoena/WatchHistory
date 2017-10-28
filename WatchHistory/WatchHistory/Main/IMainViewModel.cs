@@ -27,5 +27,7 @@ namespace DoenaSoft.WatchHistory.Main
         ICommand UndoIgnoreCommand { get; }
 
         ICommand PlayFileCommand { get; }
+
+        ICommand SortCommand { get; }
     }
 }
