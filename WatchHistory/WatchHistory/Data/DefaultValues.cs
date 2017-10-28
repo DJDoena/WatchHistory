@@ -19,7 +19,7 @@ namespace DoenaSoft.WatchHistory.Data
 
         public DefaultValues()
         {
-            Users = new[] { "default" };
+            Users = new[] { Constants.DefaultUser };
 
             FileExtensions = new[] { "avi", "mp4", "mkv" };
         }

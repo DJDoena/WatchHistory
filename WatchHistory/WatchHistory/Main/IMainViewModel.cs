@@ -25,5 +25,7 @@ namespace DoenaSoft.WatchHistory.Main
         ICommand ImportCollectionCommand { get; }
 
         ICommand UndoIgnoreCommand { get; }
+
+        ICommand PlayFileCommand { get; }
     }
 }

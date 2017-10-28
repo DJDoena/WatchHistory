@@ -54,6 +54,7 @@
       <DependentUpon>IgnoreWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Implementations\ViewModelHelper.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Main\Implementations\CollectionProcessor.cs" />
     <Compile Include="Settings\Implementations\SettingsListBoxItemViewModel.cs" />
     <Compile Include="SelectUser\ISelectUserViewModel.cs" />

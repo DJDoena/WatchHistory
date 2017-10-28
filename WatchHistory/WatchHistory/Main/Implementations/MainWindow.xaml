@@ -51,6 +51,8 @@
                                   Command="{Binding AddWatchedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}" />
                         <MenuItem Header="Ignore permanently"
                                   Command="{Binding IgnoreCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}" />
+                        <MenuItem Header="Play file"
+                                  Command="{Binding PlayFileCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.View>

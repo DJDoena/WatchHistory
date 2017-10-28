@@ -50,7 +50,7 @@ namespace DoenaSoft.WatchHistory.Implementations
             }
             else
             {
-                String user = DataManager.Users.FirstOrDefault() ?? "default";
+                String user = DataManager.Users.FirstOrDefault() ?? Constants.DefaultUser;
 
                 OpenMainWindow(user);
             }

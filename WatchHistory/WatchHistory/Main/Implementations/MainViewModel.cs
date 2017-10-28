@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using DoenaSoft.AbstractionLayer.IOServices;
@@ -131,11 +132,14 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
         public ICommand UndoIgnoreCommand
           => (new RelayCommand(UndoIgnore));
 
+        public ICommand PlayFileCommand
+            => (new ParameterizedRelayCommand(PlayFile));
+
         #endregion
 
         private void AddWatched(Object parameter)
         {
-            IEnumerable<IFileEntryViewModel> entries = ((IList)parameter).Cast<IFileEntryViewModel>().ToList();
+            IEnumerable<IFileEntryViewModel> entries = GetEntries(parameter);
 
             foreach (IFileEntryViewModel entry in entries)
             {
@@ -145,9 +149,12 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             DataManager.SaveDataFile(App.DataFile);
         }
 
+        private static IEnumerable<IFileEntryViewModel> GetEntries(Object parameter)
+            => (((IList)parameter).Cast<IFileEntryViewModel>().ToList());
+
         private void Ignore(Object parameter)
         {
-            IEnumerable<IFileEntryViewModel> entries = ((IList)parameter).Cast<IFileEntryViewModel>().ToList();
+            IEnumerable<IFileEntryViewModel> entries = GetEntries(parameter);
 
             foreach (IFileEntryViewModel entry in entries)
             {
@@ -165,6 +172,16 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
         private void UndoIgnore()
         {
             WindowFactory.OpenIgnoreWindow(UserName);
+        }
+
+        private void PlayFile(Object parameter)
+        {
+            IFileEntryViewModel selected = (IFileEntryViewModel)parameter;
+
+            if (selected != null)
+            {
+                Process.Start(selected.FileEntry.FullName);
+            }
         }
 
         private void ImportCollection()
