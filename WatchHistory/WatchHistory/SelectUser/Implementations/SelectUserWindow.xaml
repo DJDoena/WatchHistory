@@ -1,0 +1,19 @@
+﻿<Window x:Class="DoenaSoft.WatchHistory.SelectUser.Implementations.SelectUserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DoenaSoft.WatchHistory.SelectUser.Implementations"
+        mc:Ignorable="d"
+        Title="Select User" Height="100" Width="150" MaxHeight="100" MaxWidth="150" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen"
+        Loaded="OnLoaded" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO">
+    <DockPanel>
+        <ComboBox DockPanel.Dock="Top"
+                      ItemsSource="{Binding Path=Users, Mode=OneTime}" SelectedItem="{Binding SelectedUser}" IsSynchronizedWithCurrentItem="True" 
+                      Margin="5,5,5,5" />
+
+        <Button DockPanel.Dock="Bottom"
+                Command="{Binding SelectCommand}" Content="Select"
+                Margin="5,5,5,5" />
+    </DockPanel>
+</Window>

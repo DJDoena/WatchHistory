@@ -1,0 +1,110 @@
+﻿<Window x:Class="DoenaSoft.WatchHistory.Settings.Implementations.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DoenaSoft.WatchHistory.Settings.Implementations"
+        mc:Ignorable="d"
+        Title="Settings" WindowStartupLocation="CenterScreen"  WindowStyle="ToolWindow" Height="400" Width="1024" MaxHeight="400"
+        Loaded="OnLoaded" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="35"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="35"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Column="0" Grid.Row="0" 
+                   Text="Users:"
+                   Margin="5,5,5,5" />
+
+        <ListView Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
+                  ItemsSource="{Binding Users, Mode=OneWay}" SelectedItem="{Binding SelectedUser}" IsSynchronizedWithCurrentItem="True" 
+                  Margin="5,5,5,5">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBox DockPanel.Dock="Left" 
+                                 Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" 
+                                 MinWidth="100" Width="Auto" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListView>
+
+        <Button Grid.Column="2" Grid.Row="0"
+                Command="{Binding AddUserCommand}" Content="+"
+                Margin="5,5,5,5" />
+
+        <Button Grid.Column="2" Grid.Row="1"
+                Command="{Binding RemoveUserCommand}" Content="-"
+                Margin="5,5,5,5" />
+
+        <TextBlock Grid.Column="0" Grid.Row="3" 
+                   Text="Root Folders:"
+                   Margin="5,5,5,5" />
+
+        <ListView Grid.Column="1" Grid.Row="3" Grid.RowSpan="3" 
+                  ItemsSource="{Binding RootFolders, Mode=OneWay}" SelectedItem="{Binding SelectedRootFolder}" IsSynchronizedWithCurrentItem="True" 
+                  Margin="5,5,5,5">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListView>
+
+        <Button Grid.Column="2" Grid.Row="3"
+                Command="{Binding AddRootFolderCommand}" Content="+"
+                Margin="5,5,5,5" />
+
+        <Button Grid.Column="2" Grid.Row="4"
+                Command="{Binding RemoveRootFolderCommand}" Content="-"
+                Margin="5,5,5,5" />
+
+        <TextBlock Grid.Column="0" Grid.Row="6" 
+                   Text="File extensions:"
+                   Margin="5,5,5,5" />
+
+        <ListView Grid.Column="1" Grid.Row="6" Grid.RowSpan="3" 
+                  ItemsSource="{Binding FileExtensions, Mode=OneWay}" SelectedItem="{Binding SelectedFileExtension}" IsSynchronizedWithCurrentItem="True" 
+                  Margin="5,5,5,5">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBox DockPanel.Dock="Left" 
+                                 Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                                 MinWidth="100" Width="Auto" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListView>
+
+        <Button Grid.Column="2" Grid.Row="6"
+                Command="{Binding AddFileExtensionCommand}" Content="+"
+                Margin="5,5,5,5" />
+
+        <Button Grid.Column="2" Grid.Row="7"
+                Command="{Binding RemoveFileExtensionCommand}" Content="-"
+                Margin="5,5,5,5" />
+
+        <Button Grid.Column="0" Grid.Row="9"
+                Command="{Binding AcceptCommand}" Content="Accept"
+                Margin="5,5,5,5" />
+    </Grid>
+</Window>
