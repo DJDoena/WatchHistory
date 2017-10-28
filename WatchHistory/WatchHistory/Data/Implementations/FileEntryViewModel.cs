@@ -88,6 +88,8 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
 
                 name = name.Trim('\\', '/');
 
+                name = name.Replace(Constants.BackSlash, @"\");
+
                 name = name.Replace(@"\", " > ");
 
                 return (name);
