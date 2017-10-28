@@ -67,6 +67,8 @@ namespace DoenaSoft.WatchHistory.Implementations
             window.DataContext = viewModel;
 
             window.Show();
+
+            DataManager.Resume();
         }
 
         public void OpenSettingsWindow()

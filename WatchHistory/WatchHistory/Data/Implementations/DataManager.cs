@@ -38,10 +38,6 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
             LoadSettings(settingsFile);
 
             LoadData(dataFile);
-
-            SyncData();
-
-            FileObserver.Observe(m_RootFolders, m_FileExtensions);
         }
 
         #region IDataManager
