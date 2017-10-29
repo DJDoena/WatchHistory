@@ -31,6 +31,10 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         private Boolean SortAscending { get; set; }
 
+        private Boolean SuspendEvents { get; set; }
+
+        private Boolean EventRaisedWhileSuspended { get; set; }
+
         private SortColumn SortColumn
         {
             get
@@ -61,6 +65,8 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
             m_SortColumn = SortColumn.File;
             SortAscending = true;
+            SuspendEvents = false;
+            EventRaisedWhileSuspended = false;
         }
 
         #region INotifyPropertyChanged
@@ -161,16 +167,35 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
         public ICommand SortCommand
             => (new ParameterizedRelayCommand(Sort));
 
+        public ICommand OpenFileLocationCommand
+            => (new ParameterizedRelayCommand(OpenFileLocation));
+
         #endregion
 
         private void AddWatched(Object parameter)
         {
+            SuspendEvents = true;
+
             foreach (IFileEntryViewModel entry in GetEntries(parameter))
             {
                 DataManager.AddWatched(entry.FileEntry, UserName);
             }
 
             DataManager.SaveDataFile(App.DataFile);
+
+            ResumeEvents();
+        }
+
+        private void ResumeEvents()
+        {
+            SuspendEvents = false;
+
+            if (EventRaisedWhileSuspended)
+            {
+                OnModelFilesChanged(this, EventArgs.Empty);
+
+                EventRaisedWhileSuspended = false;
+            }
         }
 
         private static IEnumerable<IFileEntryViewModel> GetEntries(Object parameter)
@@ -178,12 +203,16 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         private void Ignore(Object parameter)
         {
+            SuspendEvents = true;
+
             foreach (IFileEntryViewModel entry in GetEntries(parameter))
             {
                 DataManager.AddIgnore(entry.FileEntry, UserName);
             }
 
             DataManager.SaveDataFile(App.DataFile);
+
+            ResumeEvents();
         }
 
         private void OpenSettings()
@@ -200,9 +229,24 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
         {
             IFileEntryViewModel selected = (IFileEntryViewModel)parameter;
 
-            if (selected != null)
+            if (FileExists(selected))
             {
                 Process.Start(selected.FileEntry.FullName);
+            }
+        }
+
+        private bool FileExists(IFileEntryViewModel selected)
+            => ((selected != null) && (IOServices.GetFileInfo(selected.FileEntry.FullName).Exists));
+
+        private void OpenFileLocation(Object parameter)
+        {
+            IFileEntryViewModel selected = (IFileEntryViewModel)parameter;
+
+            if (FileExists(selected))
+            {
+                ProcessStartInfo psi = new ProcessStartInfo("explorer.exe", $"/select, \"{selected.FileEntry.FullName}\"");
+
+                Process.Start(psi);
             }
         }
 
@@ -213,13 +257,24 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         private void ImportCollection()
         {
+            SuspendEvents = true;
+
             Model.ImportCollection();
+
+            ResumeEvents();
         }
 
         private void OnModelFilesChanged(Object sender
             , EventArgs e)
         {
-            RaisePropertyChanged(nameof(Entries));
+            if (SuspendEvents == false)
+            {
+                RaisePropertyChanged(nameof(Entries));
+            }
+            else
+            {
+                EventRaisedWhileSuspended = true;
+            }
         }
 
         private void RaisePropertyChanged(String attribute)

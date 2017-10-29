@@ -34,7 +34,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
             IOServices = ioServices;
 
             FileObserver = new FileObserver(ioServices);
-
+                        
             LoadSettings(settingsFile);
 
             LoadData(dataFile);
@@ -324,26 +324,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         {
             if (IsSuspended == false)
             {
-                List<String> actualFiles = GetActualFiles();
-
-                AddActualFiles(actualFiles);
-
-                RemoveDataFiles(actualFiles);
-
-                RaiseFilesChanged();
-            }
-        }
-
-        private void RemoveDataFiles(List<String> actualFiles)
-        {
-            List<KeyValuePair<String, FileEntry>> files = Files.ToList();
-
-            foreach (KeyValuePair<String, FileEntry> kvp in files)
-            {
-                if ((actualFiles.Contains(kvp.Key) == false) && (HasEvents(kvp.Value) == false))
-                {
-                    Files.Remove(kvp.Key);
-                }
+                GetActualFiles();                
             }
         }
 
@@ -353,25 +334,8 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         private static Boolean HasEvents(User user)
             => (user.Watches?.HasItems() == true);
 
-        private void AddActualFiles(List<String> actualFiles)
+        private void GetActualFiles()
         {
-            foreach (String actualFile in actualFiles)
-            {
-                if (Files.ContainsKey(actualFile) == false)
-                {
-                    FileEntry entry = new FileEntry();
-
-                    entry.FullName = actualFile;
-
-                    Files.Add(actualFile, entry);
-                }
-            }
-        }
-
-        private List<String> GetActualFiles()
-        {
-            List<String> actualFiles = new List<String>(1000);
-
             List<Task<IEnumerable<String>>> tasks = new List<Task<IEnumerable<String>>>();
 
             foreach (String rootFolder in m_RootFolders)
@@ -384,14 +348,19 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
                 }
             }
 
-            Task.WaitAll(tasks.ToArray());
+            Task<IEnumerable<String>[]> readyTask = Task.WhenAll(tasks);
 
-            foreach (Task<IEnumerable<String>> task in tasks)
-            {
-                actualFiles.AddRange(task.Result);
-            }
+            readyTask.ContinueWith(task =>
+                    {
+                        IEnumerable<String> actualFiles = task.Result.SelectMany(file => file);
 
-            return (actualFiles);
+                        AddActualFiles(actualFiles);
+
+                        RemoveDataFiles(actualFiles);
+
+                        RaiseFilesChanged();
+                    }
+                );
         }
 
         private IEnumerable<String> GetFiles(String rootFolder
@@ -410,6 +379,34 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
             }
 
             return (files);
+        }
+
+        private void AddActualFiles(IEnumerable<String> actualFiles)
+        {
+            foreach (String actualFile in actualFiles)
+            {
+                if (Files.ContainsKey(actualFile) == false)
+                {
+                    FileEntry entry = new FileEntry();
+
+                    entry.FullName = actualFile;
+
+                    Files.Add(actualFile, entry);
+                }
+            }
+        }
+
+        private void RemoveDataFiles(IEnumerable<String> actualFiles)
+        {
+            List<KeyValuePair<String, FileEntry>> files = Files.ToList();
+
+            foreach (KeyValuePair<String, FileEntry> kvp in files)
+            {
+                if ((actualFiles.Contains(kvp.Key) == false) && (HasEvents(kvp.Value) == false))
+                {
+                    Files.Remove(kvp.Key);
+                }
+            }
         }
 
         private void OnFileRenamed(Object sender

@@ -29,5 +29,7 @@ namespace DoenaSoft.WatchHistory.Main
         ICommand PlayFileCommand { get; }
 
         ICommand SortCommand { get; }
+
+        ICommand OpenFileLocationCommand { get; }
     }
 }
