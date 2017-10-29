@@ -15,6 +15,8 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
 
         private readonly IFileObserver FileObserver;
 
+        private readonly Object FilesLock;
+
         private IEnumerable<String> m_RootFolders;
 
         private IEnumerable<String> m_FileExtensions;
@@ -33,8 +35,10 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         {
             IOServices = ioServices;
 
+            FilesLock = new Object();
+
             FileObserver = new FileObserver(ioServices);
-                        
+
             LoadSettings(settingsFile);
 
             LoadData(dataFile);
@@ -130,7 +134,12 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         }
 
         public IEnumerable<FileEntry> GetFiles()
-            => (Files.Values);
+        {
+            lock (FilesLock)
+            {
+                return (Files.Values);
+            }
+        }
 
         public void AddWatched(FileEntry entry
             , String userName)
@@ -215,7 +224,10 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         {
             Files files = new Files();
 
-            files.Entries = Files.Values.ToArray();
+            lock (FilesLock)
+            {
+                files.Entries = Files.Values.ToArray();
+            }
 
             Serializer<Files>.Serialize(file, files);
         }
@@ -271,13 +283,16 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
                 files = new Files();
             }
 
-            Files = new Dictionary<String, FileEntry>(files?.Entries?.Length ?? 0);
-
-            IEnumerable<FileEntry> entries = files?.Entries ?? Enumerable.Empty<FileEntry>();
-
-            foreach (FileEntry entry in entries)
+            lock (FilesLock)
             {
-                Files[entry.FullName] = entry;
+                Files = new Dictionary<String, FileEntry>(files?.Entries?.Length ?? 0);
+
+                IEnumerable<FileEntry> entries = files?.Entries ?? Enumerable.Empty<FileEntry>();
+
+                foreach (FileEntry entry in entries)
+                {
+                    Files[entry.FullName] = entry;
+                }
             }
         }
 
@@ -324,7 +339,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         {
             if (IsSuspended == false)
             {
-                GetActualFiles();                
+                GetActualFiles();
             }
         }
 
@@ -350,17 +365,21 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
 
             Task<IEnumerable<String>[]> readyTask = Task.WhenAll(tasks);
 
-            readyTask.ContinueWith(task =>
-                    {
-                        IEnumerable<String> actualFiles = task.Result.SelectMany(file => file);
+            readyTask.ContinueWith(ProcessActualFiles);
+        }
 
-                        AddActualFiles(actualFiles);
+        private void ProcessActualFiles(Task<IEnumerable<String>[]> task)
+        {
+            IEnumerable<String> actualFiles = task.Result.SelectMany(file => file).ToList();
 
-                        RemoveDataFiles(actualFiles);
+            lock (FilesLock)
+            {
+                AddActualFiles(actualFiles);
 
-                        RaiseFilesChanged();
-                    }
-                );
+                RemoveObsoletesFiles(actualFiles);
+            }
+
+            RaiseFilesChanged();
         }
 
         private IEnumerable<String> GetFiles(String rootFolder
@@ -396,7 +415,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
             }
         }
 
-        private void RemoveDataFiles(IEnumerable<String> actualFiles)
+        private void RemoveObsoletesFiles(IEnumerable<String> actualFiles)
         {
             List<KeyValuePair<String, FileEntry>> files = Files.ToList();
 
@@ -412,14 +431,14 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         private void OnFileRenamed(Object sender
             , System.IO.RenamedEventArgs e)
         {
-            FileEntry entry;
-            if (Files.TryGetValue(e.OldFullPath, out entry))
+            FileEntry entry = new FileEntry();
+
+            lock (FilesLock)
             {
-                Files.Remove(e.OldFullPath);
-            }
-            else
-            {
-                entry = new FileEntry();
+                if (Files.TryGetValue(e.OldFullPath, out entry))
+                {
+                    Files.Remove(e.OldFullPath);
+                }
             }
 
             OnFileCreated(e, entry);
@@ -430,7 +449,10 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         private void OnFileDeleted(Object sender
             , System.IO.FileSystemEventArgs e)
         {
-            Files.Remove(e.FullPath);
+            lock (FilesLock)
+            {
+                Files.Remove(e.FullPath);
+            }
 
             RaiseFilesChanged();
         }
@@ -446,11 +468,14 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         private void OnFileCreated(System.IO.FileSystemEventArgs e
             , FileEntry entry)
         {
-            if (Files.ContainsKey(e.FullPath) == false)
+            lock (FilesLock)
             {
-                entry.FullName = e.FullPath;
+                if (Files.ContainsKey(e.FullPath) == false)
+                {
+                    entry.FullName = e.FullPath;
 
-                Files.Add(e.FullPath, entry);
+                    Files.Add(e.FullPath, entry);
+                }
             }
         }
 
