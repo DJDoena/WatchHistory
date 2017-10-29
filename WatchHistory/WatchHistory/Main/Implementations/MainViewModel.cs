@@ -165,9 +165,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         private void AddWatched(Object parameter)
         {
-            IEnumerable<IFileEntryViewModel> entries = GetEntries(parameter);
-
-            foreach (IFileEntryViewModel entry in entries)
+            foreach (IFileEntryViewModel entry in GetEntries(parameter))
             {
                 DataManager.AddWatched(entry.FileEntry, UserName);
             }
@@ -180,9 +178,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         private void Ignore(Object parameter)
         {
-            IEnumerable<IFileEntryViewModel> entries = GetEntries(parameter);
-
-            foreach (IFileEntryViewModel entry in entries)
+            foreach (IFileEntryViewModel entry in GetEntries(parameter))
             {
                 DataManager.AddIgnore(entry.FileEntry, UserName);
             }
