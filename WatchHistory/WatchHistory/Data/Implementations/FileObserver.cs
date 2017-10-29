@@ -30,7 +30,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         {
             add
             {
-                if(m_Created == null)
+                if (m_Created == null)
                 {
                     foreach (IFileSystemWatcher fsw in GetFileSystemWatchers())
                     {
@@ -113,28 +113,16 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         public void Observe(IEnumerable<String> rootFolders
            , IEnumerable<String> fileExtensions)
         {
-            Dictionary<String, Dictionary<String, IFileSystemWatcher>> newDict = new Dictionary<String, Dictionary<String, IFileSystemWatcher>>();
+            Dictionary<String, Dictionary<String, IFileSystemWatcher>> watchers = new Dictionary<String, Dictionary<String, IFileSystemWatcher>>();
 
             foreach (String rootFolder in rootFolders)
             {
-                if (IOServices.Directory.Exists(rootFolder))
-                {
-                    Dictionary<String, IFileSystemWatcher> innerDict = new Dictionary<String, IFileSystemWatcher>();
-
-                    foreach (String fileExtension in fileExtensions)
-                    {
-                        IFileSystemWatcher fsw = CreateFileSystemWatcher(rootFolder, fileExtension);
-
-                        innerDict.Add(fileExtension, fsw);
-                    }
-
-                    newDict.Add(rootFolder, innerDict);
-                }
+                CreateWatchers(rootFolder, fileExtensions, watchers);
             }
 
             DisposeFileSystemWatchers();
 
-            m_FileSystemWatchers = newDict;
+            m_FileSystemWatchers = watchers;
         }
 
         public void Suspend()
@@ -146,7 +134,34 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
 
         #endregion
 
-        private IFileSystemWatcher CreateFileSystemWatcher(String rootFolder
+        private void CreateWatchers(String rootFolder
+            , IEnumerable<String> fileExtensions
+            , Dictionary<String, Dictionary<String, IFileSystemWatcher>> byFolderWatchers)
+        {
+            if (IOServices.Directory.Exists(rootFolder))
+            {
+                Dictionary<String, IFileSystemWatcher> byExtensionWatchers = CreateWatchers(rootFolder, fileExtensions);
+
+                byFolderWatchers.Add(rootFolder, byExtensionWatchers);
+            }
+        }
+
+        private Dictionary<String, IFileSystemWatcher> CreateWatchers(String rootFolder
+            , IEnumerable<String> fileExtensions)
+        {
+            Dictionary<String, IFileSystemWatcher> watchers = new Dictionary<String, IFileSystemWatcher>();
+
+            foreach (String fileExtension in fileExtensions)
+            {
+                IFileSystemWatcher fsw = CreateWatcher(rootFolder, fileExtension);
+
+                watchers.Add(fileExtension, fsw);
+            }
+
+            return (watchers);
+        }
+
+        private IFileSystemWatcher CreateWatcher(String rootFolder
             , String fileExtension)
         {
             IFileSystemWatcher fsw = IOServices.GetFileSystemWatcher(rootFolder, "*." + fileExtension);
@@ -219,6 +234,6 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
             , System.IO.FileSystemEventArgs e)
         {
             m_Created?.Invoke(this, e);
-        }
+        } 
     }
 }

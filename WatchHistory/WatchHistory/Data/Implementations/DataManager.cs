@@ -192,7 +192,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
 
             if (fi.Exists)
             {
-                creationTime = fi.LastWriteTime;
+                creationTime = fi.CreationTime;
             }
 
             return (creationTime);

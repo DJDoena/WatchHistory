@@ -5,7 +5,6 @@ using DoenaSoft.AbstractionLayer.IOServices;
 using DoenaSoft.DVDProfiler.DVDProfilerXML.Version390;
 using DoenaSoft.ToolBox.Extensions;
 using DoenaSoft.WatchHistory.Data;
-using DoenaSoft.WatchHistory.Implementations;
 
 namespace DoenaSoft.WatchHistory.Main.Implementations
 {
@@ -32,29 +31,34 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
             try
             {
-                String folder = IOServices.Path.Combine(App.AppDataFolder, "DVDProfiler");
-
-                if (IOServices.Directory.Exists(folder))
-                {
-                    DeleteProfiles(folder);
-                }
-                else
-                {
-                    IOServices.Directory.CreateFolder(folder);
-                }
-
-                DataManager.Users = GetUsers().Union(DataManager.Users);
-
-                DataManager.RootFolders = folder.Enumerate().Union(DataManager.RootFolders);
-
-                DataManager.FileExtensions = "dvdp".Enumerate().Union(DataManager.FileExtensions);
-
-                CreateCollectionFiles(folder);
+                TryProcess();
             }
             finally
             {
                 DataManager.Resume();
             }
+        }
+
+        private void TryProcess()
+        {
+            String folder = IOServices.Path.Combine(App.AppDataFolder, "DVDProfiler");
+
+            if (IOServices.Directory.Exists(folder))
+            {
+                DeleteProfiles(folder);
+            }
+            else
+            {
+                IOServices.Directory.CreateFolder(folder);
+            }
+
+            DataManager.Users = GetUsers().SelectMany(user => user).Union(DataManager.Users);
+
+            DataManager.RootFolders = folder.Enumerate().Union(DataManager.RootFolders);
+
+            DataManager.FileExtensions = "dvdp".Enumerate().Union(DataManager.FileExtensions);
+
+            CreateCollectionFiles(folder);
         }
 
         private void DeleteProfiles(String folder)
@@ -67,79 +71,54 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             }
         }
 
-        private IEnumerable<String> GetUsers()
+        private IEnumerable<IEnumerable<String>> GetUsers()
         {
             IEnumerable<DVD> dvds = Collection.DVDList ?? Enumerable.Empty<DVD>();
 
             foreach (DVD dvd in dvds)
             {
-                IEnumerable<Event> events = dvd.EventList ?? Enumerable.Empty<Event>();
+                yield return (GetUsers(dvd));
+            }
+        }
 
-                foreach (Event e in events)
+        private IEnumerable<String> GetUsers(DVD dvd)
+        {
+            IEnumerable<Event> events = dvd.EventList ?? Enumerable.Empty<Event>();
+
+            foreach (Event e in events)
+            {
+                if (e.Type == EventType.Watched)
                 {
-                    if (e.Type == EventType.Watched)
-                    {
-                        String user = String.Join(" ", e.User?.FirstName, e.User?.LastName).Trim();
+                    String user = String.Join(" ", e.User?.FirstName, e.User?.LastName).Trim();
 
-                        yield return (user);
-                    }
+                    yield return (user);
                 }
             }
         }
+
         private void CreateCollectionFiles(String folder)
         {
-            IEnumerable<String> titles = GetEpisodeTitles();
+            IEnumerable<EpisodeTitle> titles = (new EpisodeTitleProcessor(Collection, IOServices)).GetEpisodeTitles();
 
-            titles = titles.Select(title => title.Replace(" :", ":").Replace(":", " -"));
+            titles = new HashSet<EpisodeTitle>(titles);
 
-            titles = titles.Select(FileNameHelper.GetInstance(IOServices).ReplaceInvalidFileNameChars);
-
-            titles = new HashSet<String>(titles);
-
-            foreach (String title in titles)
+            foreach (EpisodeTitle title in titles)
             {
-                String fileName = IOServices.Path.Combine(folder, title + ".dvdp");
-
-                using (System.IO.Stream stream = IOServices.GetFileStream(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read))
-                { }
+                CreateCollectionFile(folder, title);
             }
         }
 
-        private IEnumerable<String> GetEpisodeTitles()
+        private void CreateCollectionFile(String folder
+            , EpisodeTitle title)
         {
-            IEnumerable<DVD> dvds = Collection.DVDList ?? Enumerable.Empty<DVD>();
+            String fileName = IOServices.Path.Combine(folder, title.Title + ".dvdp");
 
-            foreach (DVD dvd in dvds)
-            {
-                IEnumerable<Object> cast = dvd.CastList ?? Enumerable.Empty<Object>();
+            using (System.IO.Stream stream = IOServices.GetFileStream(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read))
+            { }
 
-                foreach (String caption in GetCaptions(cast))
-                {
-                    yield return ($"{GetTitle(dvd)}{Constants.BackSlash}{caption}");
-                }
+            IFileInfo fi = IOServices.GetFileInfo(fileName);
 
-                IEnumerable<Object> crew = dvd.CrewList ?? Enumerable.Empty<Object>();
-
-                foreach (String caption in GetCaptions(crew))
-                {
-                    yield return ($"{GetTitle(dvd)}{Constants.BackSlash}{caption}");
-                }
-            }
-        }
-
-        private static String GetTitle(DVD dvd)
-            => (dvd.Title.Replace(": ", Constants.BackSlash));
-
-        private IEnumerable<String> GetCaptions(IEnumerable<Object> list)
-        {
-            IEnumerable<Divider> dividers = list.OfType<Divider>();
-
-            dividers = dividers.Where(div => div?.Type == DividerType.Episode);
-
-            foreach (Divider divider in dividers)
-            {
-                yield return (divider.Caption);
-            }
-        }
+            fi.CreationTime = title.PurchaseDate;
+        }     
     }
 }

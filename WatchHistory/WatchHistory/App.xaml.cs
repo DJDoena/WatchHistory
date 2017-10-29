@@ -19,7 +19,7 @@ namespace DoenaSoft.WatchHistory
 
         private String SettingsFile { get; set; }
 
-        internal static String DataFile { get; set; }
+        internal static String DataFile { get; private set; }
 
         private IDataManager DataManager { get; set; }
 
