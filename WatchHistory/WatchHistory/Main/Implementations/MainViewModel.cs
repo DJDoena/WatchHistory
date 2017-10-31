@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using DoenaSoft.AbstractionLayer.IOServices;
@@ -44,7 +43,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             set
             {
                 SortAscending = (value != m_SortColumn) ? true : (SortAscending == false);
-                
+
                 m_SortColumn = value;
 
                 RaisePropertyChanged(nameof(Entries));
@@ -227,27 +226,19 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         private void PlayFile(Object parameter)
         {
-            IFileEntryViewModel selected = (IFileEntryViewModel)parameter;
+            FileEntry fileEntry = GetFileEntry(parameter);
 
-            if (FileExists(selected))
-            {
-                Process.Start(selected.FileEntry.FullName);
-            }
+            Model.PlayFile(fileEntry);
         }
 
-        private bool FileExists(IFileEntryViewModel selected)
-            => ((selected != null) && (IOServices.GetFileInfo(selected.FileEntry.FullName).Exists));
+        private static FileEntry GetFileEntry(Object parameter)
+            => (((IFileEntryViewModel)parameter).FileEntry);
 
         private void OpenFileLocation(Object parameter)
         {
-            IFileEntryViewModel selected = (IFileEntryViewModel)parameter;
+            FileEntry fileEntry = GetFileEntry(parameter);
 
-            if (FileExists(selected))
-            {
-                ProcessStartInfo psi = new ProcessStartInfo("explorer.exe", $"/select, \"{selected.FileEntry.FullName}\"");
-
-                Process.Start(psi);
-            }
+            Model.OpenFileLocation(fileEntry);
         }
 
         private void Sort(Object parameter)

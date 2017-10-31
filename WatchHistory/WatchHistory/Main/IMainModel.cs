@@ -6,7 +6,7 @@ namespace DoenaSoft.WatchHistory.Main
 {
     internal interface IMainModel
     {
-        String Filter { get;  set; }
+        String Filter { get; set; }
 
         Boolean IgnoreWatched { get; set; }
 
@@ -15,5 +15,9 @@ namespace DoenaSoft.WatchHistory.Main
         IEnumerable<FileEntry> GetFiles();
 
         void ImportCollection();
+
+        void PlayFile(FileEntry fileEntry);
+
+        void OpenFileLocation(FileEntry fileEntry);
     }
 }

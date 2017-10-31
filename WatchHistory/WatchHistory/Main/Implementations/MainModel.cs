@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using DoenaSoft.AbstractionLayer.IOServices;
 using DoenaSoft.AbstractionLayer.UIServices;
@@ -139,6 +140,22 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             RaiseFilesChanged(EventArgs.Empty);
         }
 
+        public void PlayFile(FileEntry fileEntry)
+        {
+            if (IOServices.GetFileInfo(fileEntry.FullName).Exists)
+            {
+                Process.Start(fileEntry.FullName);
+            }
+        }
+
+        public void OpenFileLocation(FileEntry fileEntry)
+        {
+            if (IOServices.GetFileInfo(fileEntry.FullName).Exists)
+            {
+                Process.Start("explorer.exe", $"/select, \"{fileEntry.FullName}\"");
+            }
+        }
+
         #endregion
 
         #region UserIgnores
@@ -175,7 +192,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             => ((user.UserName == UserName) && (user.Watches?.HasItems() == true));
 
         #endregion
-        
+
         private static OpenFileDialogOptions GetImportCollectionFileDialogOptions()
         {
             OpenFileDialogOptions options = new OpenFileDialogOptions();
