@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Input;
-using DoenaSoft.AbstractionLayer.IOServices;
-using DoenaSoft.ToolBox.Commands;
-using DoenaSoft.WatchHistory.Data;
-using DoenaSoft.WatchHistory.Implementations;
-
-namespace DoenaSoft.WatchHistory.Ignore.Implementations
+﻿namespace DoenaSoft.WatchHistory.Ignore.Implementations
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Windows.Input;
+    using AbstractionLayer.IOServices;
+    using Data;
+    using ToolBox.Commands;
+    using WatchHistory.Implementations;
+
     internal sealed class IgnoreViewModel : IIgnoreViewModel
     {
         private readonly IIgnoreModel Model;
@@ -93,7 +93,7 @@ namespace DoenaSoft.WatchHistory.Ignore.Implementations
             {
                 IEnumerable<FileEntry> modelEntries = Model.GetFiles();
 
-                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, UserName, DataManager, IOServices);
+                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, UserName, DataManager, IOServices, SortColumn.File, true);
 
                 return (viewModelEntries);
             }

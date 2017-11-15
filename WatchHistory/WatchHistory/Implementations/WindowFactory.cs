@@ -1,20 +1,20 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using DoenaSoft.AbstractionLayer.IOServices;
-using DoenaSoft.AbstractionLayer.UIServices;
-using DoenaSoft.WatchHistory.Data;
-using DoenaSoft.WatchHistory.Ignore;
-using DoenaSoft.WatchHistory.Ignore.Implementations;
-using DoenaSoft.WatchHistory.Main;
-using DoenaSoft.WatchHistory.Main.Implementations;
-using DoenaSoft.WatchHistory.SelectUser;
-using DoenaSoft.WatchHistory.SelectUser.Implementations;
-using DoenaSoft.WatchHistory.Settings;
-using DoenaSoft.WatchHistory.Settings.Implementations;
-
-namespace DoenaSoft.WatchHistory.Implementations
+﻿namespace DoenaSoft.WatchHistory.Implementations
 {
+    using System;
+    using System.Linq;
+    using System.Windows;
+    using AbstractionLayer.IOServices;
+    using AbstractionLayer.UIServices;
+    using Data;
+    using Ignore;
+    using Ignore.Implementations;
+    using Main;
+    using Main.Implementations;
+    using SelectUser;
+    using SelectUser.Implementations;
+    using Settings;
+    using Settings.Implementations;
+
     internal sealed class WindowFactory : IWindowFactory
     {
         private readonly IIOServices IOServices;

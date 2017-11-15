@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DoenaSoft.WatchHistory.Data
+﻿namespace DoenaSoft.WatchHistory.Data
 {
+    using System;
+    using System.Collections.Generic;
+
+
     internal interface IFileObserver
     {
         event System.IO.FileSystemEventHandler Created;

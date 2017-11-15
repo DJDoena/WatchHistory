@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
-
-namespace DoenaSoft.WatchHistory.Settings
+﻿namespace DoenaSoft.WatchHistory.Settings
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
+
     internal interface ISettingsViewModel : INotifyPropertyChanged
     {
         ObservableCollection<ISettingsListBoxItemViewModel> Users { get; }

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DoenaSoft.AbstractionLayer.IOServices;
-using DoenaSoft.DVDProfiler.DVDProfilerXML.Version390;
-using DoenaSoft.ToolBox.Extensions;
-using DoenaSoft.WatchHistory.Data;
-
-namespace DoenaSoft.WatchHistory.Main.Implementations
+﻿namespace DoenaSoft.WatchHistory.Main.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AbstractionLayer.IOServices;
+    using Data;
+    using DVDProfiler.DVDProfilerXML.Version390;
+    using ToolBox.Extensions;
+
     internal sealed class CollectionProcessor
     {
         private readonly Collection Collection;
@@ -119,6 +119,6 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             IFileInfo fi = IOServices.GetFileInfo(fileName);
 
             fi.CreationTime = title.PurchaseDate;
-        }     
+        }
     }
 }

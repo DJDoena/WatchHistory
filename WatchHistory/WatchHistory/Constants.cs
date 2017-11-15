@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace DoenaSoft.WatchHistory
+﻿namespace DoenaSoft.WatchHistory
 {
+    using System;
+
     internal static class Constants
     {
         internal const String DefaultUser = "default";

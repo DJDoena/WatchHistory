@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DoenaSoft.WatchHistory.Data
+﻿namespace DoenaSoft.WatchHistory.Data
 {
+    using System;
+    using System.Collections.Generic;
+
     internal interface IDataManager
     {
         IEnumerable<String> Users { get; set; }

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using DoenaSoft.WatchHistory.Data;
-
-namespace DoenaSoft.WatchHistory.Ignore
+﻿namespace DoenaSoft.WatchHistory.Ignore
 {
+    using System;
+    using System.Collections.Generic;
+    using Data;
+
     internal interface IIgnoreModel
     {
-        String Filter { get;  set; }
+        String Filter { get; set; }
 
         event EventHandler FilesChanged;
 

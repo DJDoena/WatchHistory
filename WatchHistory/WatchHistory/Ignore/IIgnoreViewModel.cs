@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
-using DoenaSoft.WatchHistory.Data;
-
-namespace DoenaSoft.WatchHistory.Ignore
+﻿namespace DoenaSoft.WatchHistory.Ignore
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
+    using Data;
+
     internal interface IIgnoreViewModel : INotifyPropertyChanged
     {
         String Title { get; }

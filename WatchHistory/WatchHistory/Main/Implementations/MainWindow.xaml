@@ -23,7 +23,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <DockPanel Grid.Column="0" Grid.Row="0">      
+            <DockPanel Grid.Column="0" Grid.Row="0">
                 <DockPanel DockPanel.Dock="Right">
                     <TextBlock DockPanel.Dock="Left"
                                Text="Ignore Titles with Existing Watched: "

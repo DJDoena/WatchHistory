@@ -1,16 +1,16 @@
-﻿using System;
-using System.Windows;
-using DoenaSoft.AbstractionLayer.IOServices;
-using DoenaSoft.AbstractionLayer.IOServices.Implementations;
-using DoenaSoft.AbstractionLayer.UIServices;
-using DoenaSoft.AbstractionLayer.UIServices.Implementations;
-using DoenaSoft.DVDProfiler.DVDProfilerHelper;
-using DoenaSoft.WatchHistory.Data;
-using DoenaSoft.WatchHistory.Data.Implementations;
-using DoenaSoft.WatchHistory.Implementations;
-
-namespace DoenaSoft.WatchHistory
+﻿namespace DoenaSoft.WatchHistory
 {
+    using System;
+    using System.Windows;
+    using AbstractionLayer.IOServices;
+    using AbstractionLayer.IOServices.Implementations;
+    using AbstractionLayer.UIServices;
+    using AbstractionLayer.UIServices.Implementations;
+    using Data;
+    using Data.Implementations;
+    using DVDProfiler.DVDProfilerHelper;
+    using Implementations;
+
     public partial class App : Application
     {
         private IUIServices UIServices { get; set; }

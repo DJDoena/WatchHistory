@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DoenaSoft.AbstractionLayer.IOServices;
-using DoenaSoft.DVDProfiler.DVDProfilerHelper;
-using DoenaSoft.ToolBox.Extensions;
-using DoenaSoft.WatchHistory.Implementations;
-
-namespace DoenaSoft.WatchHistory.Data.Implementations
+﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using AbstractionLayer.IOServices;
+    using DVDProfiler.DVDProfilerHelper;
+    using ToolBox.Extensions;
+    using WatchHistory.Implementations;
+
     internal sealed class DataManager : IDataManager
     {
         private readonly IIOServices IOServices;

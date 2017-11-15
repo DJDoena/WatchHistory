@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DoenaSoft.ToolBox.Extensions;
-using DoenaSoft.WatchHistory.Data;
-
-namespace DoenaSoft.WatchHistory.Ignore.Implementations
+﻿namespace DoenaSoft.WatchHistory.Ignore.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Data;
+    using ToolBox.Extensions;
+
     internal sealed class IgnoreModel : IIgnoreModel
     {
         private readonly IDataManager DataManager;

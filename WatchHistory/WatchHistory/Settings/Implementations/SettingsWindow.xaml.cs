@@ -1,11 +1,8 @@
-﻿using System;
-using System.Windows;
-
-namespace DoenaSoft.WatchHistory.Settings.Implementations
+﻿namespace DoenaSoft.WatchHistory.Settings.Implementations
 {
-    /// <summary>
-    /// Interaction logic for SettingsWindow.xaml
-    /// </summary>
+    using System;
+    using System.Windows;
+
     public partial class SettingsWindow : Window
     {
         public SettingsWindow()

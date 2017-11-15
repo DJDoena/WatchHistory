@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using DoenaSoft.WatchHistory.Data;
-
-namespace DoenaSoft.WatchHistory.Main
+﻿namespace DoenaSoft.WatchHistory.Main
 {
+    using System;
+    using System.Collections.Generic;
+    using Data;
+
     internal interface IMainModel
     {
         String Filter { get; set; }

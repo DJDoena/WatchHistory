@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Input;
-using DoenaSoft.AbstractionLayer.UIServices;
-using DoenaSoft.ToolBox.Commands;
-using DoenaSoft.WatchHistory.Data;
-
-namespace DoenaSoft.WatchHistory.Settings.Implementations
+﻿namespace DoenaSoft.WatchHistory.Settings.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Windows.Input;
+    using AbstractionLayer.UIServices;
+    using Data;
+    using ToolBox.Commands;
+
     internal sealed class SettingsViewModel : ISettingsViewModel
     {
         private readonly IDataManager DataManager;

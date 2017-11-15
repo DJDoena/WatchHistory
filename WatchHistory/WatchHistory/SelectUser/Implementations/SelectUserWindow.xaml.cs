@@ -1,11 +1,9 @@
-﻿using System;
-using System.Windows;
-
-namespace DoenaSoft.WatchHistory.SelectUser.Implementations
+﻿namespace DoenaSoft.WatchHistory.SelectUser.Implementations
 {
-    /// <summary>
-    /// Interaction logic for SelectUserWindow.xaml
-    /// </summary>
+    using System;
+    using System.Windows;
+
+
     public partial class SelectUserWindow : Window
     {
         public SelectUserWindow()

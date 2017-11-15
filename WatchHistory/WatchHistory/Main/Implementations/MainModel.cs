@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using DoenaSoft.AbstractionLayer.IOServices;
-using DoenaSoft.AbstractionLayer.UIServices;
-using DoenaSoft.DVDProfiler.DVDProfilerHelper;
-using DoenaSoft.DVDProfiler.DVDProfilerXML.Version390;
-using DoenaSoft.ToolBox.Extensions;
-using DoenaSoft.WatchHistory.Data;
-
-namespace DoenaSoft.WatchHistory.Main.Implementations
+﻿namespace DoenaSoft.WatchHistory.Main.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using AbstractionLayer.IOServices;
+    using AbstractionLayer.UIServices;
+    using Data;
+    using DVDProfiler.DVDProfilerHelper;
+    using DVDProfiler.DVDProfilerXML.Version390;
+    using ToolBox.Extensions;
+
     internal sealed class MainModel : IMainModel
     {
         private readonly IDataManager DataManager;

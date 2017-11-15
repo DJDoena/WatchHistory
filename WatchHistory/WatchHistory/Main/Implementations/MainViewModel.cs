@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Input;
-using DoenaSoft.AbstractionLayer.IOServices;
-using DoenaSoft.ToolBox.Commands;
-using DoenaSoft.WatchHistory.Data;
-using DoenaSoft.WatchHistory.Implementations;
-
-namespace DoenaSoft.WatchHistory.Main.Implementations
+﻿namespace DoenaSoft.WatchHistory.Main.Implementations
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Windows.Input;
+    using AbstractionLayer.IOServices;
+    using Data;
+    using ToolBox.Commands;
+    using WatchHistory.Implementations;
+
     internal sealed class MainViewModel : IMainViewModel
     {
         private readonly IMainModel Model;
@@ -62,8 +62,8 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             WindowFactory = windowFactory;
             UserName = userName;
 
-            m_SortColumn = SortColumn.File;
-            SortAscending = true;
+            m_SortColumn = SortColumn.CreationTime;
+            SortAscending = false;
             SuspendEvents = false;
             EventRaisedWhileSuspended = false;
         }

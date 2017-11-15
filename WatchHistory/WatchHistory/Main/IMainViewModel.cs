@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
-using DoenaSoft.WatchHistory.Data;
-
-namespace DoenaSoft.WatchHistory.Main
+﻿namespace DoenaSoft.WatchHistory.Main
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Windows.Input;
+    using Data;
+
     internal interface IMainViewModel : INotifyPropertyChanged
     {
         String Title { get; }

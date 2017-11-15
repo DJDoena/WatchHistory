@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DoenaSoft.AbstractionLayer.IOServices;
-using DoenaSoft.DVDProfiler.DVDProfilerXML.Version390;
-
-namespace DoenaSoft.WatchHistory.Main.Implementations
+﻿namespace DoenaSoft.WatchHistory.Main.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AbstractionLayer.IOServices;
+    using DVDProfiler.DVDProfilerXML.Version390;
+
     internal sealed class EpisodeTitleProcessor
     {
         private readonly Collection Collection;

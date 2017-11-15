@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using DoenaSoft.AbstractionLayer.IOServices;
-using DoenaSoft.WatchHistory.Data;
-using DoenaSoft.WatchHistory.Data.Implementations;
-
-namespace DoenaSoft.WatchHistory.Implementations
+﻿namespace DoenaSoft.WatchHistory.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using AbstractionLayer.IOServices;
+    using Data;
+    using Data.Implementations;
+
     internal static class ViewModelHelper
     {
         internal static ObservableCollection<IFileEntryViewModel> GetSortedEntries(IEnumerable<FileEntry> modelEntries
             , String userName
             , IDataManager dataManager
             , IIOServices ioServices
-            , SortColumn sortColumn = SortColumn.File
-            , Boolean ascending = true)
+            , SortColumn sortColumn
+            , Boolean ascending)
         {
             List<FileEntryViewModel> viewModelEntries = modelEntries.Select(item => new FileEntryViewModel(item, userName, dataManager, ioServices)).ToList();
 

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace DoenaSoft.WatchHistory
+﻿namespace DoenaSoft.WatchHistory
 {
+    using System;
+
     internal interface IWindowFactory
     {
         void OpenSelectUserWindow();

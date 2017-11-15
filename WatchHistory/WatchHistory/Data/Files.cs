@@ -1,8 +1,8 @@
-﻿using System;
-using System.Xml.Serialization;
-
-namespace DoenaSoft.WatchHistory.Data
+﻿namespace DoenaSoft.WatchHistory.Data
 {
+    using System;
+    using System.Xml.Serialization;
+
     [XmlRoot]
     public sealed class Files
     {

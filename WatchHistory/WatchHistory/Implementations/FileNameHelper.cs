@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using DoenaSoft.AbstractionLayer.IOServices;
-
-namespace DoenaSoft.WatchHistory.Implementations
+﻿namespace DoenaSoft.WatchHistory.Implementations
 {
+    using System;
+    using System.Linq;
+    using AbstractionLayer.IOServices;
+
     internal class FileNameHelper
     {
         private readonly Char[] InvalidFileNameChas;

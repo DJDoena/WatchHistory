@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using DoenaSoft.AbstractionLayer.IOServices;
-
-namespace DoenaSoft.WatchHistory.Data.Implementations
+﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using AbstractionLayer.IOServices;
+
     internal sealed class FileObserver : IFileObserver
     {
         private readonly IIOServices IOServices;

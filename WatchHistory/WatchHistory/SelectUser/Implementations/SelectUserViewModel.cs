@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Input;
-using DoenaSoft.ToolBox.Commands;
-using DoenaSoft.WatchHistory.Data;
-
-namespace DoenaSoft.WatchHistory.SelectUser.Implementations
+﻿namespace DoenaSoft.WatchHistory.SelectUser.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Windows.Input;
+    using Data;
+    using ToolBox.Commands;
+
     internal sealed class SelectUserViewModel : ISelectUserViewModel
     {
         private readonly IDataManager DataManager;
@@ -28,7 +28,7 @@ namespace DoenaSoft.WatchHistory.SelectUser.Implementations
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         #endregion
 
         #region ISelectUserViewModel

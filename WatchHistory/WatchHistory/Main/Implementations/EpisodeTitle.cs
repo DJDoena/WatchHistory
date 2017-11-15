@@ -1,10 +1,10 @@
-﻿using System;
-using DoenaSoft.AbstractionLayer.IOServices;
-using DoenaSoft.DVDProfiler.DVDProfilerXML.Version390;
-using DoenaSoft.WatchHistory.Implementations;
-
-namespace DoenaSoft.WatchHistory.Main.Implementations
+﻿namespace DoenaSoft.WatchHistory.Main.Implementations
 {
+    using System;
+    using AbstractionLayer.IOServices;
+    using DVDProfiler.DVDProfilerXML.Version390;
+    using WatchHistory.Implementations;
+
     internal sealed class EpisodeTitle : IEquatable<EpisodeTitle>
     {
         internal String Title { get; }

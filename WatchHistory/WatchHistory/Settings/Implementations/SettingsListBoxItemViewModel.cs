@@ -1,8 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-
-namespace DoenaSoft.WatchHistory.Settings.Implementations
+﻿namespace DoenaSoft.WatchHistory.Settings.Implementations
 {
+    using System;
+    using System.ComponentModel;
+
     internal sealed class SettingsListBoxItemViewModel : ISettingsListBoxItemViewModel
     {
         private String m_Value;
@@ -21,7 +21,7 @@ namespace DoenaSoft.WatchHistory.Settings.Implementations
 
             set
             {
-                if(value != m_Value)
+                if (value != m_Value)
                 {
                     m_Value = value;
 

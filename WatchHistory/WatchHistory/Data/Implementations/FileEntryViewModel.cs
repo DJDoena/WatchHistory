@@ -1,11 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Media;
-using DoenaSoft.AbstractionLayer.IOServices;
-
-namespace DoenaSoft.WatchHistory.Data.Implementations
+﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
+    using System;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Windows.Media;
+    using AbstractionLayer.IOServices;
+
     internal sealed class FileEntryViewModel : IFileEntryViewModel
     {
         private readonly String UserName;
@@ -131,7 +131,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         }
 
         public Brush Color
-            => (IOServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red);            
+            => (IOServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red);
 
         #endregion
 
