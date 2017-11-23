@@ -88,7 +88,7 @@
 
                 name = name.Trim('\\', '/');
 
-                name = name.Replace(Constants.BackSlash, @"\");
+                name = name.Replace(Constants.Backslash, @"\");
 
                 name = name.Replace(@"\", " > ");
 

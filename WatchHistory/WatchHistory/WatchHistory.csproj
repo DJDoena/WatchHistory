@@ -45,6 +45,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Environment.cs" />
     <Compile Include="Implementations\FileNameHelper.cs" />
     <Compile Include="Ignore\IIgnoreModel.cs" />
     <Compile Include="Ignore\IIgnoreViewModel.cs" />
@@ -87,6 +88,9 @@
     <Compile Include="Data\DefaultValues.cs" />
     <Compile Include="Data\Implementations\FileObserver.cs" />
     <Compile Include="Data\Files.cs" />
+    <Compile Include="Data\Files.Extended.cs">
+      <DependentUpon>Files.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\IFileObserver.cs" />
     <Compile Include="Data\IDataManager.cs" />
     <Compile Include="Data\Settings.cs" />

@@ -53,9 +53,9 @@
 
         private static string GetTitle(DVD dvd
             , String caption)
-            => ($"{GetTitle(dvd)}{Constants.BackSlash}{caption}");
+            => ($"{GetTitle(dvd)}{Constants.Backslash}{caption}");
 
         private static String GetTitle(DVD dvd)
-            => (dvd.Title.Replace(": ", Constants.BackSlash));
+            => (dvd.Title.Replace(": ", Constants.Backslash));
     }
 }

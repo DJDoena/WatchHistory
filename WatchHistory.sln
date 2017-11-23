@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Libraries", "_Libraries", "{9DDCC0D1-4448-4F03-B892-23424E26AE20}"
 EndProject
@@ -20,6 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{90C69892
 		WatchHistory\WatchHistorySetup\setup.iss = WatchHistory\WatchHistorySetup\setup.iss
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{757D0591-4E58-4788-A4FC-08BF7DFDB672}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanUpHistory", "CleanUpHistory\CleanUpHistory.csproj", "{0095D0DA-710B-4A9D-9488-D978B1999E5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -35,6 +39,8 @@ Global
 		{2E90CC6F-892E-45B3-8812-EE52FFA3B222}.Debug|x86.Build.0 = Debug|x86
 		{B5876E77-34BB-46A9-AACA-4FA81FB5A6A4}.Debug|x86.ActiveCfg = Debug|x86
 		{B5876E77-34BB-46A9-AACA-4FA81FB5A6A4}.Debug|x86.Build.0 = Debug|x86
+		{0095D0DA-710B-4A9D-9488-D978B1999E5A}.Debug|x86.ActiveCfg = Debug|x86
+		{0095D0DA-710B-4A9D-9488-D978B1999E5A}.Debug|x86.Build.0 = Debug|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,5 +50,6 @@ Global
 		{4782E10E-B5CC-4C2D-9D7F-D132CB5A50A0} = {9DDCC0D1-4448-4F03-B892-23424E26AE20}
 		{461DACCA-8EBF-4C03-AD1A-C438E4EB3B36} = {9DDCC0D1-4448-4F03-B892-23424E26AE20}
 		{2E90CC6F-892E-45B3-8812-EE52FFA3B222} = {9DDCC0D1-4448-4F03-B892-23424E26AE20}
+		{0095D0DA-710B-4A9D-9488-D978B1999E5A} = {757D0591-4E58-4788-A4FC-08BF7DFDB672}
 	EndGlobalSection
 EndGlobal

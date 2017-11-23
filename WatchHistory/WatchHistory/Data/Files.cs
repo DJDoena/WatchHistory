@@ -11,7 +11,7 @@
         public FileEntry[] Entries { get; set; }
     }
 
-    public class FileEntry
+    public sealed partial class FileEntry
     {
         private User[] m_Users;
 
@@ -19,6 +19,19 @@
 
         [XmlElement]
         public String FullName { get; set; }
+
+        [XmlElement]
+        public DateTime CreationTime
+        {
+            get
+            {
+                return (m_CreationTime ?? new DateTime(0));
+            }
+            set
+            {
+                m_CreationTime = value;
+            }
+        }
 
         [XmlArray("Users")]
         [XmlArrayItem("User")]
@@ -37,19 +50,9 @@
         }
 
         public event EventHandler UsersChanged;
-
-        internal DateTime GetCreationTime(IDataManager dataManager)
-        {
-            if (m_CreationTime.HasValue == false)
-            {
-                m_CreationTime = dataManager.GetCreationTime(this);
-            }
-
-            return (m_CreationTime.Value);
-        }
     }
 
-    public class User
+    public sealed class User
     {
         private DateTime[] m_Watches;
 

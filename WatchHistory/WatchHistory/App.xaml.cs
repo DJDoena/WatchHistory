@@ -17,10 +17,6 @@
 
         private IIOServices IOServices { get; set; }
 
-        private String SettingsFile { get; set; }
-
-        internal static String DataFile { get; private set; }
-
         private IDataManager DataManager { get; set; }
 
         internal static String AppDataFolder { get; private set; }
@@ -33,13 +29,9 @@
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
-            AppDataFolder = GetAppDataFolder();
+            Environment.Init(IOServices);
 
-            SettingsFile = IOServices.Path.Combine(AppDataFolder, "Settings.xml");
-
-            DataFile = IOServices.Path.Combine(AppDataFolder, "Files.xml");
-
-            DataManager = new DataManager(SettingsFile, DataFile, IOServices);
+            DataManager = new DataManager(Environment.SettingsFile, Environment.DataFile, IOServices);
 
             IWindowFactory windowFactory = new WindowFactory(IOServices, UIServices, DataManager);
 
@@ -48,22 +40,8 @@
 
         protected override void OnExit(ExitEventArgs e)
         {
-            DataManager.SaveSettingsFile(SettingsFile);
-            DataManager.SaveDataFile(DataFile);
-        }
-
-        private String GetAppDataFolder()
-        {
-            String appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-            appData = IOServices.Path.Combine(appData, "Doena Soft.", "WatchHistory");
-
-            if (IOServices.Directory.Exists(appData) == false)
-            {
-                IOServices.Directory.CreateFolder(appData);
-            }
-
-            return (appData);
+            DataManager.SaveSettingsFile(Environment.SettingsFile);
+            DataManager.SaveDataFile(Environment.DataFile);
         }
 
         private void OnUnhandledException(Object sender

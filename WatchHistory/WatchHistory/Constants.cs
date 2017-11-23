@@ -6,6 +6,6 @@
     {
         internal const String DefaultUser = "default";
 
-        internal const String BackSlash = " #BS# ";
+        internal const String Backslash = " #BS# ";
     }
 }

@@ -113,7 +113,7 @@
                 DataManager.UndoIgnore(entry.FileEntry, UserName);
             }
 
-            DataManager.SaveDataFile(App.DataFile);
+            DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
         }
 
         private void OnModelFilesChanged(Object sender

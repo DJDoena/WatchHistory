@@ -180,7 +180,7 @@
                 DataManager.AddWatched(entry.FileEntry, UserName);
             }
 
-            DataManager.SaveDataFile(App.DataFile);
+            DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
 
             ResumeEvents();
         }
@@ -209,7 +209,7 @@
                 DataManager.AddIgnore(entry.FileEntry, UserName);
             }
 
-            DataManager.SaveDataFile(App.DataFile);
+            DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
 
             ResumeEvents();
         }
