@@ -138,7 +138,7 @@
             , IEnumerable<String> fileExtensions
             , Dictionary<String, Dictionary<String, IFileSystemWatcher>> byFolderWatchers)
         {
-            if (IOServices.Directory.Exists(rootFolder))
+            if (IOServices.Folder.Exists(rootFolder))
             {
                 Dictionary<String, IFileSystemWatcher> byExtensionWatchers = CreateWatchers(rootFolder, fileExtensions);
 

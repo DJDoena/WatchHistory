@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.IOServices.Implementations;
     using Data;
@@ -29,12 +30,54 @@
         {
             Files files = Serializer<Files>.Deserialize(Environment.DataFile);
 
+            CreateBackup();
+
             if (files?.Entries?.Length > 0)
             {
                 files.Entries = Clean(files.Entries);
             }
 
             Serializer<Files>.Serialize(Environment.DataFile, files);
+        }
+
+        private static void CreateBackup()
+        {
+            String file = Environment.DataFile;
+
+            Int32 lastIndexOf = file.LastIndexOf(".");
+
+            String extension = file.Substring(lastIndexOf);
+
+            String fileBaseName = file.Substring(0, lastIndexOf);
+
+            try
+            {
+                String fileName = fileBaseName + ".5" + extension;
+
+                if (IOServices.File.Exists(fileName))
+                {
+                    IOServices.File.Delete(fileName);
+                }
+
+                for (Int32 i = 4; i > 0; i--)
+                {
+                    String fileName2 = fileBaseName + "." + i.ToString() + extension;
+
+                    if (IOServices.File.Exists(fileName2))
+                    {
+                        IOServices.File.Move(fileName2, fileName);
+                    }
+
+                    fileName = fileName2;
+                }
+
+                if (IOServices.File.Exists(file))
+                {
+                    IOServices.File.Copy(file, fileName);
+                }
+            }
+            catch (IOException)
+            { }
         }
 
         private static FileEntry[] Clean(FileEntry[] input)

@@ -18,6 +18,8 @@
 
         void PlayFile(FileEntry fileEntry);
 
+        Boolean CanPlayFile(FileEntry fileEntry);
+
         void OpenFileLocation(FileEntry fileEntry);
     }
 }

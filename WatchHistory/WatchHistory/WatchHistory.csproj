@@ -45,6 +45,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data\Files.v1_0.cs" />
+    <Compile Include="Data\Implementations\FilesModelConverter.cs" />
+    <Compile Include="Data\Implementations\FilesSerializer.cs" />
+    <Compile Include="Data\IFilesSerializer.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Implementations\FileNameHelper.cs" />
     <Compile Include="Ignore\IIgnoreModel.cs" />

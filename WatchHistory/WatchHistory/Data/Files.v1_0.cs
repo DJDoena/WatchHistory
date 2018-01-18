@@ -1,7 +1,6 @@
-﻿namespace DoenaSoft.WatchHistory.Data
+﻿namespace DoenaSoft.WatchHistory.Data.v1_0
 {
     using System;
-    using System.Diagnostics;
     using System.Xml;
     using System.Xml.Serialization;
 
@@ -12,22 +11,13 @@
         [XmlArrayItem("Entry")]
         public FileEntry[] Entries { get; set; }
 
-        [XmlAttribute]
-        public Decimal Version { get; set; }
-
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes { get; set; }
 
         [XmlAnyElement]
         public XmlElement[] AnyElements { get; set; }
-
-        public Files()
-        {
-            Version = 2.0m;
-        }
     }
 
-    [DebuggerDisplay("File: {FullName}")]
     public sealed partial class FileEntry
     {
         private User[] m_Users;
@@ -37,16 +27,16 @@
         [XmlElement]
         public String FullName { get; set; }
 
-        [XmlAttribute]
+        [XmlElement]
         public DateTime CreationTime
         {
             get
             {
-                return (m_CreationTime ?? new DateTime(0, DateTimeKind.Utc));
+                return ((m_CreationTime ?? new DateTime(0)).ToUniversalTime());
             }
             set
             {
-                m_CreationTime = value.Conform();
+                m_CreationTime = value;
             }
         }
 
@@ -66,12 +56,6 @@
             }
         }
 
-        [XmlAttribute]
-        public Int32 VideoLength { get; set; }
-
-        [XmlIgnore]
-        public Boolean VideoLengthSpecified { get; set; }
-
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes { get; set; }
 
@@ -81,10 +65,9 @@
         public event EventHandler UsersChanged;
     }
 
-    [DebuggerDisplay("User: {UserName}")]
     public sealed class User
     {
-        private Watch[] m_Watches;
+        private DateTime[] m_Watches;
 
         [XmlAttribute]
         public String UserName { get; set; }
@@ -97,13 +80,18 @@
 
         [XmlArray("Watches")]
         [XmlArrayItem("Watched")]
-        public Watch[] Watches
+        public DateTime[] Watches
         {
             get
             {
                 if ((m_Watches == null) || (m_Watches.Length == 0))
                 {
                     return (null);
+                }
+
+                for (Int32 i = 0; i < m_Watches.Length; i++)
+                {
+                    m_Watches[i] = m_Watches[i].ToUniversalTime();
                 }
 
                 return (m_Watches);
@@ -123,36 +111,5 @@
         public XmlElement[] AnyElements { get; set; }
 
         public event EventHandler WatchesChanged;
-    }
-
-    [DebuggerDisplay("Watched: {Value}")]
-    public sealed class Watch
-    {
-        private DateTime m_Watched;
-
-        [XmlAttribute]
-        public DateTime Value
-        {
-            get
-            {
-                return m_Watched;
-            }
-            set
-            {
-                m_Watched = value.Conform();
-            }
-        }
-
-        [XmlAnyAttribute]
-        public XmlAttribute[] AnyAttributes { get; set; }
-
-        [XmlAnyElement]
-        public XmlElement[] AnyElements { get; set; }
-    }
-
-    internal static class DateTimeConformer
-    {
-        internal static DateTime Conform(this DateTime value)
-            => (value.AddTicks(-(value.Ticks % TimeSpan.TicksPerSecond)).ToUniversalTime());
     }
 }

@@ -148,6 +148,9 @@
             }
         }
 
+        public Boolean CanPlayFile(FileEntry fileEntry)
+            => (fileEntry.FullName.EndsWith("." + CollectionProcessor.FileExtension) == false);
+
         public void OpenFileLocation(FileEntry fileEntry)
         {
             if (IOServices.GetFileInfo(fileEntry.FullName).Exists)
@@ -200,7 +203,7 @@
             options.CheckFileExists = true;
             options.FileName = "Collection.xml";
             options.Filter = "Collection files|*.xml";
-            options.RestoreDirectory = true;
+            options.RestoreFolder = true;
             options.Title = "Please select a DVD Profiler Collection Export file";
 
             return (options);

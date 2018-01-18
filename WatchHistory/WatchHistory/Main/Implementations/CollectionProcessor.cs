@@ -10,6 +10,8 @@
 
     internal sealed class CollectionProcessor
     {
+        internal const String FileExtension = "dvdp";
+
         private readonly Collection Collection;
 
         private readonly IDataManager DataManager;
@@ -41,29 +43,29 @@
 
         private void TryProcess()
         {
-            String folder = IOServices.Path.Combine(App.AppDataFolder, "DVDProfiler");
+            String folder = IOServices.Path.Combine(WatchHistory.Environment.AppDataFolder, "DVDProfiler");
 
-            if (IOServices.Directory.Exists(folder))
+            if (IOServices.Folder.Exists(folder))
             {
                 DeleteProfiles(folder);
             }
             else
             {
-                IOServices.Directory.CreateFolder(folder);
+                IOServices.Folder.CreateFolder(folder);
             }
 
             DataManager.Users = GetUsers().SelectMany(user => user).Union(DataManager.Users);
 
             DataManager.RootFolders = folder.Enumerate().Union(DataManager.RootFolders);
 
-            DataManager.FileExtensions = "dvdp".Enumerate().Union(DataManager.FileExtensions);
+            DataManager.FileExtensions = FileExtension.Enumerate().Union(DataManager.FileExtensions);
 
             CreateCollectionFiles(folder);
         }
 
         private void DeleteProfiles(String folder)
         {
-            IEnumerable<String> files = IOServices.Directory.GetFiles(folder, "*.dvdp");
+            IEnumerable<String> files = IOServices.Folder.GetFiles(folder, "*." + FileExtension);
 
             foreach (String file in files)
             {
@@ -111,7 +113,7 @@
         private void CreateCollectionFile(String folder
             , EpisodeTitle title)
         {
-            String fileName = IOServices.Path.Combine(folder, title.Title + ".dvdp");
+            String fileName = IOServices.Path.Combine(folder, title.Title + "." + FileExtension);
 
             using (System.IO.Stream stream = IOServices.GetFileStream(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read))
             { }

@@ -19,8 +19,6 @@
 
         private IDataManager DataManager { get; set; }
 
-        internal static String AppDataFolder { get; private set; }
-
         protected override void OnStartup(StartupEventArgs e)
         {
             IOServices = new IOServices();
@@ -53,7 +51,7 @@
             {
                 ExceptionXml exceptionXml = new ExceptionXml(ex);
 
-                String fileName = IOServices.Path.Combine(AppDataFolder, "Crash.xml");
+                String fileName = IOServices.Path.Combine(Environment.AppDataFolder, "Crash.xml");
 
                 Serializer<ExceptionXml>.Serialize(fileName, exceptionXml);
 

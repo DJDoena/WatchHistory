@@ -9,13 +9,15 @@
 
         internal static String DataFile { get; private set; }
 
+        internal static String AppDataFolder { get; private set; }
+
         internal static void Init(IIOServices ioServices)
         {
-            String appDataFolder = GetAppDataFolder(ioServices);
+            AppDataFolder = GetAppDataFolder(ioServices);
 
-            SettingsFile = ioServices.Path.Combine(appDataFolder, "Settings.xml");
+            SettingsFile = ioServices.Path.Combine(AppDataFolder, "Settings.xml");
 
-            DataFile = ioServices.Path.Combine(appDataFolder, "Files.xml");
+            DataFile = ioServices.Path.Combine(AppDataFolder, "Files.xml");
         }
 
         private static String GetAppDataFolder(IIOServices ioServices)
@@ -24,9 +26,9 @@
 
             appDataFolder = ioServices.Path.Combine(appDataFolder, "Doena Soft.", "WatchHistory");
 
-            if (ioServices.Directory.Exists(appDataFolder) == false)
+            if (ioServices.Folder.Exists(appDataFolder) == false)
             {
-                ioServices.Directory.CreateFolder(appDataFolder);
+                ioServices.Folder.CreateFolder(appDataFolder);
             }
 
             return (appDataFolder);

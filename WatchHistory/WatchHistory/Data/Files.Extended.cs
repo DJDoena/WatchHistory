@@ -11,7 +11,7 @@
                 m_CreationTime = dataManager.GetCreationTime(this);
             }
 
-            return (m_CreationTime.Value);
+            return (m_CreationTime.Value.ToLocalTime());
         }
     }
 }

@@ -18,6 +18,8 @@
 
         ICommand AddWatchedCommand { get; }
 
+        ICommand PlayFileAndAddWatchedCommand { get; }
+
         ICommand IgnoreCommand { get; }
 
         ICommand OpenSettingsCommand { get; }

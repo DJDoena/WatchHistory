@@ -148,6 +148,9 @@
         public ICommand AddWatchedCommand
             => (new ParameterizedRelayCommand(AddWatched));
 
+        public ICommand PlayFileAndAddWatchedCommand
+            => (new ParameterizedRelayCommand(PlayFileAndAddWatched, CanPlayFile));
+
         public ICommand OpenSettingsCommand
             => (new RelayCommand(OpenSettings));
 
@@ -161,7 +164,7 @@
           => (new RelayCommand(UndoIgnore));
 
         public ICommand PlayFileCommand
-            => (new ParameterizedRelayCommand(PlayFile));
+            => (new ParameterizedRelayCommand(PlayFile, CanPlayFile));
 
         public ICommand SortCommand
             => (new ParameterizedRelayCommand(Sort));
@@ -175,9 +178,9 @@
         {
             SuspendEvents = true;
 
-            foreach (IFileEntryViewModel entry in GetEntries(parameter))
+            foreach (FileEntry fileEntry in GetEntries(parameter))
             {
-                DataManager.AddWatched(entry.FileEntry, UserName);
+                DataManager.AddWatched(fileEntry, UserName);
             }
 
             DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
@@ -197,16 +200,16 @@
             }
         }
 
-        private static IEnumerable<IFileEntryViewModel> GetEntries(Object parameter)
-            => (((IList)parameter).Cast<IFileEntryViewModel>().ToList());
+        private static IEnumerable<FileEntry> GetEntries(Object parameter)
+            => (((IList)parameter).Cast<IFileEntryViewModel>().Select(entry => entry.FileEntry).ToList());
 
         private void Ignore(Object parameter)
         {
             SuspendEvents = true;
 
-            foreach (IFileEntryViewModel entry in GetEntries(parameter))
+            foreach (FileEntry fileEntry in GetEntries(parameter))
             {
-                DataManager.AddIgnore(entry.FileEntry, UserName);
+                DataManager.AddIgnore(fileEntry, UserName);
             }
 
             DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
@@ -231,8 +234,28 @@
             Model.PlayFile(fileEntry);
         }
 
+        private Boolean CanPlayFile(Object parameter)
+        {
+            FileEntry fileEntry = GetFileEntry(parameter);
+
+            Boolean canPlay = (fileEntry != null) && (Model.CanPlayFile(fileEntry));
+
+            return (canPlay);
+        }
+
+        private void PlayFileAndAddWatched(Object parameter)
+        {
+            FileEntry fileEntry = GetFileEntry(parameter);
+
+            Model.PlayFile(fileEntry);
+
+            DataManager.AddWatched(fileEntry, UserName);
+
+            DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+        }
+
         private static FileEntry GetFileEntry(Object parameter)
-            => (((IFileEntryViewModel)parameter).FileEntry);
+            => (((IFileEntryViewModel)parameter)?.FileEntry);
 
         private void OpenFileLocation(Object parameter)
         {

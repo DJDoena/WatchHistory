@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using AbstractionLayer.IOServices;
@@ -16,6 +17,8 @@
         private readonly IFileObserver FileObserver;
 
         private readonly Object FilesLock;
+
+        private readonly IFilesSerializer FilesSerializer;
 
         private IEnumerable<String> m_RootFolders;
 
@@ -41,7 +44,11 @@
 
             LoadSettings(settingsFile);
 
-            LoadData(dataFile);
+            FilesSerializer = new FilesSerializer(ioServices);
+
+            FilesSerializer.CreateBackup(dataFile);
+
+            LoadData(dataFile);            
         }
 
         #region IDataManager
@@ -187,7 +194,7 @@
 
             if (user?.Watches?.HasItems() == true)
             {
-                lastWatched = user.Watches.Max();
+                lastWatched = user.Watches.Max(watch => watch.Value).ToLocalTime();
             }
 
             return (lastWatched);
@@ -209,15 +216,14 @@
 
         public void SaveSettingsFile(String file)
         {
-            Settings settings = new Settings();
+            DefaultValues defaultValues = new DefaultValues() { Users = m_Users.ToArray(), RootFolders = m_RootFolders.ToArray(), FileExtensions = m_FileExtensions.ToArray() };
 
-            settings.DefaultValues = new DefaultValues();
+            Settings settings = new Settings() { DefaultValues = defaultValues };
 
-            settings.DefaultValues.Users = m_Users.ToArray();
-            settings.DefaultValues.RootFolders = m_RootFolders.ToArray();
-            settings.DefaultValues.FileExtensions = m_FileExtensions.ToArray();
-
-            Serializer<Settings>.Serialize(file, settings);
+            using (Stream fs = IOServices.GetFileStream(file, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                Serializer<Settings>.Serialize(fs, settings);
+            }
         }
 
         public void SaveDataFile(String file)
@@ -229,7 +235,7 @@
                 files.Entries = Files.Values.ToArray();
             }
 
-            Serializer<Files>.Serialize(file, files);
+            FilesSerializer.SaveFile(file, files);
         }
 
         public void Suspend()
@@ -250,18 +256,19 @@
 
         #endregion
 
-        private void LoadSettings(String settingsFile)
+        private void LoadSettings(String file)
         {
             Settings settings;
             try
             {
-                settings = Serializer<Settings>.Deserialize(settingsFile);
+                using (Stream fs = IOServices.GetFileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    settings = Serializer<Settings>.Deserialize(fs);
+                }
             }
             catch
             {
-                settings = new Settings();
-
-                settings.DefaultValues = new DefaultValues();
+                settings = new Settings() { DefaultValues = new DefaultValues() };
             }
 
             m_Users = settings?.DefaultValues?.Users ?? Enumerable.Empty<String>();
@@ -271,17 +278,9 @@
             m_FileExtensions = settings?.DefaultValues?.FileExtensions ?? Enumerable.Empty<String>();
         }
 
-        private void LoadData(String dataFile)
+        private void LoadData(String file)
         {
-            Files files;
-            try
-            {
-                files = Serializer<Files>.Deserialize(dataFile);
-            }
-            catch
-            {
-                files = new Files();
-            }
+            Files files = FilesSerializer.LoadData(file);
 
             lock (FilesLock)
             {
@@ -314,13 +313,9 @@
 
         private void AddWatched(User user)
         {
-            List<DateTime> watches = user.Watches?.ToList() ?? new List<DateTime>(1);
+            List<Watch> watches = user.Watches?.ToList() ?? new List<Watch>(1);
 
-            DateTime now = DateTime.Now;
-
-            now = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
-
-            watches.Add(now);
+            watches.Add(new Watch() { Value = DateTime.UtcNow });
 
             user.Watches = watches.ToArray();
 
@@ -385,7 +380,7 @@
         private IEnumerable<String> GetFiles(String rootFolder
             , String fileExtension)
         {
-            IDirectory dir = IOServices.Directory;
+            IFolder dir = IOServices.Folder;
 
             IEnumerable<String> files;
             if (dir.Exists(rootFolder))
@@ -429,7 +424,7 @@
         }
 
         private void OnFileRenamed(Object sender
-            , System.IO.RenamedEventArgs e)
+            , RenamedEventArgs e)
         {
             FileEntry entry = new FileEntry();
 
@@ -447,25 +442,29 @@
         }
 
         private void OnFileDeleted(Object sender
-            , System.IO.FileSystemEventArgs e)
+            , FileSystemEventArgs e)
         {
             lock (FilesLock)
             {
-                Files.Remove(e.FullPath);
+                FileEntry entry;
+                if ((Files.TryGetValue(e.FullPath, out entry)) && (HasEvents(entry) == false))
+                {
+                    Files.Remove(e.FullPath);
+                }
             }
 
             RaiseFilesChanged();
         }
 
         private void OnFileCreated(Object sender
-            , System.IO.FileSystemEventArgs e)
+            , FileSystemEventArgs e)
         {
             OnFileCreated(e, new FileEntry());
 
             RaiseFilesChanged();
         }
 
-        private void OnFileCreated(System.IO.FileSystemEventArgs e
+        private void OnFileCreated(FileSystemEventArgs e
             , FileEntry entry)
         {
             lock (FilesLock)

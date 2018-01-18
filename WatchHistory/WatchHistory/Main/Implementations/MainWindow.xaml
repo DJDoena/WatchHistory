@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DoenaSoft.WatchHistory.Main.Implementations"
         mc:Ignorable="d"
         Title="{Binding Title, Mode=OneTime}" Height="900" Width="1200" WindowStartupLocation="CenterScreen" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO"
         FocusManager.FocusedElement="{Binding ElementName=FilterTextBox}">
@@ -49,8 +48,10 @@
                     <ContextMenu>
                         <MenuItem Header="Play file"
                                   Command="{Binding PlayFileCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                        <MenuItem Header="Add Watched Event"
+                        <MenuItem Header="Add &quot;Watched&quot; event"
                                   Command="{Binding AddWatchedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}" />
+                        <MenuItem Header="Play file &amp; Add &quot;Watched&quot; event"
+                                  Command="{Binding PlayFileAndAddWatchedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                         <MenuItem Header="Ignore permanently"
                                   Command="{Binding IgnoreCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}" />
                         <MenuItem Header="Open file location"
