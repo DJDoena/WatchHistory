@@ -214,28 +214,30 @@
             return (creationTime);
         }
 
-        public void SaveSettingsFile(String file)
+        public void SaveSettingsFile(String fileName)
         {
             DefaultValues defaultValues = new DefaultValues() { Users = m_Users.ToArray(), RootFolders = m_RootFolders.ToArray(), FileExtensions = m_FileExtensions.ToArray() };
 
             Settings settings = new Settings() { DefaultValues = defaultValues };
 
-            using (Stream fs = IOServices.GetFileStream(file, FileMode.Create, FileAccess.Write, FileShare.Read))
+            using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 Serializer<Settings>.Serialize(fs, settings);
             }
         }
 
-        public void SaveDataFile(String file)
+        public void SaveDataFile(String fileName)
         {
-            Files files = new Files();
-
             lock (FilesLock)
             {
-                files.Entries = Files.Values.ToArray();
-            }
+                List<FileEntry> entries = Files.Values.ToList();
 
-            FilesSerializer.SaveFile(file, files);
+                entries.Sort((left, right) => left.FullName.CompareTo(right.FullName));
+
+                Files files = new Files() { Entries = entries.ToArray() };
+
+                FilesSerializer.SaveFile(fileName, files);
+            }
         }
 
         public void Suspend()
@@ -256,12 +258,12 @@
 
         #endregion
 
-        private void LoadSettings(String file)
+        private void LoadSettings(String fileName)
         {
             Settings settings;
             try
             {
-                using (Stream fs = IOServices.GetFileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     settings = Serializer<Settings>.Deserialize(fs);
                 }
@@ -278,9 +280,9 @@
             m_FileExtensions = settings?.DefaultValues?.FileExtensions ?? Enumerable.Empty<String>();
         }
 
-        private void LoadData(String file)
+        private void LoadData(String fileName)
         {
-            Files files = FilesSerializer.LoadData(file);
+            Files files = FilesSerializer.LoadData(fileName);
 
             lock (FilesLock)
             {

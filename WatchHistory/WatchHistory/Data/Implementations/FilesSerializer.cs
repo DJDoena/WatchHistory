@@ -17,12 +17,12 @@
 
         #region IFilesSerializer
         
-        public Files LoadData(String file)
+        public Files LoadData(String fileName)
         {
             Files files;
             try
             {
-                files = ReadXml(file);
+                files = ReadXml(fileName);
             }
             catch
             {
@@ -32,44 +32,49 @@
             return (files);
         }
 
-        public void SaveFile(String file
+        public void SaveFile(String fileName
             , Files files)
         {
-            Serializer<Files>.Serialize(file, files);
+            using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                Serializer<Files>.Serialize(fs, files);
+            }
         }
 
-        public void CreateBackup(String file)
+        public void CreateBackup(String fileName)
         {
-            Int32 lastIndexOf = file.LastIndexOf(".");
+            Int32 lastIndexOf = fileName.LastIndexOf(".");
 
-            String extension = file.Substring(lastIndexOf);
+            String extension = fileName.Substring(lastIndexOf);
 
-            String fileBaseName = file.Substring(0, lastIndexOf);
+            String fileBaseName = fileName.Substring(0, lastIndexOf);
 
             try
             {
-                String fileName = fileBaseName + ".5" + extension;
+                const Int32 MaximumBackups = 9;
+
+                String newFileName = fileBaseName + "." + MaximumBackups.ToString() + extension;
+
+                if (IOServices.File.Exists(newFileName))
+                {
+                    IOServices.File.Delete(newFileName);
+                }
+
+                for (Int32 backupIndex = MaximumBackups - 1; backupIndex > 0; backupIndex--)
+                {
+                    String oldFileName = fileBaseName + "." + backupIndex.ToString() + extension;
+
+                    if (IOServices.File.Exists(oldFileName))
+                    {
+                        IOServices.File.Move(oldFileName, newFileName);
+                    }
+
+                    newFileName = oldFileName;
+                }
 
                 if (IOServices.File.Exists(fileName))
                 {
-                    IOServices.File.Delete(fileName);
-                }
-
-                for (Int32 i = 4; i > 0; i--)
-                {
-                    String fileName2 = fileBaseName + "." + i.ToString() + extension;
-
-                    if (IOServices.File.Exists(fileName2))
-                    {
-                        IOServices.File.Move(fileName2, fileName);
-                    }
-
-                    fileName = fileName2;
-                }
-
-                if (IOServices.File.Exists(file))
-                {
-                    IOServices.File.Copy(file, fileName);
+                    IOServices.File.Copy(fileName, newFileName);
                 }
             }
             catch (IOException)
@@ -78,12 +83,12 @@
 
         #endregion
 
-        private Files ReadXml(String file)
-            => ((IsVersion2File(file)) ? ReadVersion2File(file) : ReadVersion1File(file));
+        private Files ReadXml(String fileName)
+            => ((IsVersion2File(fileName)) ? ReadVersion2File(fileName) : ReadVersion1File(fileName));
 
-        private Boolean IsVersion2File(String file)
+        private Boolean IsVersion2File(String fileName)
         {
-            using (Stream fs = IOServices.GetFileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 using (StreamReader sr = new StreamReader(fs, Encoding.UTF8))
                 {
@@ -103,9 +108,9 @@
             }
         }
 
-        private Files ReadVersion2File(String file)
+        private Files ReadVersion2File(String fileName)
         {
-            using (Stream fs = IOServices.GetFileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 Files files = Serializer<Files>.Deserialize(fs);
 
@@ -113,9 +118,9 @@
             }
         }
 
-        private Files ReadVersion1File(String file)
+        private Files ReadVersion1File(String fileName)
         {
-            using (Stream fs = IOServices.GetFileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 v1_0.Files oldFiles = Serializer<v1_0.Files>.Deserialize(fs);
 
