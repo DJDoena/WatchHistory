@@ -52,14 +52,16 @@
 
             try
             {
-                String fileName = fileBaseName + ".5" + extension;
+                const Int32 MaximumBackups = 9;
+
+                String fileName = fileBaseName + "." + MaximumBackups.ToString() + extension;
 
                 if (IOServices.File.Exists(fileName))
                 {
                     IOServices.File.Delete(fileName);
                 }
 
-                for (Int32 i = 4; i > 0; i--)
+                for (Int32 i = MaximumBackups - 1; i > 0; i--)
                 {
                     String fileName2 = fileBaseName + "." + i.ToString() + extension;
 
