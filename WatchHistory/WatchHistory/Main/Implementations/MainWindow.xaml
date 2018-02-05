@@ -52,7 +52,7 @@
                                   Command="{Binding AddWatchedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}" />
                         <MenuItem Header="Play file &amp; Add &quot;Watched&quot; event"
                                   Command="{Binding PlayFileAndAddWatchedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                        <MenuItem Header="Ignore permanently"
+                        <MenuItem Header="Ignore"
                                   Command="{Binding IgnoreCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}" />
                         <MenuItem Header="Open file location"
                                   Command="{Binding OpenFileLocationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
