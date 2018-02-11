@@ -14,11 +14,7 @@
 
         public String Value
         {
-            get
-            {
-                return (m_Value);
-            }
-
+            get => m_Value;
             set
             {
                 if (value != m_Value)

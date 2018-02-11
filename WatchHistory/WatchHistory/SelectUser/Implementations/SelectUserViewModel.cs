@@ -14,7 +14,7 @@
 
         private readonly IWindowFactory WindowFactory;
 
-        private String m_SelectedUser;
+        private String _SelectedUser;
 
         public SelectUserViewModel(IDataManager dataManager
             , IWindowFactory windowFactory)
@@ -22,7 +22,7 @@
             DataManager = dataManager;
             WindowFactory = windowFactory;
 
-            m_SelectedUser = DataManager.Users.First();
+            _SelectedUser = DataManager.Users.First();
         }
 
         #region INotifyPropertyChanged
@@ -38,16 +38,12 @@
 
         public String SelectedUser
         {
-            get
-            {
-                return (m_SelectedUser);
-
-            }
+            get => _SelectedUser;
             set
             {
-                if (value != m_SelectedUser)
+                if (value != _SelectedUser)
                 {
-                    m_SelectedUser = value;
+                    _SelectedUser = value;
 
                     RaisePropertyChanged(nameof(SelectedUser));
                 }
@@ -55,7 +51,7 @@
         }
 
         public ICommand SelectCommand
-            => (new RelayCommand(Select));
+            => new RelayCommand(Select);
 
         public event EventHandler Closing;
 
@@ -69,8 +65,6 @@
         }
 
         private void RaisePropertyChanged(String attribute)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
-        }
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

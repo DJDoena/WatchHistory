@@ -7,9 +7,9 @@
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
     using Data;
-    using DVDProfiler.DVDProfilerHelper;
-    using DVDProfiler.DVDProfilerXML.Version390;
+    using DVDProfiler.DVDProfilerXML.Version400;
     using ToolBox.Extensions;
+    using WatchHistory.Implementations;
 
     internal sealed class MainModel : IMainModel
     {
@@ -21,11 +21,11 @@
 
         private readonly String UserName;
 
-        private String m_Filter;
+        private String _Filter;
 
-        private Boolean m_IgnoreWatched;
+        private Boolean _IgnoreWatched;
 
-        private event EventHandler m_FilesChanged;
+        private event EventHandler _FilesChanged;
 
         public MainModel(IDataManager dataManager
             , IIOServices ioServices
@@ -44,15 +44,12 @@
 
         public String Filter
         {
-            get
-            {
-                return (m_Filter ?? String.Empty);
-            }
+            get => _Filter ?? String.Empty;
             set
             {
-                if (value != m_Filter)
+                if (value != _Filter)
                 {
-                    m_Filter = value;
+                    _Filter = value;
 
                     RaiseFilesChanged(EventArgs.Empty);
                 }
@@ -61,15 +58,12 @@
 
         public Boolean IgnoreWatched
         {
-            get
-            {
-                return (m_IgnoreWatched);
-            }
+            get => _IgnoreWatched;
             set
             {
-                if (value != m_IgnoreWatched)
+                if (value != _IgnoreWatched)
                 {
-                    m_IgnoreWatched = value;
+                    _IgnoreWatched = value;
 
                     RaiseFilesChanged(EventArgs.Empty);
                 }
@@ -80,18 +74,18 @@
         {
             add
             {
-                if (m_FilesChanged == null)
+                if (_FilesChanged == null)
                 {
                     DataManager.FilesChanged += OnDataManagerFilesChanged;
                 }
 
-                m_FilesChanged += value;
+                _FilesChanged += value;
             }
             remove
             {
-                m_FilesChanged -= value;
+                _FilesChanged -= value;
 
-                if (m_FilesChanged == null)
+                if (_FilesChanged == null)
                 {
                     DataManager.FilesChanged -= OnDataManagerFilesChanged;
                 }
@@ -100,32 +94,28 @@
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            IEnumerable<FileEntry> files = DataManager.GetFiles();
+            IEnumerable<FileEntry> allFiles = DataManager.GetFiles();
 
-            files = files.Except(files.Where(UserIgnores));
+            IEnumerable<FileEntry> notIgnoredFiles = allFiles.Except(allFiles.Where(UserIgnores));
 
-            files = files.Where(ContainsFilter);
+            IEnumerable<FileEntry> filteredFiles = notIgnoredFiles.Where(ContainsFilter).ToList();
 
-            if (IgnoreWatched)
-            {
-                files = files.Except(files.Where(UserHasWatched));
-            }
+            IEnumerable<FileEntry> unwatchedFiles = filteredFiles.Except(filteredFiles.Where(UserHasWatched));
 
-            files = files.ToList();
+            IEnumerable<FileEntry> result = IgnoreWatched ? unwatchedFiles.ToList() : filteredFiles;
 
-            return (files);
+            return (result);
         }
 
         public void ImportCollection()
         {
             OpenFileDialogOptions options = GetImportCollectionFileDialogOptions();
 
-            String fileName;
-            if (UIServices.ShowOpenFileDialog(options, out fileName))
+            if (UIServices.ShowOpenFileDialog(options, out String fileName))
             {
                 try
                 {
-                    Collection collection = Serializer<Collection>.Deserialize(fileName);
+                    Collection collection = SerializerHelper.Deserialize<Collection>(IOServices, fileName);
 
                     CollectionProcessor processor = new CollectionProcessor(collection, DataManager, IOServices);
 
@@ -149,7 +139,7 @@
         }
 
         public Boolean CanPlayFile(FileEntry fileEntry)
-            => (fileEntry.FullName.EndsWith("." + Constants.DvdProfilerFileExtension) == false);
+            => fileEntry.FullName.EndsWith("." + Constants.DvdProfilerFileExtension) == false;
 
         public void OpenFileLocation(FileEntry fileEntry)
         {
@@ -164,35 +154,35 @@
         #region UserIgnores
 
         private Boolean UserIgnores(FileEntry file)
-            => (file.Users?.HasItemsWhere(UserIgnores) == true);
+            => file.Users?.HasItemsWhere(UserIgnores) == true;
 
         private Boolean UserIgnores(Data.User user)
-            => ((user.UserName == UserName) && (user.Ignore));
+            => (user.UserName == UserName) && (user.Ignore);
 
         #endregion
 
         #region ContainsFilter
 
         private Boolean ContainsFilter(FileEntry file)
-            => (ContainsFilter(file, Filter.Trim().Split(' ')));
+            => ContainsFilter(file, Filter.Trim().Split(' '));
 
         private static Boolean ContainsFilter(FileEntry file
            , IEnumerable<String> filters)
-            => (filters.All(filter => ContainsFilter(file, filter)));
+            => filters.All(filter => ContainsFilter(file, filter));
 
         private static Boolean ContainsFilter(FileEntry file
             , String filter)
-            => (file.FullName.IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1);
+            => file.FullName.IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1;
 
         #endregion
 
         #region UserHasWatched
 
         private Boolean UserHasWatched(FileEntry file)
-            => (file.Users?.HasItemsWhere(UserHasWatched) == true);
+            => file.Users?.HasItemsWhere(UserHasWatched) == true;
 
         private Boolean UserHasWatched(Data.User user)
-            => ((user.UserName == UserName) && (user.Watches?.HasItems() == true));
+            => (user.UserName == UserName) && (user.Watches?.HasItems() == true);
 
         #endregion
 
@@ -211,13 +201,9 @@
 
         private void OnDataManagerFilesChanged(Object sender
             , EventArgs e)
-        {
-            RaiseFilesChanged(e);
-        }
+            => RaiseFilesChanged(e);
 
         private void RaiseFilesChanged(EventArgs e)
-        {
-            m_FilesChanged?.Invoke(this, e);
-        }
+            => _FilesChanged?.Invoke(this, e);
     }
 }

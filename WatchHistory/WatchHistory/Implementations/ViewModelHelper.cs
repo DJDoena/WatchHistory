@@ -18,7 +18,7 @@
             , SortColumn sortColumn
             , Boolean ascending)
         {
-            List<FileEntryViewModel> viewModelEntries = modelEntries.ForEach(item => new FileEntryViewModel(item, userName, dataManager, ioServices)).ToList();
+            List<FileEntryViewModel> viewModelEntries = modelEntries.Select(item => new FileEntryViewModel(item, userName, dataManager, ioServices)).ToList();
 
             viewModelEntries.Sort((left, right) => Compare(left, right, sortColumn, ascending, userName, dataManager));
 
@@ -111,8 +111,7 @@
 
         private static void TryPadName(ref String part)
         {
-            UInt32 number;
-            if (UInt32.TryParse(part, out number))
+            if (UInt32.TryParse(part, out uint number))
             {
                 part = number.ToString("D10");
             }

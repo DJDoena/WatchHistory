@@ -4,18 +4,19 @@
     using System.Collections.Generic;
     using System.Linq;
     using AbstractionLayer.IOServices;
+    using ToolBox.Extensions;
 
     internal sealed class FileObserver : IFileObserver
     {
         private readonly IIOServices IOServices;
 
-        private Dictionary<String, Dictionary<String, IFileSystemWatcher>> m_FileSystemWatchers;
+        private Dictionary<String, Dictionary<String, IFileSystemWatcher>> _FileSystemWatchers;
 
-        private event System.IO.FileSystemEventHandler m_Created;
+        private event System.IO.FileSystemEventHandler _Created;
 
-        private event System.IO.FileSystemEventHandler m_Deleted;
+        private event System.IO.FileSystemEventHandler _Deleted;
 
-        private event System.IO.RenamedEventHandler m_Renamed;
+        private event System.IO.RenamedEventHandler _Renamed;
 
         private Boolean IsSuspended { get; set; }
 
@@ -30,26 +31,20 @@
         {
             add
             {
-                if (m_Created == null)
+                if (_Created == null)
                 {
-                    foreach (IFileSystemWatcher fsw in GetFileSystemWatchers())
-                    {
-                        fsw.Created += OnFileCreated;
-                    }
+                    GetFileSystemWatchers().ForEach(fsw => fsw.Created += OnFileCreated);
                 }
 
-                m_Created += value;
+                _Created += value;
             }
             remove
             {
-                m_Created -= value;
+                _Created -= value;
 
-                if (m_Created == null)
+                if (_Created == null)
                 {
-                    foreach (IFileSystemWatcher fsw in GetFileSystemWatchers())
-                    {
-                        fsw.Created -= OnFileCreated;
-                    }
+                    GetFileSystemWatchers().ForEach(fsw => fsw.Created -= OnFileCreated);
                 }
             }
         }
@@ -58,26 +53,20 @@
         {
             add
             {
-                if (m_Deleted == null)
+                if (_Deleted == null)
                 {
-                    foreach (IFileSystemWatcher fsw in GetFileSystemWatchers())
-                    {
-                        fsw.Deleted += OnFileDeleted;
-                    }
+                    GetFileSystemWatchers().ForEach(fsw => fsw.Deleted += OnFileDeleted);
                 }
 
-                m_Deleted += value;
+                _Deleted += value;
             }
             remove
             {
-                m_Deleted -= value;
+                _Deleted -= value;
 
-                if (m_Deleted == null)
+                if (_Deleted == null)
                 {
-                    foreach (IFileSystemWatcher fsw in GetFileSystemWatchers())
-                    {
-                        fsw.Deleted -= OnFileDeleted;
-                    }
+                    GetFileSystemWatchers().ForEach(fsw => fsw.Deleted -= OnFileDeleted);
                 }
             }
         }
@@ -86,26 +75,20 @@
         {
             add
             {
-                if (m_Renamed == null)
+                if (_Renamed == null)
                 {
-                    foreach (IFileSystemWatcher fsw in GetFileSystemWatchers())
-                    {
-                        fsw.Renamed += OnFileRenamed;
-                    }
+                    GetFileSystemWatchers().ForEach(fsw => fsw.Renamed += OnFileRenamed);
                 }
 
-                m_Renamed += value;
+                _Renamed += value;
             }
             remove
             {
-                m_Renamed -= value;
+                _Renamed -= value;
 
-                if (m_Renamed == null)
+                if (_Renamed == null)
                 {
-                    foreach (IFileSystemWatcher fsw in GetFileSystemWatchers())
-                    {
-                        fsw.Renamed -= OnFileRenamed;
-                    }
+                    GetFileSystemWatchers().ForEach(fsw => fsw.Renamed -= OnFileRenamed);
                 }
             }
         }
@@ -115,21 +98,18 @@
         {
             Dictionary<String, Dictionary<String, IFileSystemWatcher>> watchers = new Dictionary<String, Dictionary<String, IFileSystemWatcher>>();
 
-            foreach (String rootFolder in rootFolders)
-            {
-                CreateWatchers(rootFolder, fileExtensions, watchers);
-            }
+            rootFolders.ForEach(folder => CreateWatchers(folder, fileExtensions, watchers));
 
             DisposeFileSystemWatchers();
 
-            m_FileSystemWatchers = watchers;
+            _FileSystemWatchers = watchers;
         }
 
         public void Suspend()
         {
             DisposeFileSystemWatchers();
 
-            m_FileSystemWatchers = null;
+            _FileSystemWatchers = null;
         }
 
         #endregion
@@ -151,14 +131,16 @@
         {
             Dictionary<String, IFileSystemWatcher> watchers = new Dictionary<String, IFileSystemWatcher>();
 
-            foreach (String fileExtension in fileExtensions)
-            {
-                IFileSystemWatcher fsw = CreateWatcher(rootFolder, fileExtension);
-
-                watchers.Add(fileExtension, fsw);
-            }
+            fileExtensions.ForEach(ext => AddWatcher(watchers, rootFolder, ext));
 
             return (watchers);
+        }
+
+        private void AddWatcher(Dictionary<String, IFileSystemWatcher> watchers, String rootFolder, String fileExtension)
+        {
+            IFileSystemWatcher fsw = CreateWatcher(rootFolder, fileExtension);
+
+            watchers.Add(fileExtension, fsw);
         }
 
         private IFileSystemWatcher CreateWatcher(String rootFolder
@@ -166,48 +148,43 @@
         {
             IFileSystemWatcher fsw = IOServices.GetFileSystemWatcher(rootFolder, "*." + fileExtension);
 
-            if (m_Created != null)
+            if (_Created != null)
             {
                 fsw.Created += OnFileCreated;
             }
 
-            if (m_Deleted != null)
+            if (_Deleted != null)
             {
                 fsw.Deleted += OnFileDeleted;
             }
 
-            if (m_Renamed != null)
+            if (_Renamed != null)
             {
                 fsw.Renamed += OnFileRenamed;
             }
 
             fsw.EnableRaisingEvents = (IsSuspended == false);
-            fsw.IncludeSubdirectories = true;
+            fsw.IncludeSubFolders = true;
 
             return (fsw);
         }
 
         private void DisposeFileSystemWatchers()
-        {
-            foreach (IFileSystemWatcher fsw in GetFileSystemWatchers())
-            {
-                DisposeFileSystemWatcher(fsw);
-            }
-        }
+            => GetFileSystemWatchers().ForEach(DisposeFileSystemWatcher);
 
         private void DisposeFileSystemWatcher(IFileSystemWatcher fsw)
         {
-            if (m_Created != null)
+            if (_Created != null)
             {
                 fsw.Created -= OnFileCreated;
             }
 
-            if (m_Deleted != null)
+            if (_Deleted != null)
             {
                 fsw.Deleted -= OnFileDeleted;
             }
 
-            if (m_Renamed != null)
+            if (_Renamed != null)
             {
                 fsw.Renamed -= OnFileRenamed;
             }
@@ -216,24 +193,18 @@
         }
 
         private IEnumerable<IFileSystemWatcher> GetFileSystemWatchers()
-            => (m_FileSystemWatchers?.Values.SelectMany(kvp => kvp.Values) ?? Enumerable.Empty<IFileSystemWatcher>());
+            => _FileSystemWatchers?.Values.SelectMany(kvp => kvp.Values) ?? Enumerable.Empty<IFileSystemWatcher>();
 
         private void OnFileRenamed(Object sender
             , System.IO.RenamedEventArgs e)
-        {
-            m_Renamed?.Invoke(this, e);
-        }
+            => _Renamed?.Invoke(this, e);
 
         private void OnFileDeleted(Object sender
             , System.IO.FileSystemEventArgs e)
-        {
-            m_Deleted?.Invoke(this, e);
-        }
+            => _Deleted?.Invoke(this, e);
 
         private void OnFileCreated(Object sender
             , System.IO.FileSystemEventArgs e)
-        {
-            m_Created?.Invoke(this, e);
-        } 
+            => _Created?.Invoke(this, e);
     }
 }

@@ -3,21 +3,29 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using DVDProfiler.DVDProfilerHelper;
+    using AbstractionLayer.IOServices;
     using ToolBox.Extensions;
+    using WatchHistory.Implementations;
     using WatchHistory.Main.Implementations;
-    using Version390 = DVDProfiler.DVDProfilerXML.Version390;
+    using Version400 = DVDProfiler.DVDProfilerXML.Version400;
 
     internal sealed class DvdWatchesProcessor
     {
+        private readonly IIOServices IOServices;
+
         private Dictionary<User, HashSet<Watch>> ExistingWatches { get; set; }
+
+        public DvdWatchesProcessor(IIOServices ioServices)
+        {
+            IOServices = ioServices;
+        }
 
         internal void UpdateFromDvdWatches(FileEntry entry)
         {
             DvdWatches watches = null;
             try
             {
-                watches = Serializer<DvdWatches>.Deserialize(entry.FullName);
+                watches = SerializerHelper.Deserialize<DvdWatches>(IOServices, entry.FullName);
             }
             catch
             { }
@@ -32,16 +40,13 @@
         {
             ExistingWatches = new Dictionary<User, HashSet<Watch>>();
 
-            AddExistingWatches(entry);
-
-            UpdateFromDvdWatches(watches);
-
             List<User> entryUsers = entry.Users.EnsureNotNull().ToList();
 
-            foreach (KeyValuePair<User, HashSet<Watch>> kvp in ExistingWatches)
-            {
-                UpdateEntryWatches(entryUsers, kvp.Key, kvp.Value);
-            }
+            entryUsers.ForEach(AddExistingWatches);
+
+            watches.Watches.EnsureNotNull().ForEach(UpdateFromDvdWatch);
+
+            ExistingWatches.ForEach(kvp => UpdateEntryWatches(entryUsers, kvp.Key, kvp.Value));
 
             entry.Users = (entryUsers.Count > 0) ? entryUsers.ToArray() : null;
         }
@@ -69,15 +74,7 @@
             return (entryUser);
         }
 
-        private void UpdateFromDvdWatches(DvdWatches dvdWatches)
-        {
-            foreach (Version390.Event dvdWatch in dvdWatches.Watches.EnsureNotNull())
-            {
-                UpdateFromDvdWatch(dvdWatch);
-            }
-        }
-
-        private void UpdateFromDvdWatch(Version390.Event dvdWatch)
+        private void UpdateFromDvdWatch(Version400.Event dvdWatch)
         {
             User user = new User()
             {
@@ -119,14 +116,6 @@
             return (left.Equals(right));
         }
 
-        private void AddExistingWatches(FileEntry entry)
-        {
-            foreach (User user in entry.Users.EnsureNotNull())
-            {
-                AddExistingWatches(user);
-            }
-        }
-
         private void AddExistingWatches(User user)
         {
             IEnumerable<Watch> watches = user.Watches.EnsureNotNull().Where(w => w.Source != Constants.DvdProfilerSource);
@@ -144,10 +133,7 @@
 
             ExistingWatches.Add(user, hashed);
 
-            foreach (Watch watch in watches)
-            {
-                hashed.Add(watch);
-            }
+            watches.ForEach(watch => hashed.Add(watch));
         }
     }
 }

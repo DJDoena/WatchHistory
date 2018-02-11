@@ -42,9 +42,10 @@
             {
                 ISelectUserViewModel viewModel = new SelectUserViewModel(DataManager, this);
 
-                Window window = new SelectUserWindow();
-
-                window.DataContext = viewModel;
+                Window window = new SelectUserWindow()
+                {
+                    DataContext = viewModel
+                };
 
                 window.Show();
             }
@@ -62,9 +63,10 @@
 
             IMainViewModel viewModel = new MainViewModel(model, DataManager, IOServices, this, userName);
 
-            Window window = new MainWindow();
-
-            window.DataContext = viewModel;
+            Window window = new MainWindow()
+            {
+                DataContext = viewModel
+            };
 
             window.Show();
 
@@ -75,9 +77,10 @@
         {
             ISettingsViewModel viewModel = new SettingsViewModel(DataManager, UIServices);
 
-            Window window = new SettingsWindow();
-
-            window.DataContext = viewModel;
+            Window window = new SettingsWindow()
+            {
+                DataContext = viewModel
+            };
 
             window.ShowDialog();
         }
@@ -88,9 +91,10 @@
 
             IIgnoreViewModel viewModel = new IgnoreViewModel(model, DataManager, IOServices, this, userName);
 
-            Window window = new IgnoreWindow();
-
-            window.DataContext = viewModel;
+            Window window = new IgnoreWindow()
+            {
+                DataContext = viewModel
+            };
 
             window.ShowDialog();
         }

@@ -6,10 +6,8 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AbstractionLayer.IOServices;
-    using DVDProfiler.DVDProfilerHelper;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
-    using WatchHistory.Main.Implementations;
 
     internal sealed class DataManager : IDataManager
     {
@@ -21,17 +19,17 @@
 
         private readonly IFilesSerializer FilesSerializer;
 
-        private IEnumerable<String> m_RootFolders;
+        private IEnumerable<String> _RootFolders;
 
-        private IEnumerable<String> m_FileExtensions;
+        private IEnumerable<String> _FileExtensions;
 
-        private IEnumerable<String> m_Users;
+        private IEnumerable<String> _Users;
 
         private Dictionary<String, FileEntry> Files { get; set; }
 
         private Boolean IsSuspended { get; set; }
 
-        private event EventHandler m_FilesChanged;
+        private event EventHandler _FilesChanged;
 
         public DataManager(String settingsFile
             , String dataFile
@@ -56,20 +54,14 @@
 
         public IEnumerable<String> RootFolders
         {
-            get
-            {
-                foreach (String rootFolder in m_RootFolders)
-                {
-                    yield return (rootFolder);
-                }
-            }
+            get => _RootFolders.Select(folder => folder);
             set
             {
                 value = new HashSet<String>(value);
 
-                FileObserver.Observe(value, m_FileExtensions);
+                FileObserver.Observe(value, _FileExtensions);
 
-                m_RootFolders = value.ToList();
+                _RootFolders = value.ToList();
 
                 SyncData();
             }
@@ -77,22 +69,16 @@
 
         public IEnumerable<String> FileExtensions
         {
-            get
-            {
-                foreach (String fileExtension in m_FileExtensions)
-                {
-                    yield return (fileExtension);
-                }
-            }
+            get => _FileExtensions.Select(ext => ext);
             set
             {
-                value = value.ForEach(FileNameHelper.GetInstance(IOServices).ReplaceInvalidFileNameChars);
+                value = value.Select(ext => ext.ReplaceInvalidFileNameChars('_'));
 
                 value = new HashSet<String>(value);
 
-                FileObserver.Observe(m_RootFolders, value);
+                FileObserver.Observe(_RootFolders, value);
 
-                m_FileExtensions = value.ToList();
+                _FileExtensions = value.ToList();
 
                 SyncData();
             }
@@ -100,18 +86,12 @@
 
         public IEnumerable<String> Users
         {
-            get
-            {
-                foreach (String user in m_Users)
-                {
-                    yield return (user);
-                }
-            }
+            get => _Users.Select(user => user);
             set
             {
                 value = new HashSet<String>(value);
 
-                m_Users = value.ToList();
+                _Users = value.ToList();
             }
         }
 
@@ -119,20 +99,20 @@
         {
             add
             {
-                if (m_FilesChanged == null)
+                if (_FilesChanged == null)
                 {
                     FileObserver.Created += OnFileCreated;
                     FileObserver.Deleted += OnFileDeleted;
                     FileObserver.Renamed += OnFileRenamed;
                 }
 
-                m_FilesChanged += value;
+                _FilesChanged += value;
             }
             remove
             {
-                m_FilesChanged -= value;
+                _FilesChanged -= value;
 
-                if (m_FilesChanged == null)
+                if (_FilesChanged == null)
                 {
                     FileObserver.Created -= OnFileCreated;
                     FileObserver.Deleted -= OnFileDeleted;
@@ -162,12 +142,9 @@
         public void AddIgnore(FileEntry entry
             , String userName)
         {
-            User user = TryGetUser(entry, userName);
-
-            user = user ?? AddUser(entry, userName);
+            User user = TryGetUser(entry, userName) ?? AddUser(entry, userName);
 
             user.Ignore = true;
-            user.IgnoreSpecified = true;
 
             RaiseFilesChanged();
         }
@@ -180,7 +157,6 @@
             if (user != null)
             {
                 user.Ignore = false;
-                user.IgnoreSpecified = false;
 
                 RaiseFilesChanged();
             }
@@ -219,9 +195,9 @@
         {
             DefaultValues defaultValues = new DefaultValues()
             {
-                Users = m_Users.ToArray(),
-                RootFolders = m_RootFolders.ToArray(),
-                FileExtensions = m_FileExtensions.ToArray()
+                Users = _Users.ToArray(),
+                RootFolders = _RootFolders.ToArray(),
+                FileExtensions = _FileExtensions.ToArray()
             };
 
             Settings settings = new Settings()
@@ -229,10 +205,7 @@
                 DefaultValues = defaultValues
             };
 
-            using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
-            {
-                Serializer<Settings>.Serialize(fs, settings);
-            }
+            SerializerHelper.Serialize(IOServices, fileName, settings);
         }
 
         public void SaveDataFile(String fileName)
@@ -263,7 +236,7 @@
         {
             IsSuspended = false;
 
-            FileObserver.Observe(m_RootFolders, m_FileExtensions);
+            FileObserver.Observe(_RootFolders, _FileExtensions);
 
             SyncData();
         }
@@ -275,10 +248,7 @@
             Settings settings;
             try
             {
-                using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    settings = Serializer<Settings>.Deserialize(fs);
-                }
+                settings = SerializerHelper.Deserialize<Settings>(IOServices, fileName);
             }
             catch
             {
@@ -288,11 +258,11 @@
                 };
             }
 
-            m_Users = settings?.DefaultValues?.Users ?? Enumerable.Empty<String>();
+            _Users = settings?.DefaultValues?.Users ?? Enumerable.Empty<String>();
 
-            m_RootFolders = settings?.DefaultValues?.RootFolders ?? Enumerable.Empty<String>();
+            _RootFolders = settings?.DefaultValues?.RootFolders ?? Enumerable.Empty<String>();
 
-            m_FileExtensions = settings?.DefaultValues?.FileExtensions ?? Enumerable.Empty<String>();
+            _FileExtensions = settings?.DefaultValues?.FileExtensions ?? Enumerable.Empty<String>();
         }
 
         private void LoadData(String fileName)
@@ -305,10 +275,7 @@
 
                 IEnumerable<FileEntry> entries = files?.Entries ?? Enumerable.Empty<FileEntry>();
 
-                foreach (FileEntry entry in entries)
-                {
-                    Files[entry.Key] = entry;
-                }
+                entries.ForEach(entry => Files[entry.Key] = entry);
             }
         }
 
@@ -342,11 +309,11 @@
 
         private static User TryGetUser(FileEntry entry
             , String userName)
-            => (entry.Users?.Where(user => IsUser(user, userName)).FirstOrDefault());
+            => entry.Users?.Where(user => IsUser(user, userName)).FirstOrDefault();
 
         private static Boolean IsUser(User user
             , String userName)
-            => (user.UserName == userName);
+            => user.UserName == userName;
 
         private void SyncData()
         {
@@ -357,29 +324,25 @@
         }
 
         private Boolean HasEvents(FileEntry entry)
-            => (entry.Users?.HasItemsWhere(HasEvents) == true);
+            => entry.Users?.HasItemsWhere(HasEvents) == true;
 
         private static Boolean HasEvents(User user)
-            => (user.Watches?.HasItems() == true);
+            => user.Watches?.HasItems() == true;
 
         private void GetActualFiles()
         {
-            List<Task<IEnumerable<String>>> tasks = new List<Task<IEnumerable<String>>>();
-
-            foreach (String rootFolder in m_RootFolders)
-            {
-                foreach (String fileExtension in m_FileExtensions)
-                {
-                    Task<IEnumerable<String>> task = Task.Run(() => GetFiles(rootFolder, fileExtension));
-
-                    tasks.Add(task);
-                }
-            }
+            IEnumerable<Task<IEnumerable<String>>> tasks = _RootFolders.Select(GetActualFiles).SelectMany(task => task);
 
             Task<IEnumerable<String>[]> readyTask = Task.WhenAll(tasks);
 
             readyTask.ContinueWith(ProcessActualFiles);
         }
+
+        private IEnumerable<Task<IEnumerable<String>>> GetActualFiles(String folder)
+            => _FileExtensions.Select(ext => GetActualFiles(folder, ext));
+
+        private Task<IEnumerable<String>> GetActualFiles(String folder, String fileExtension)
+            => Task.Run(() => GetFiles(folder, fileExtension));
 
         private void ProcessActualFiles(Task<IEnumerable<String>[]> task)
         {
@@ -387,7 +350,7 @@
 
             lock (FilesLock)
             {
-                AddActualFiles(actualFiles);
+                actualFiles.ForEach(AddActualFile);
 
                 RemoveObsoletesFiles(actualFiles);
             }
@@ -397,17 +360,9 @@
 
         private IEnumerable<String> GetFiles(String rootFolder
             , String fileExtension)
-            => (IOServices.Folder.Exists(rootFolder)
+            => IOServices.Folder.Exists(rootFolder)
                 ? (IOServices.Folder.GetFiles(rootFolder, "*." + fileExtension, SearchOption.AllDirectories))
-                : (Enumerable.Empty<String>()));
-
-        private void AddActualFiles(IEnumerable<String> actualFiles)
-        {
-            foreach (String actualFile in actualFiles)
-            {
-                AddActualFile(actualFile);
-            }
-        }
+                : (Enumerable.Empty<String>());
 
         private void AddActualFile(String actualFile)
         {
@@ -426,7 +381,7 @@
 
             if (actualFile.EndsWith("." + Constants.DvdProfilerFileExtension))
             {
-                (new DvdWatchesProcessor()).UpdateFromDvdWatches(entry);
+                (new DvdWatchesProcessor(IOServices)).UpdateFromDvdWatches(entry);
             }
         }
 
@@ -434,14 +389,16 @@
         {
             List<KeyValuePair<String, FileEntry>> files = Files.ToList();
 
-            List<String> fileKeys = actualFiles.ForEach(f => f.ToLower()).ToList();
+            List<String> fileKeys = actualFiles.Select(file => file.ToLower()).ToList();
 
-            foreach (KeyValuePair<String, FileEntry> kvp in files)
+            files.ForEach(file => TryRemoveFile(fileKeys, file));
+        }
+
+        private void TryRemoveFile(List<String> fileKeys, KeyValuePair<String, FileEntry> file)
+        {
+            if ((fileKeys.Contains(file.Key) == false) && (HasEvents(file.Value) == false))
             {
-                if ((fileKeys.Contains(kvp.Key) == false) && (HasEvents(kvp.Value) == false))
-                {
-                    Files.Remove(kvp.Key);
-                }
+                Files.Remove(file.Key);
             }
         }
 
@@ -513,8 +470,6 @@
         }
 
         private void RaiseFilesChanged()
-        {
-            m_FilesChanged?.Invoke(this, EventArgs.Empty);
-        }
+            => _FilesChanged?.Invoke(this, EventArgs.Empty);
     }
 }

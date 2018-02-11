@@ -6,7 +6,7 @@
     using AbstractionLayer.IOServices;
     using AbstractionLayer.IOServices.Implementations;
     using Data;
-    using ToolBox.Generics;
+    using WatchHistory.Implementations;
 
     public static class Program
     {
@@ -28,7 +28,7 @@
 
         private static void TryClean()
         {
-            Files files = Serializer<Files>.Deserialize(Environment.DataFile);
+            Files files = SerializerHelper.Deserialize<Files>(IOServices, Environment.DataFile);
 
             CreateBackup();
 
@@ -37,7 +37,7 @@
                 files.Entries = Clean(files.Entries);
             }
 
-            Serializer<Files>.Serialize(Environment.DataFile, files);
+            SerializerHelper.Serialize(IOServices, Environment.DataFile, files);
         }
 
         private static void CreateBackup()

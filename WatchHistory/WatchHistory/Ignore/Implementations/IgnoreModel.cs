@@ -12,9 +12,9 @@
 
         private readonly String UserName;
 
-        private String m_Filter;
+        private String _Filter;
 
-        private event EventHandler m_FilesChanged;
+        private event EventHandler _FilesChanged;
 
         public IgnoreModel(IDataManager dataManager
             , String userName)
@@ -27,15 +27,12 @@
 
         public String Filter
         {
-            get
-            {
-                return (m_Filter ?? String.Empty);
-            }
+            get => _Filter ?? String.Empty;
             set
             {
-                if (value != m_Filter)
+                if (value != _Filter)
                 {
-                    m_Filter = value;
+                    _Filter = value;
 
                     RaiseFilesChanged(EventArgs.Empty);
                 }
@@ -46,18 +43,18 @@
         {
             add
             {
-                if (m_FilesChanged == null)
+                if (_FilesChanged == null)
                 {
                     DataManager.FilesChanged += OnDataManagerFilesChanged;
                 }
 
-                m_FilesChanged += value;
+                _FilesChanged += value;
             }
             remove
             {
-                m_FilesChanged -= value;
+                _FilesChanged -= value;
 
-                if (m_FilesChanged == null)
+                if (_FilesChanged == null)
                 {
                     DataManager.FilesChanged -= OnDataManagerFilesChanged;
                 }
@@ -66,15 +63,13 @@
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            IEnumerable<FileEntry> files = DataManager.GetFiles();
+            IEnumerable<FileEntry> allFiles = DataManager.GetFiles();
 
-            files = files.Where(UserIgnores);
+            IEnumerable<FileEntry> ignoredFiles = allFiles.Where(UserIgnores);
 
-            files = files.Where(ContainsFilter);
+            IEnumerable<FileEntry> filteredFiles = ignoredFiles.Where(ContainsFilter).ToList();
 
-            files = files.ToList();
-
-            return (files);
+            return (filteredFiles);
         }
 
         #endregion
@@ -82,37 +77,33 @@
         #region UserIgnores
 
         private Boolean UserIgnores(FileEntry file)
-            => (file.Users?.HasItemsWhere(UserIgnores) == true);
+            => file.Users?.HasItemsWhere(UserIgnores) == true;
 
         private Boolean UserIgnores(User user)
-            => ((user.UserName == UserName) && (user.Ignore));
+            => (user.UserName == UserName) && (user.Ignore);
 
         #endregion
 
         #region ContainsFilter
 
         private Boolean ContainsFilter(FileEntry file)
-            => (ContainsFilter(file, Filter.Trim().Split(' ')));
+            => ContainsFilter(file, Filter.Trim().Split(' '));
 
         private static Boolean ContainsFilter(FileEntry file
            , IEnumerable<String> filters)
-            => (filters.All(filter => ContainsFilter(file, filter)));
+            => filters.All(filter => ContainsFilter(file, filter));
 
         private static Boolean ContainsFilter(FileEntry file
             , String filter)
-            => (file.FullName.IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1);
+            => file.FullName.IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1;
 
         #endregion
 
         private void OnDataManagerFilesChanged(Object sender
             , EventArgs e)
-        {
-            RaiseFilesChanged(e);
-        }
+            => RaiseFilesChanged(e);
 
         private void RaiseFilesChanged(EventArgs e)
-        {
-            m_FilesChanged?.Invoke(this, e);
-        }
+            => _FilesChanged?.Invoke(this, e);
     }
 }

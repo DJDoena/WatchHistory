@@ -11,16 +11,16 @@
     {
         [XmlArray("Entries")]
         [XmlArrayItem("Entry")]
-        public FileEntry[] Entries { get; set; }
+        public FileEntry[] Entries;
 
         [XmlAttribute]
-        public Decimal Version { get; set; }
+        public Decimal Version;
 
         [XmlAnyAttribute]
-        public XmlAttribute[] AnyAttributes { get; set; }
+        public XmlAttribute[] AnyAttributes;
 
         [XmlAnyElement]
-        public XmlElement[] AnyElements { get; set; }
+        public XmlElement[] AnyElements;
 
         public Files()
         {
@@ -36,33 +36,24 @@
         private Nullable<DateTime> m_CreationTime;
 
         [XmlElement]
-        public String FullName { get; set; }
+        public String FullName;
 
         [XmlIgnore]
         public String Key
-            => (FullName?.ToLower() ?? String.Empty);
+            => FullName?.ToLower() ?? String.Empty;
 
         [XmlAttribute]
         public DateTime CreationTime
         {
-            get
-            {
-                return (m_CreationTime ?? new DateTime(0, DateTimeKind.Utc));
-            }
-            set
-            {
-                m_CreationTime = value.Conform();
-            }
+            get => m_CreationTime ?? new DateTime(0, DateTimeKind.Utc);
+            set => m_CreationTime = value.Conform();
         }
 
         [XmlArray("Users")]
         [XmlArrayItem("User")]
         public User[] Users
         {
-            get
-            {
-                return (m_Users);
-            }
+            get => m_Users;
             set
             {
                 m_Users = value;
@@ -72,16 +63,16 @@
         }
 
         [XmlAttribute]
-        public UInt32 VideoLength { get; set; }
+        public UInt32 VideoLength;
 
         [XmlIgnore]
-        public Boolean VideoLengthSpecified { get; set; }
+        public Boolean VideoLengthSpecified;
 
         [XmlAnyAttribute]
-        public XmlAttribute[] AnyAttributes { get; set; }
+        public XmlAttribute[] AnyAttributes;
 
         [XmlAnyElement]
-        public XmlElement[] AnyElements { get; set; }
+        public XmlElement[] AnyElements;
 
         public event EventHandler UsersChanged;
     }
@@ -92,13 +83,14 @@
         private Watch[] m_Watches;
 
         [XmlAttribute]
-        public String UserName { get; set; }
+        public String UserName;
 
         [XmlAttribute]
-        public Boolean Ignore { get; set; }
+        public Boolean Ignore;
 
         [XmlIgnore]
-        public Boolean IgnoreSpecified { get; set; }
+        public Boolean IgnoreSpecified
+            => Ignore;
 
         [XmlArray("Watches")]
         [XmlArrayItem("Watched")]
@@ -122,18 +114,18 @@
         }
 
         [XmlAnyAttribute]
-        public XmlAttribute[] AnyAttributes { get; set; }
+        public XmlAttribute[] AnyAttributes;
 
         [XmlAnyElement]
-        public XmlElement[] AnyElements { get; set; }
+        public XmlElement[] AnyElements;
 
         public event EventHandler WatchesChanged;
 
         public override Int32 GetHashCode()
-            => (UserName?.GetHashCode() ?? 0);
+            => UserName?.GetHashCode() ?? 0;
 
         public override Boolean Equals(Object obj)
-            => (Equals(obj as User));
+            => Equals(obj as User);
 
         public Boolean Equals(User other)
         {
@@ -154,31 +146,25 @@
         [XmlAttribute]
         public DateTime Value
         {
-            get
-            {
-                return m_Watched;
-            }
-            set
-            {
-                m_Watched = value.Conform();
-            }
+            get => m_Watched;
+            set => m_Watched = value.Conform();
         }
 
         [XmlAttribute]
-        public String Source { get; set; }
+        public String Source;
 
         [XmlIgnore]
         public Boolean SourceSpecified
-            => (Source.IsNotEmpty());
+            => Source.IsNotEmpty();
 
         [XmlAnyAttribute]
-        public XmlAttribute[] AnyAttributes { get; set; }
+        public XmlAttribute[] AnyAttributes;
 
         [XmlAnyElement]
-        public XmlElement[] AnyElements { get; set; }
+        public XmlElement[] AnyElements;
 
         public override Int32 GetHashCode()
-            => (Value.GetHashCode());
+            => Value.GetHashCode();
 
         public override Boolean Equals(Object obj)
             => (Equals(obj as Watch));

@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Windows.Media;
     using AbstractionLayer.IOServices;
+    using ToolBox.Extensions;
 
     internal sealed class FileEntryViewModel : IFileEntryViewModel
     {
@@ -14,9 +15,9 @@
 
         private readonly IIOServices IOServices;
 
-        private User m_User;
+        private User _User;
 
-        private event PropertyChangedEventHandler m_PropertyChanged;
+        private event PropertyChangedEventHandler _PropertyChanged;
 
         public FileEntryViewModel(FileEntry entry
             , String userName
@@ -28,7 +29,7 @@
             DataManager = dataManager;
             IOServices = ioServices;
 
-            m_User = TryGetUser();
+            _User = TryGetUser();
         }
 
         #region INotifyPropertyChanged
@@ -37,11 +38,11 @@
         {
             add
             {
-                if (m_PropertyChanged == null)
+                if (_PropertyChanged == null)
                 {
-                    if (m_User != null)
+                    if (_User != null)
                     {
-                        m_User.WatchesChanged += OnWatchesChanged;
+                        _User.WatchesChanged += OnWatchesChanged;
                     }
                     else
                     {
@@ -49,17 +50,17 @@
                     }
                 }
 
-                m_PropertyChanged += value;
+                _PropertyChanged += value;
             }
             remove
             {
-                m_PropertyChanged -= value;
+                _PropertyChanged -= value;
 
-                if (m_PropertyChanged == null)
+                if (_PropertyChanged == null)
                 {
-                    if (m_User != null)
+                    if (_User != null)
                     {
-                        m_User.WatchesChanged -= OnWatchesChanged;
+                        _User.WatchesChanged -= OnWatchesChanged;
                     }
                     else
                     {
@@ -81,10 +82,7 @@
             {
                 String name = FileEntry.FullName;
 
-                foreach (String rootFolder in DataManager.RootFolders)
-                {
-                    name = name.Replace(rootFolder, String.Empty);
-                }
+                DataManager.RootFolders.ForEach(folder => name = name.Replace(folder, String.Empty));
 
                 name = name.Trim('\\', '/');
 
@@ -131,38 +129,34 @@
         }
 
         public Brush Color
-            => (IOServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red);
+            => IOServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red;
 
         #endregion
 
         private User TryGetUser()
-            => (FileEntry.Users?.Where(item => item.UserName == UserName).FirstOrDefault());
+            => FileEntry.Users?.Where(item => item.UserName == UserName).FirstOrDefault();
 
         private void OnUsersChanged(Object sender
             , EventArgs e)
         {
-            m_User = TryGetUser();
+            _User = TryGetUser();
 
-            if (m_User != null)
+            if (_User != null)
             {
-                if (m_PropertyChanged != null)
+                if (_PropertyChanged != null)
                 {
                     FileEntry.UsersChanged -= OnUsersChanged;
 
-                    m_User.WatchesChanged += OnWatchesChanged;
+                    _User.WatchesChanged += OnWatchesChanged;
                 }
             }
         }
 
         private void OnWatchesChanged(Object sender
             , EventArgs e)
-        {
-            RaisePropertyChanged(nameof(LastWatched));
-        }
+            => RaisePropertyChanged(nameof(LastWatched));
 
         private void RaisePropertyChanged(String attribute)
-        {
-            m_PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
-        }
+            => _PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

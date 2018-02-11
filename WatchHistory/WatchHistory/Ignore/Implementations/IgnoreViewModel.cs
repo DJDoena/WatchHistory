@@ -10,6 +10,7 @@
     using AbstractionLayer.IOServices;
     using Data;
     using ToolBox.Commands;
+    using ToolBox.Extensions;
     using WatchHistory.Implementations;
 
     internal sealed class IgnoreViewModel : IIgnoreViewModel
@@ -24,7 +25,7 @@
 
         private readonly String UserName;
 
-        private event PropertyChangedEventHandler m_PropertyChanged;
+        private event PropertyChangedEventHandler _PropertyChanged;
 
         public IgnoreViewModel(IIgnoreModel model
             , IDataManager dataManager
@@ -45,18 +46,18 @@
         {
             add
             {
-                if (m_PropertyChanged == null)
+                if (_PropertyChanged == null)
                 {
                     Model.FilesChanged += OnModelFilesChanged;
                 }
 
-                m_PropertyChanged += value;
+                _PropertyChanged += value;
             }
             remove
             {
-                m_PropertyChanged -= value;
+                _PropertyChanged -= value;
 
-                if (m_PropertyChanged == null)
+                if (_PropertyChanged == null)
                 {
                     Model.FilesChanged -= OnModelFilesChanged;
                 }
@@ -68,14 +69,11 @@
         #region IIgnoreViewModel
 
         public String Title
-            => ($"Watch History (user: {UserName})");
+            => $"Watch History (user: {UserName})";
 
         public String Filter
         {
-            get
-            {
-                return (Model.Filter);
-            }
+            get => Model.Filter;
             set
             {
                 if (value != Model.Filter)
@@ -100,7 +98,7 @@
         }
 
         public ICommand UndoIgnoreCommand
-           => (new ParameterizedRelayCommand(UndoIgnore));
+           => new ParameterizedRelayCommand(UndoIgnore);
 
         #endregion
 
@@ -108,23 +106,16 @@
         {
             IEnumerable<IFileEntryViewModel> entries = ((IList)parameter).Cast<IFileEntryViewModel>().ToList();
 
-            foreach (IFileEntryViewModel entry in entries)
-            {
-                DataManager.UndoIgnore(entry.FileEntry, UserName);
-            }
+            entries.ForEach(entry => DataManager.UndoIgnore(entry.FileEntry, UserName));
 
             DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
         }
 
         private void OnModelFilesChanged(Object sender
             , EventArgs e)
-        {
-            RaisePropertyChanged(nameof(Entries));
-        }
+            => RaisePropertyChanged(nameof(Entries));
 
         private void RaisePropertyChanged(String attribute)
-        {
-            m_PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
-        }
+            => _PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

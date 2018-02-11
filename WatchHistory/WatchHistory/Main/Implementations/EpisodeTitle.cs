@@ -3,30 +3,32 @@
     using System;
     using System.Collections.Generic;
     using AbstractionLayer.IOServices;
-    using DVDProfiler.DVDProfilerXML.Version390;
-    using WatchHistory.Implementations;
+    using DVDProfiler.DVDProfilerXML.Version400;
+    using ToolBox.Extensions;
 
     internal sealed class EpisodeTitle : IEquatable<EpisodeTitle>
     {
+        private readonly DVD Dvd;
+
         internal String Title { get; }
 
-        internal DateTime PurchaseDate { get; }
+        internal DateTime PurchaseDate 
+            => Dvd.PurchaseInfo?.Date ?? new DateTime(0);
 
-        internal IEnumerable<Event> Watches { get; }
+        internal IEnumerable<Event> Watches
+            => CollectionProcessor.GetWatches(Dvd);
 
         public EpisodeTitle(DVD dvd
             , String caption
             , IIOServices ioServices)
         {
-            PurchaseDate = dvd.PurchaseInfo?.Date ?? new DateTime(0);
+            Dvd = dvd;
 
             Title = GetTitle(dvd, caption);
 
             Title = Title.Replace(" :", ":").Replace(":", " -");
 
-            Title = FileNameHelper.GetInstance(ioServices).ReplaceInvalidFileNameChars(Title);
-
-            Watches = CollectionProcessor.GetWatches(dvd);
+            Title = Title.ReplaceInvalidFileNameChars(' ');
         }
 
         #region IEquatable<DvdTitle>
@@ -38,11 +40,11 @@
                 return (false);
             }
 
-            Boolean equals = Title.Equals(other.Title);
+            Boolean equals = Dvd.ID == other.Dvd.ID;
 
             if (equals)
             {
-                equals = PurchaseDate.Equals(other.PurchaseDate);
+                equals = Title == other.Title;
             }
 
             return (equals);
@@ -51,7 +53,7 @@
         #endregion
 
         public override Int32 GetHashCode()
-            => ((Title.GetHashCode() / 2) + (PurchaseDate.GetHashCode() / 2));
+            => ((Dvd.ID.GetHashCode() / 2) + (Title.GetHashCode() / 2));
 
         public override Boolean Equals(Object obj)
             => (Equals(obj as EpisodeTitle));

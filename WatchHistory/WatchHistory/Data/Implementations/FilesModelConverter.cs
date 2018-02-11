@@ -88,7 +88,6 @@
             if (oldUser.IgnoreSpecified)
             {
                 newUser.Ignore = oldUser.Ignore;
-                newUser.IgnoreSpecified = true;
             }
 
             newUser.UserName = oldUser.UserName;

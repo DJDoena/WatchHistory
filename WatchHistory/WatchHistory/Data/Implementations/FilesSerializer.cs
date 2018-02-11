@@ -4,7 +4,7 @@
     using System.IO;
     using System.Text;
     using AbstractionLayer.IOServices;
-    using DVDProfiler.DVDProfilerHelper;
+    using WatchHistory.Implementations;
 
     internal sealed class FilesSerializer : IFilesSerializer
     {
@@ -16,7 +16,7 @@
         }
 
         #region IFilesSerializer
-        
+
         public Files LoadData(String fileName)
         {
             Files files;
@@ -34,12 +34,7 @@
 
         public void SaveFile(String fileName
             , Files files)
-        {
-            using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
-            {
-                Serializer<Files>.Serialize(fs, files);
-            }
-        }
+            => SerializerHelper.Serialize(IOServices, fileName, files);
 
         public void CreateBackup(String fileName)
         {
@@ -84,7 +79,7 @@
         #endregion
 
         private Files ReadXml(String fileName)
-            => ((IsVersion2File(fileName)) ? ReadVersion2File(fileName) : ReadVersion1File(fileName));
+            => (IsVersion2File(fileName)) ? ReadVersion2File(fileName) : ReadVersion1File(fileName);
 
         private Boolean IsVersion2File(String fileName)
         {
@@ -109,25 +104,15 @@
         }
 
         private Files ReadVersion2File(String fileName)
-        {
-            using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                Files files = Serializer<Files>.Deserialize(fs);
-
-                return (files);
-            }
-        }
+            => SerializerHelper.Deserialize<Files>(IOServices, fileName);
 
         private Files ReadVersion1File(String fileName)
         {
-            using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                v1_0.Files oldFiles = Serializer<v1_0.Files>.Deserialize(fs);
+            v1_0.Files oldFiles = SerializerHelper.Deserialize<v1_0.Files>(IOServices, fileName);
 
-                Files newFiles = FilesModelConverter.Convert(oldFiles);
+            Files newFiles = FilesModelConverter.Convert(oldFiles);
 
-                return (newFiles);
-            }
+            return (newFiles);
         }
     }
 }

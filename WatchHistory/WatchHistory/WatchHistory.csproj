@@ -58,7 +58,6 @@
     <Compile Include="Data\Implementations\FilesSerializer.cs" />
     <Compile Include="Data\IFilesSerializer.cs" />
     <Compile Include="Environment.cs" />
-    <Compile Include="Implementations\FileNameHelper.cs" />
     <Compile Include="Ignore\IIgnoreModel.cs" />
     <Compile Include="Ignore\IIgnoreViewModel.cs" />
     <Compile Include="Ignore\Implementations\IgnoreModel.cs" />
@@ -66,6 +65,7 @@
     <Compile Include="Ignore\Implementations\IgnoreWindow.xaml.cs">
       <DependentUpon>IgnoreWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Implementations\SerializerHelper.cs" />
     <Compile Include="Implementations\SortColumn.cs" />
     <Compile Include="Implementations\ViewModelHelper.cs" />
     <Compile Include="Constants.cs" />

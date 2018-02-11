@@ -25,9 +25,9 @@
 
         private readonly String UserName;
 
-        private event PropertyChangedEventHandler m_PropertyChanged;
+        private event PropertyChangedEventHandler _PropertyChanged;
 
-        private SortColumn m_SortColumn;
+        private SortColumn _SortColumn;
 
         private Boolean SortAscending { get; set; }
 
@@ -37,15 +37,12 @@
 
         private SortColumn SortColumn
         {
-            get
-            {
-                return (m_SortColumn);
-            }
+            get => _SortColumn;
             set
             {
-                SortAscending = (value != m_SortColumn) ? true : (SortAscending == false);
+                SortAscending = (value != _SortColumn) ? true : (SortAscending == false);
 
-                m_SortColumn = value;
+                _SortColumn = value;
 
                 RaisePropertyChanged(nameof(Entries));
             }
@@ -63,7 +60,7 @@
             WindowFactory = windowFactory;
             UserName = userName;
 
-            m_SortColumn = SortColumn.CreationTime;
+            _SortColumn = SortColumn.CreationTime;
             SortAscending = false;
             SuspendEvents = false;
             EventRaisedWhileSuspended = false;
@@ -75,18 +72,18 @@
         {
             add
             {
-                if (m_PropertyChanged == null)
+                if (_PropertyChanged == null)
                 {
                     Model.FilesChanged += OnModelFilesChanged;
                 }
 
-                m_PropertyChanged += value;
+                _PropertyChanged += value;
             }
             remove
             {
-                m_PropertyChanged -= value;
+                _PropertyChanged -= value;
 
-                if (m_PropertyChanged == null)
+                if (_PropertyChanged == null)
                 {
                     Model.FilesChanged -= OnModelFilesChanged;
                 }
@@ -98,14 +95,11 @@
         #region IMainViewModel
 
         public String Title
-            => ($"Watch History (user: {UserName})");
+            => $"Watch History (user: {UserName})";
 
         public String Filter
         {
-            get
-            {
-                return (Model.Filter);
-            }
+            get => Model.Filter;
             set
             {
                 if (value != Model.Filter)
@@ -119,10 +113,7 @@
 
         public Boolean IgnoreWatched
         {
-            get
-            {
-                return (Model.IgnoreWatched);
-            }
+            get => Model.IgnoreWatched;
             set
             {
                 if (value != Model.IgnoreWatched)
@@ -147,31 +138,31 @@
         }
 
         public ICommand AddWatchedCommand
-            => (new ParameterizedRelayCommand(AddWatched));
+            => new ParameterizedRelayCommand(AddWatched);
 
         public ICommand PlayFileAndAddWatchedCommand
-            => (new ParameterizedRelayCommand(PlayFileAndAddWatched, CanPlayFile));
+            => new ParameterizedRelayCommand(PlayFileAndAddWatched, CanPlayFile);
 
         public ICommand OpenSettingsCommand
-            => (new RelayCommand(OpenSettings));
+            => new RelayCommand(OpenSettings);
 
         public ICommand ImportCollectionCommand
-            => (new RelayCommand(ImportCollection));
+            => new RelayCommand(ImportCollection);
 
         public ICommand IgnoreCommand
-           => (new ParameterizedRelayCommand(Ignore));
+           => new ParameterizedRelayCommand(Ignore);
 
         public ICommand UndoIgnoreCommand
-          => (new RelayCommand(UndoIgnore));
+            => new RelayCommand(UndoIgnore);
 
         public ICommand PlayFileCommand
-            => (new ParameterizedRelayCommand(PlayFile, CanPlayFile));
+            => new ParameterizedRelayCommand(PlayFile, CanPlayFile);
 
         public ICommand SortCommand
-            => (new ParameterizedRelayCommand(Sort));
+            => new ParameterizedRelayCommand(Sort);
 
         public ICommand OpenFileLocationCommand
-            => (new ParameterizedRelayCommand(OpenFileLocation));
+            => new ParameterizedRelayCommand(OpenFileLocation);
 
         #endregion
 
@@ -179,10 +170,7 @@
         {
             SuspendEvents = true;
 
-            foreach (FileEntry fileEntry in GetEntries(parameter))
-            {
-                DataManager.AddWatched(fileEntry, UserName);
-            }
+            GetEntries(parameter).ForEach(entry => DataManager.AddWatched(entry, UserName));
 
             DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
 
@@ -202,16 +190,13 @@
         }
 
         private static IEnumerable<FileEntry> GetEntries(Object parameter)
-            => (((IList)parameter).Cast<IFileEntryViewModel>().ForEach(entry => entry.FileEntry).ToList());
+            => ((IList)parameter).Cast<IFileEntryViewModel>().Select(entry => entry.FileEntry).ToList();
 
         private void Ignore(Object parameter)
         {
             SuspendEvents = true;
 
-            foreach (FileEntry fileEntry in GetEntries(parameter))
-            {
-                DataManager.AddIgnore(fileEntry, UserName);
-            }
+            GetEntries(parameter).ForEach(entry => DataManager.AddIgnore(entry, UserName));
 
             DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
 
@@ -219,14 +204,10 @@
         }
 
         private void OpenSettings()
-        {
-            WindowFactory.OpenSettingsWindow();
-        }
+            => WindowFactory.OpenSettingsWindow();
 
         private void UndoIgnore()
-        {
-            WindowFactory.OpenIgnoreWindow(UserName);
-        }
+            => WindowFactory.OpenIgnoreWindow(UserName);
 
         private void PlayFile(Object parameter)
         {
@@ -256,7 +237,7 @@
         }
 
         private static FileEntry GetFileEntry(Object parameter)
-            => (((IFileEntryViewModel)parameter)?.FileEntry);
+            => ((IFileEntryViewModel)parameter)?.FileEntry;
 
         private void OpenFileLocation(Object parameter)
         {
@@ -266,9 +247,7 @@
         }
 
         private void Sort(Object parameter)
-        {
-            SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (String)parameter));
-        }
+            => SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (String)parameter));
 
         private void ImportCollection()
         {
@@ -293,8 +272,6 @@
         }
 
         private void RaisePropertyChanged(String attribute)
-        {
-            m_PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
-        }
+            => _PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

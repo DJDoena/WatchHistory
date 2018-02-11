@@ -1,6 +1,7 @@
 ﻿namespace DoenaSoft.WatchHistory
 {
     using System;
+    using System.IO;
     using System.Windows;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.IOServices.Implementations;
@@ -53,7 +54,7 @@
 
                 String fileName = IOServices.Path.Combine(Environment.AppDataFolder, "Crash.xml");
 
-                Serializer<ExceptionXml>.Serialize(fileName, exceptionXml);
+                SerializerHelper.Serialize(IOServices, fileName, exceptionXml);
 
                 UIServices.ShowMessageBox(ex.Message, String.Empty, Buttons.OK, Icon.Error);
             }
