@@ -25,6 +25,8 @@
 
         private IEnumerable<String> _Users;
 
+        private Boolean _IsSynchronizing;
+
         private Dictionary<String, FileEntry> Files { get; set; }
 
         private Boolean IsSuspended { get; set; }
@@ -94,6 +96,19 @@
                 _Users = value.ToList();
             }
         }
+
+        public Boolean IsSynchronizing
+        {
+            get => _IsSynchronizing;
+            private set
+            {
+                _IsSynchronizing = value;
+
+                IsSynchronizingChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public event EventHandler IsSynchronizingChanged;
 
         public event EventHandler FilesChanged
         {
@@ -319,7 +334,7 @@
         {
             if (IsSuspended == false)
             {
-                GetActualFiles();
+                GetActualFiles();                
             }
         }
 
@@ -331,6 +346,8 @@
 
         private void GetActualFiles()
         {
+            IsSynchronizing = true;
+
             IEnumerable<Task<IEnumerable<String>>> tasks = _RootFolders.Select(GetActualFiles).SelectMany(task => task);
 
             Task<IEnumerable<String>[]> readyTask = Task.WhenAll(tasks);
@@ -355,6 +372,8 @@
                 RemoveObsoletesFiles(actualFiles);
             }
 
+            IsSynchronizing = false;
+
             RaiseFilesChanged();
         }
 
@@ -372,9 +391,10 @@
             {
                 entry = new FileEntry()
                 {
-                    FullName = actualFile,
-                    CreationTime = entry.GetCreationTime(this)
+                    FullName = actualFile,                    
                 };
+
+                entry.CreationTime = entry.GetCreationTime(this);
 
                 Files.Add(key, entry);
             }

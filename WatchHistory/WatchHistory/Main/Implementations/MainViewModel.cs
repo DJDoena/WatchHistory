@@ -75,6 +75,8 @@
                 if (_PropertyChanged == null)
                 {
                     Model.FilesChanged += OnModelFilesChanged;
+
+                    DataManager.IsSynchronizingChanged += OnDataManagerIsSynchronizingChanged;
                 }
 
                 _PropertyChanged += value;
@@ -85,6 +87,8 @@
 
                 if (_PropertyChanged == null)
                 {
+                    DataManager.IsSynchronizingChanged -= OnDataManagerIsSynchronizingChanged;
+
                     Model.FilesChanged -= OnModelFilesChanged;
                 }
             }
@@ -147,7 +151,7 @@
             => new RelayCommand(OpenSettings);
 
         public ICommand ImportCollectionCommand
-            => new RelayCommand(ImportCollection);
+            => new RelayCommand(ImportCollection, CanImportCollection);
 
         public ICommand IgnoreCommand
            => new ParameterizedRelayCommand(Ignore);
@@ -249,6 +253,9 @@
         private void Sort(Object parameter)
             => SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (String)parameter));
 
+        private Boolean CanImportCollection()
+            => DataManager.IsSynchronizing == false;
+
         private void ImportCollection()
         {
             SuspendEvents = true;
@@ -273,5 +280,11 @@
 
         private void RaisePropertyChanged(String attribute)
             => _PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+
+        private void OnDataManagerIsSynchronizingChanged(Object sender
+            , EventArgs e)
+        {
+            RaisePropertyChanged(nameof(ImportCollectionCommand));
+        }
     }
 }

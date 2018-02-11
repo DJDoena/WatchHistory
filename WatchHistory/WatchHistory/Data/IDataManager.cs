@@ -11,6 +11,10 @@
 
         IEnumerable<String> FileExtensions { get; set; }
 
+        Boolean IsSynchronizing { get; }
+
+        event EventHandler IsSynchronizingChanged;
+
         event EventHandler FilesChanged;
 
         IEnumerable<FileEntry> GetFiles();
