@@ -9,6 +9,7 @@
     using AbstractionLayer.UIServices;
     using Data;
     using ToolBox.Commands;
+    using ToolBox.Extensions;
 
     internal sealed class SettingsViewModel : ISettingsViewModel
     {
@@ -28,11 +29,11 @@
             DataManager = dataManager;
             UIServices = uiServices;
 
-            Users = new ObservableCollection<ISettingsListBoxItemViewModel>(DataManager.Users.Select(item => new SettingsListBoxItemViewModel(item)));
+            Users = new ObservableCollection<ISettingsListBoxItemViewModel>(DataManager.Users.ForEach(item => new SettingsListBoxItemViewModel(item)));
 
             RootFolders = new ObservableCollection<String>(DataManager.RootFolders);
 
-            FileExtensions = new ObservableCollection<ISettingsListBoxItemViewModel>(DataManager.FileExtensions.Select(item => new SettingsListBoxItemViewModel(item)));
+            FileExtensions = new ObservableCollection<ISettingsListBoxItemViewModel>(DataManager.FileExtensions.ForEach(item => new SettingsListBoxItemViewModel(item)));
         }
 
         #region INotifyPropertyChanged
@@ -171,7 +172,7 @@
 
         private void Accept()
         {
-            HashSet<String> users = new HashSet<String>(Users.Select(item => item.Value));
+            HashSet<String> users = new HashSet<String>(Users.ForEach(item => item.Value));
 
             DataManager.Users = users.Where(item => String.IsNullOrEmpty(item) == false);
 
@@ -179,7 +180,7 @@
 
             DataManager.RootFolders = rootFolders.Where(item => String.IsNullOrEmpty(item) == false);
 
-            HashSet<String> fileExtensions = new HashSet<String>(FileExtensions.Select(item => item.Value));
+            HashSet<String> fileExtensions = new HashSet<String>(FileExtensions.ForEach(item => item.Value));
 
             DataManager.FileExtensions = fileExtensions.Where(item => String.IsNullOrEmpty(item) == false);
 

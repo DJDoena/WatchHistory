@@ -5,6 +5,7 @@
     using System.Linq;
     using AbstractionLayer.IOServices;
     using DVDProfiler.DVDProfilerXML.Version390;
+    using ToolBox.Extensions;
 
     internal sealed class EpisodeTitleProcessor
     {
@@ -24,7 +25,7 @@
 
         private IEnumerable<IEnumerable<EpisodeTitle>> GetTitles()
         {
-            IEnumerable<DVD> dvds = Collection.DVDList ?? Enumerable.Empty<DVD>();
+            IEnumerable<DVD> dvds = Collection.DVDList.EnsureNotNull();
 
             foreach (DVD dvd in dvds)
             {
@@ -45,7 +46,7 @@
         }
 
         private static IEnumerable<Divider> GetDividers(IEnumerable<Object> list)
-            => ((list ?? Enumerable.Empty<Object>()).OfType<Divider>());
+            => (list.EnsureNotNull().OfType<Divider>());
 
         private IEnumerable<EpisodeTitle> GetEpisodeTitles(DVD dvd
             , IEnumerable<Divider> dividers)

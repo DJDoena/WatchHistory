@@ -1,4 +1,4 @@
-﻿namespace DoenaSoft.WatchHistory.Data
+﻿namespace DoenaSoft.WatchHistory.Data.v2_0
 {
     using System;
     using System.Diagnostics;
@@ -148,11 +148,5 @@
 
         [XmlAnyElement]
         public XmlElement[] AnyElements { get; set; }
-    }
-
-    internal static class DateTimeConformer
-    {
-        internal static DateTime Conform(this DateTime value)
-            => (value.AddTicks(-(value.Ticks % TimeSpan.TicksPerSecond)).ToUniversalTime());
     }
 }

@@ -30,8 +30,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WatchHistory\WatchHistory\Data\Files.cs">
-      <Link>Data\Files.cs</Link>
+    <Compile Include="..\WatchHistory\WatchHistory\Data\DateTimeConformer.cs">
+      <Link>Data\DateTimeConformer.cs</Link>
+    </Compile>
+    <Compile Include="..\WatchHistory\WatchHistory\Data\Files.v2_1.cs">
+      <Link>Data\Files.v2_1.cs</Link>
     </Compile>
     <Compile Include="..\WatchHistory\WatchHistory\Environment.cs">
       <Link>Environment.cs</Link>

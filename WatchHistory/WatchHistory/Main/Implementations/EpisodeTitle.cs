@@ -1,6 +1,7 @@
 ﻿namespace DoenaSoft.WatchHistory.Main.Implementations
 {
     using System;
+    using System.Collections.Generic;
     using AbstractionLayer.IOServices;
     using DVDProfiler.DVDProfilerXML.Version390;
     using WatchHistory.Implementations;
@@ -10,6 +11,8 @@
         internal String Title { get; }
 
         internal DateTime PurchaseDate { get; }
+
+        internal IEnumerable<Event> Watches { get; }
 
         public EpisodeTitle(DVD dvd
             , String caption
@@ -22,6 +25,8 @@
             Title = Title.Replace(" :", ":").Replace(":", " -");
 
             Title = FileNameHelper.GetInstance(ioServices).ReplaceInvalidFileNameChars(Title);
+
+            Watches = CollectionProcessor.GetWatches(dvd);
         }
 
         #region IEquatable<DvdTitle>

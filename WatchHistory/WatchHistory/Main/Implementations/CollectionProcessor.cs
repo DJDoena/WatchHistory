@@ -5,13 +5,12 @@
     using System.Linq;
     using AbstractionLayer.IOServices;
     using Data;
+    using DVDProfiler.DVDProfilerHelper;
     using DVDProfiler.DVDProfilerXML.Version390;
     using ToolBox.Extensions;
 
     internal sealed class CollectionProcessor
     {
-        internal const String FileExtension = "dvdp";
-
         private readonly Collection Collection;
 
         private readonly IDataManager DataManager;
@@ -58,14 +57,14 @@
 
             DataManager.RootFolders = folder.Enumerate().Union(DataManager.RootFolders);
 
-            DataManager.FileExtensions = FileExtension.Enumerate().Union(DataManager.FileExtensions);
+            DataManager.FileExtensions = Constants.DvdProfilerFileExtension.Enumerate().Union(DataManager.FileExtensions);
 
             CreateCollectionFiles(folder);
         }
 
         private void DeleteProfiles(String folder)
         {
-            IEnumerable<String> files = IOServices.Folder.GetFiles(folder, "*." + FileExtension);
+            IEnumerable<String> files = IOServices.Folder.GetFiles(folder, "*." + Constants.DvdProfilerFileExtension);
 
             foreach (String file in files)
             {
@@ -75,7 +74,7 @@
 
         private IEnumerable<IEnumerable<String>> GetUsers()
         {
-            IEnumerable<DVD> dvds = Collection.DVDList ?? Enumerable.Empty<DVD>();
+            IEnumerable<DVD> dvds = Collection.DVDList.EnsureNotNull();
 
             foreach (DVD dvd in dvds)
             {
@@ -85,18 +84,17 @@
 
         private IEnumerable<String> GetUsers(DVD dvd)
         {
-            IEnumerable<Event> events = dvd.EventList ?? Enumerable.Empty<Event>();
-
-            foreach (Event e in events)
+            foreach (Event watch in GetWatches(dvd))
             {
-                if (e.Type == EventType.Watched)
-                {
-                    String user = String.Join(" ", e.User?.FirstName, e.User?.LastName).Trim();
-
-                    yield return (user);
-                }
+                yield return (GetUserName(watch));
             }
         }
+
+        internal static IEnumerable<Event> GetWatches(DVD dvd)
+            => (dvd.EventList.EnsureNotNull().Where(e => e.Type == EventType.Watched));
+
+        internal static String GetUserName(Event watch)
+            => (String.Join(" ", watch.User?.FirstName, watch.User?.LastName).Trim());
 
         private void CreateCollectionFiles(String folder)
         {
@@ -113,10 +111,17 @@
         private void CreateCollectionFile(String folder
             , EpisodeTitle title)
         {
-            String fileName = IOServices.Path.Combine(folder, title.Title + "." + FileExtension);
+            String fileName = IOServices.Path.Combine(folder, title.Title + "." + Constants.DvdProfilerFileExtension);
 
             using (System.IO.Stream stream = IOServices.GetFileStream(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read))
-            { }
+            {
+                DvdWatches watches = new DvdWatches()
+                {
+                    Watches = title.Watches?.ToArray()
+                };
+
+                Serializer<DvdWatches>.Serialize(stream, watches);
+            }
 
             IFileInfo fi = IOServices.GetFileInfo(fileName);
 

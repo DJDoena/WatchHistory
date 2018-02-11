@@ -9,6 +9,7 @@
     using DVDProfiler.DVDProfilerHelper;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
+    using WatchHistory.Main.Implementations;
 
     internal sealed class DataManager : IDataManager
     {
@@ -48,7 +49,7 @@
 
             FilesSerializer.CreateBackup(dataFile);
 
-            LoadData(dataFile);            
+            LoadData(dataFile);
         }
 
         #region IDataManager
@@ -85,7 +86,7 @@
             }
             set
             {
-                value = value.Select(FileNameHelper.GetInstance(IOServices).ReplaceInvalidFileNameChars);
+                value = value.ForEach(FileNameHelper.GetInstance(IOServices).ReplaceInvalidFileNameChars);
 
                 value = new HashSet<String>(value);
 
@@ -216,9 +217,17 @@
 
         public void SaveSettingsFile(String fileName)
         {
-            DefaultValues defaultValues = new DefaultValues() { Users = m_Users.ToArray(), RootFolders = m_RootFolders.ToArray(), FileExtensions = m_FileExtensions.ToArray() };
+            DefaultValues defaultValues = new DefaultValues()
+            {
+                Users = m_Users.ToArray(),
+                RootFolders = m_RootFolders.ToArray(),
+                FileExtensions = m_FileExtensions.ToArray()
+            };
 
-            Settings settings = new Settings() { DefaultValues = defaultValues };
+            Settings settings = new Settings()
+            {
+                DefaultValues = defaultValues
+            };
 
             using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
@@ -234,7 +243,10 @@
 
                 entries.Sort((left, right) => left.FullName.CompareTo(right.FullName));
 
-                Files files = new Files() { Entries = entries.ToArray() };
+                Files files = new Files()
+                {
+                    Entries = entries.ToArray()
+                };
 
                 FilesSerializer.SaveFile(fileName, files);
             }
@@ -270,7 +282,10 @@
             }
             catch
             {
-                settings = new Settings() { DefaultValues = new DefaultValues() };
+                settings = new Settings()
+                {
+                    DefaultValues = new DefaultValues()
+                };
             }
 
             m_Users = settings?.DefaultValues?.Users ?? Enumerable.Empty<String>();
@@ -292,7 +307,7 @@
 
                 foreach (FileEntry entry in entries)
                 {
-                    Files[entry.FullName] = entry;
+                    Files[entry.Key] = entry;
                 }
             }
         }
@@ -302,9 +317,10 @@
         {
             List<User> users = entry.Users?.ToList() ?? new List<User>(1);
 
-            User user = new User();
-
-            user.UserName = userName;
+            User user = new User()
+            {
+                UserName = userName
+            };
 
             users.Add(user);
 
@@ -381,34 +397,36 @@
 
         private IEnumerable<String> GetFiles(String rootFolder
             , String fileExtension)
-        {
-            IFolder dir = IOServices.Folder;
-
-            IEnumerable<String> files;
-            if (dir.Exists(rootFolder))
-            {
-                files = dir.GetFiles(rootFolder, "*." + fileExtension, System.IO.SearchOption.AllDirectories);
-            }
-            else
-            {
-                files = Enumerable.Empty<String>();
-            }
-
-            return (files);
-        }
+            => (IOServices.Folder.Exists(rootFolder)
+                ? (IOServices.Folder.GetFiles(rootFolder, "*." + fileExtension, SearchOption.AllDirectories))
+                : (Enumerable.Empty<String>()));
 
         private void AddActualFiles(IEnumerable<String> actualFiles)
         {
             foreach (String actualFile in actualFiles)
             {
-                if (Files.ContainsKey(actualFile) == false)
+                AddActualFile(actualFile);
+            }
+        }
+
+        private void AddActualFile(String actualFile)
+        {
+            String key = actualFile.ToLower();
+
+            if (Files.TryGetValue(key, out FileEntry entry) == false)
+            {
+                entry = new FileEntry()
                 {
-                    FileEntry entry = new FileEntry();
+                    FullName = actualFile,
+                    CreationTime = entry.GetCreationTime(this)
+                };
 
-                    entry.FullName = actualFile;
+                Files.Add(key, entry);
+            }
 
-                    Files.Add(actualFile, entry);
-                }
+            if (actualFile.EndsWith("." + Constants.DvdProfilerFileExtension))
+            {
+                (new DvdWatchesProcessor()).UpdateFromDvdWatches(entry);
             }
         }
 
@@ -416,9 +434,11 @@
         {
             List<KeyValuePair<String, FileEntry>> files = Files.ToList();
 
+            List<String> fileKeys = actualFiles.ForEach(f => f.ToLower()).ToList();
+
             foreach (KeyValuePair<String, FileEntry> kvp in files)
             {
-                if ((actualFiles.Contains(kvp.Key) == false) && (HasEvents(kvp.Value) == false))
+                if ((fileKeys.Contains(kvp.Key) == false) && (HasEvents(kvp.Value) == false))
                 {
                     Files.Remove(kvp.Key);
                 }
@@ -430,15 +450,19 @@
         {
             FileEntry entry = new FileEntry();
 
+            String fileName = e.OldFullPath;
+
             lock (FilesLock)
             {
-                if (Files.TryGetValue(e.OldFullPath, out entry))
-                {
-                    Files.Remove(e.OldFullPath);
-                }
-            }
+                String key = fileName.ToLower();
 
-            OnFileCreated(e, entry);
+                if (Files.TryGetValue(key, out entry))
+                {
+                    Files.Remove(key);
+                }
+
+                OnFileCreated(fileName, entry);
+            }
 
             RaiseFilesChanged();
         }
@@ -448,10 +472,11 @@
         {
             lock (FilesLock)
             {
-                FileEntry entry;
-                if ((Files.TryGetValue(e.FullPath, out entry)) && (HasEvents(entry) == false))
+                String key = e.FullPath.ToLower();
+
+                if ((Files.TryGetValue(key, out FileEntry entry)) && (HasEvents(entry) == false))
                 {
-                    Files.Remove(e.FullPath);
+                    Files.Remove(key);
                 }
             }
 
@@ -469,13 +494,20 @@
         private void OnFileCreated(FileSystemEventArgs e
             , FileEntry entry)
         {
+            OnFileCreated(e.FullPath, entry);
+        }
+
+        private void OnFileCreated(String fileName, FileEntry entry)
+        {
             lock (FilesLock)
             {
-                if (Files.ContainsKey(e.FullPath) == false)
-                {
-                    entry.FullName = e.FullPath;
+                String key = fileName.ToLower();
 
-                    Files.Add(e.FullPath, entry);
+                if (Files.ContainsKey(key) == false)
+                {
+                    entry.FullName = fileName;
+
+                    Files.Add(key, entry);
                 }
             }
         }

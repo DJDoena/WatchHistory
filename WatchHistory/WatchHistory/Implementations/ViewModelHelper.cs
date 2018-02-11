@@ -7,6 +7,7 @@
     using AbstractionLayer.IOServices;
     using Data;
     using Data.Implementations;
+    using ToolBox.Extensions;
 
     internal static class ViewModelHelper
     {
@@ -17,7 +18,7 @@
             , SortColumn sortColumn
             , Boolean ascending)
         {
-            List<FileEntryViewModel> viewModelEntries = modelEntries.Select(item => new FileEntryViewModel(item, userName, dataManager, ioServices)).ToList();
+            List<FileEntryViewModel> viewModelEntries = modelEntries.ForEach(item => new FileEntryViewModel(item, userName, dataManager, ioServices)).ToList();
 
             viewModelEntries.Sort((left, right) => Compare(left, right, sortColumn, ascending, userName, dataManager));
 

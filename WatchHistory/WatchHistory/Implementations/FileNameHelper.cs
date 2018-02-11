@@ -3,16 +3,17 @@
     using System;
     using System.Linq;
     using AbstractionLayer.IOServices;
+    using ToolBox.Extensions;
 
     internal class FileNameHelper
     {
-        private readonly Char[] InvalidFileNameChas;
+        private readonly Char[] InvalidFileNameChars;
 
         private static FileNameHelper Instance { get; set; }
 
         private FileNameHelper(IIOServices ioServices)
         {
-            InvalidFileNameChas = ioServices.Path.GetInvalidFileNameChars();
+            InvalidFileNameChars = ioServices.Path.GetInvalidFileNameChars();
         }
 
         public static FileNameHelper GetInstance(IIOServices ioServices)
@@ -26,9 +27,9 @@
         }
 
         internal String ReplaceInvalidFileNameChars(String title)
-            => (new String(title.Select(ReplaceInvalidFileNameChars).ToArray()));
+            => (new String(title.ForEach(ReplaceInvalidFileNameChars).ToArray()));
 
         private Char ReplaceInvalidFileNameChars(Char c)
-            => (InvalidFileNameChas.Contains(c) ? ' ' : c);
+            => (InvalidFileNameChars.Contains(c) ? ' ' : c);
     }
 }

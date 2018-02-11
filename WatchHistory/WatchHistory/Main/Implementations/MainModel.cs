@@ -149,7 +149,7 @@
         }
 
         public Boolean CanPlayFile(FileEntry fileEntry)
-            => (fileEntry.FullName.EndsWith("." + CollectionProcessor.FileExtension) == false);
+            => (fileEntry.FullName.EndsWith("." + Constants.DvdProfilerFileExtension) == false);
 
         public void OpenFileLocation(FileEntry fileEntry)
         {

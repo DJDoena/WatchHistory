@@ -45,7 +45,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data\DateTimeConformer.cs" />
+    <Compile Include="Data\Files.Extended.cs">
+      <DependentUpon>Files.v2_1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Files.v1_0.cs" />
+    <Compile Include="Data\Files.v2_1.cs">
+      <DependentUpon>Files.v2_1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Implementations\DvdWatchesProcessor.cs" />
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
     <Compile Include="Data\Implementations\FilesSerializer.cs" />
     <Compile Include="Data\IFilesSerializer.cs" />
@@ -61,6 +69,7 @@
     <Compile Include="Implementations\SortColumn.cs" />
     <Compile Include="Implementations\ViewModelHelper.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Main\Implementations\DvdWatches.cs" />
     <Compile Include="Main\Implementations\EpisodeTitleProcessor.cs" />
     <Compile Include="Main\Implementations\EpisodeTitle.cs" />
     <Compile Include="Main\Implementations\CollectionProcessor.cs" />
@@ -91,9 +100,8 @@
     <Compile Include="Data\Implementations\DataManager.cs" />
     <Compile Include="Data\DefaultValues.cs" />
     <Compile Include="Data\Implementations\FileObserver.cs" />
-    <Compile Include="Data\Files.cs" />
-    <Compile Include="Data\Files.Extended.cs">
-      <DependentUpon>Files.cs</DependentUpon>
+    <Compile Include="Data\Files.v2_0.cs">
+      <DependentUpon>Files.v2_0.xsd</DependentUpon>
     </Compile>
     <Compile Include="Data\IFileObserver.cs" />
     <Compile Include="Data\IDataManager.cs" />
@@ -126,6 +134,12 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Files.v2_1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Data\Files.v2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="DJDSOFT.ICO">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

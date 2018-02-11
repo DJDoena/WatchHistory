@@ -10,6 +10,7 @@
     using AbstractionLayer.IOServices;
     using Data;
     using ToolBox.Commands;
+    using ToolBox.Extensions;
     using WatchHistory.Implementations;
 
     internal sealed class MainViewModel : IMainViewModel
@@ -201,7 +202,7 @@
         }
 
         private static IEnumerable<FileEntry> GetEntries(Object parameter)
-            => (((IList)parameter).Cast<IFileEntryViewModel>().Select(entry => entry.FileEntry).ToList());
+            => (((IList)parameter).Cast<IFileEntryViewModel>().ForEach(entry => entry.FileEntry).ToList());
 
         private void Ignore(Object parameter)
         {
