@@ -11,24 +11,24 @@
 
     internal sealed class CollectionProcessor
     {
-        private readonly Collection Collection;
+        private readonly Collection _Collection;
 
-        private readonly IDataManager DataManager;
+        private readonly IDataManager _DataManager;
 
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
         public CollectionProcessor(Collection collection
             , IDataManager dataManager
             , IIOServices ioServices)
         {
-            Collection = collection;
-            DataManager = dataManager;
-            IOServices = ioServices;
+            _Collection = collection;
+            _DataManager = dataManager;
+            _IOServices = ioServices;
         }
 
         public void Process()
         {
-            DataManager.Suspend();
+            _DataManager.Suspend();
 
             try
             {
@@ -36,42 +36,42 @@
             }
             finally
             {
-                DataManager.Resume();
+                _DataManager.Resume();
             }
         }
 
         private void TryProcess()
         {
-            String folder = IOServices.Path.Combine(WatchHistory.Environment.AppDataFolder, "DVDProfiler");
+            String folder = _IOServices.Path.Combine(WatchHistory.Environment.AppDataFolder, "DVDProfiler");
 
-            if (IOServices.Folder.Exists(folder))
+            if (_IOServices.Folder.Exists(folder))
             {
                 DeleteProfiles(folder);
             }
             else
             {
-                IOServices.Folder.CreateFolder(folder);
+                _IOServices.Folder.CreateFolder(folder);
             }
 
-            DataManager.Users = GetUsers().Union(DataManager.Users);
+            _DataManager.Users = GetUsers().Union(_DataManager.Users);
 
-            DataManager.RootFolders = folder.Enumerate().Union(DataManager.RootFolders);
+            _DataManager.RootFolders = folder.Enumerate().Union(_DataManager.RootFolders);
 
-            DataManager.FileExtensions = Constants.DvdProfilerFileExtension.Enumerate().Union(DataManager.FileExtensions);
+            _DataManager.FileExtensions = Constants.DvdProfilerFileExtension.Enumerate().Union(_DataManager.FileExtensions);
 
             CreateCollectionFiles(folder);
         }
 
         private void DeleteProfiles(String folder)
         {
-            IEnumerable<String> files = IOServices.Folder.GetFiles(folder, "*." + Constants.DvdProfilerFileExtension);
+            IEnumerable<String> files = _IOServices.Folder.GetFiles(folder, "*." + Constants.DvdProfilerFileExtension);
 
-            files.ForEach(file => IOServices.File.Delete(file));
+            files.ForEach(file => _IOServices.File.Delete(file));
         }
 
         private IEnumerable<String> GetUsers()
         {
-            IEnumerable<DVD> dvds = Collection.DVDList.EnsureNotNull();
+            IEnumerable<DVD> dvds = _Collection.DVDList.EnsureNotNull();
 
             IEnumerable<IEnumerable<String>> usersByDvd = dvds.Select(GetUsers);
 
@@ -97,7 +97,7 @@
 
         private void CreateCollectionFiles(String folder)
         {
-            IEnumerable<EpisodeTitle> titles = (new EpisodeTitleProcessor(Collection, IOServices)).GetEpisodeTitles();
+            IEnumerable<EpisodeTitle> titles = (new EpisodeTitleProcessor(_Collection, _IOServices)).GetEpisodeTitles();
 
             titles = new HashSet<EpisodeTitle>(titles);
 
@@ -107,16 +107,16 @@
         private void CreateCollectionFile(String folder
             , EpisodeTitle title)
         {
-            String fileName = IOServices.Path.Combine(folder, title.Title + "." + Constants.DvdProfilerFileExtension);
+            String fileName = _IOServices.Path.Combine(folder, title.Title + "." + Constants.DvdProfilerFileExtension);
 
             DvdWatches watches = new DvdWatches()
             {
                 Watches = title.Watches?.ToArray()
             };
 
-            SerializerHelper.Serialize(IOServices, fileName, watches);
+            SerializerHelper.Serialize(_IOServices, fileName, watches);
 
-            IFileInfo fi = IOServices.GetFileInfo(fileName);
+            IFileInfo fi = _IOServices.GetFileInfo(fileName);
 
             fi.CreationTime = title.PurchaseDate;
         }

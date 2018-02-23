@@ -11,13 +11,13 @@
 
     internal sealed class DataManager : IDataManager
     {
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
-        private readonly IFileObserver FileObserver;
+        private readonly IFileObserver _FileObserver;
 
-        private readonly Object FilesLock;
+        private readonly Object _FilesLock;
 
-        private readonly IFilesSerializer FilesSerializer;
+        private readonly IFilesSerializer _FilesSerializer;
 
         private IEnumerable<String> _RootFolders;
 
@@ -37,17 +37,17 @@
             , String dataFile
             , IIOServices ioServices)
         {
-            IOServices = ioServices;
+            _IOServices = ioServices;
 
-            FilesLock = new Object();
+            _FilesLock = new Object();
 
-            FileObserver = new FileObserver(ioServices);
+            _FileObserver = new FileObserver(ioServices);
 
             LoadSettings(settingsFile);
 
-            FilesSerializer = new FilesSerializer(ioServices);
+            _FilesSerializer = new FilesSerializer(ioServices);
 
-            FilesSerializer.CreateBackup(dataFile);
+            _FilesSerializer.CreateBackup(dataFile);
 
             LoadData(dataFile);
         }
@@ -61,7 +61,7 @@
             {
                 value = new HashSet<String>(value);
 
-                FileObserver.Observe(value, _FileExtensions);
+                _FileObserver.Observe(value, _FileExtensions);
 
                 _RootFolders = value.ToList();
 
@@ -78,7 +78,7 @@
 
                 value = new HashSet<String>(value);
 
-                FileObserver.Observe(_RootFolders, value);
+                _FileObserver.Observe(_RootFolders, value);
 
                 _FileExtensions = value.ToList();
 
@@ -116,9 +116,9 @@
             {
                 if (_FilesChanged == null)
                 {
-                    FileObserver.Created += OnFileCreated;
-                    FileObserver.Deleted += OnFileDeleted;
-                    FileObserver.Renamed += OnFileRenamed;
+                    _FileObserver.Created += OnFileCreated;
+                    _FileObserver.Deleted += OnFileDeleted;
+                    _FileObserver.Renamed += OnFileRenamed;
                 }
 
                 _FilesChanged += value;
@@ -129,29 +129,34 @@
 
                 if (_FilesChanged == null)
                 {
-                    FileObserver.Created -= OnFileCreated;
-                    FileObserver.Deleted -= OnFileDeleted;
-                    FileObserver.Renamed -= OnFileRenamed;
+                    _FileObserver.Created -= OnFileCreated;
+                    _FileObserver.Deleted -= OnFileDeleted;
+                    _FileObserver.Renamed -= OnFileRenamed;
                 }
             }
         }
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            lock (FilesLock)
+            lock (_FilesLock)
             {
                 return (Files.Values);
             }
         }
 
         public void AddWatched(FileEntry entry
-            , String userName)
+           , String userName)
+            => AddWatched(entry, userName, DateTime.UtcNow);
+
+        public void AddWatched(FileEntry entry
+            , String userName
+            , DateTime watchedOn)
         {
             User user = TryGetUser(entry, userName);
 
             user = user ?? AddUser(entry, userName);
 
-            AddWatched(user);
+            AddWatched(user, watchedOn);
         }
 
         public void AddIgnore(FileEntry entry
@@ -194,7 +199,7 @@
 
         public DateTime GetCreationTime(FileEntry fileEntry)
         {
-            IFileInfo fi = IOServices.GetFileInfo(fileEntry.FullName);
+            IFileInfo fi = _IOServices.GetFileInfo(fileEntry.FullName);
 
             DateTime creationTime = new DateTime(0);
 
@@ -220,12 +225,12 @@
                 DefaultValues = defaultValues
             };
 
-            SerializerHelper.Serialize(IOServices, fileName, settings);
+            SerializerHelper.Serialize(_IOServices, fileName, settings);
         }
 
         public void SaveDataFile(String fileName)
         {
-            lock (FilesLock)
+            lock (_FilesLock)
             {
                 List<FileEntry> entries = Files.Values.ToList();
 
@@ -236,7 +241,7 @@
                     Entries = entries.ToArray()
                 };
 
-                FilesSerializer.SaveFile(fileName, files);
+                _FilesSerializer.SaveFile(fileName, files);
             }
         }
 
@@ -244,14 +249,14 @@
         {
             IsSuspended = true;
 
-            FileObserver.Suspend();
+            _FileObserver.Suspend();
         }
 
         public void Resume()
         {
             IsSuspended = false;
 
-            FileObserver.Observe(_RootFolders, _FileExtensions);
+            _FileObserver.Observe(_RootFolders, _FileExtensions);
 
             SyncData();
         }
@@ -263,7 +268,7 @@
             Settings settings;
             try
             {
-                settings = SerializerHelper.Deserialize<Settings>(IOServices, fileName);
+                settings = SerializerHelper.Deserialize<Settings>(_IOServices, fileName);
             }
             catch
             {
@@ -282,9 +287,9 @@
 
         private void LoadData(String fileName)
         {
-            Files files = FilesSerializer.LoadData(fileName);
+            Files files = _FilesSerializer.LoadData(fileName);
 
-            lock (FilesLock)
+            lock (_FilesLock)
             {
                 Files = new Dictionary<String, FileEntry>(files?.Entries?.Length ?? 0);
 
@@ -311,11 +316,12 @@
             return (user);
         }
 
-        private void AddWatched(User user)
+        private void AddWatched(User user
+            , DateTime watchedOn)
         {
             List<Watch> watches = user.Watches?.ToList() ?? new List<Watch>(1);
 
-            watches.Add(new Watch() { Value = DateTime.UtcNow });
+            watches.Add(new Watch() { Value = watchedOn });
 
             user.Watches = watches.ToArray();
 
@@ -365,7 +371,7 @@
         {
             IEnumerable<String> actualFiles = task.Result.SelectMany(file => file).ToList();
 
-            lock (FilesLock)
+            lock (_FilesLock)
             {
                 actualFiles.ForEach(AddActualFile);
 
@@ -379,8 +385,8 @@
 
         private IEnumerable<String> GetFiles(String rootFolder
             , String fileExtension)
-            => IOServices.Folder.Exists(rootFolder)
-                ? (IOServices.Folder.GetFiles(rootFolder, "*." + fileExtension, SearchOption.AllDirectories))
+            => _IOServices.Folder.Exists(rootFolder)
+                ? (_IOServices.Folder.GetFiles(rootFolder, "*." + fileExtension, SearchOption.AllDirectories))
                 : (Enumerable.Empty<String>());
 
         private void AddActualFile(String actualFile)
@@ -401,7 +407,7 @@
 
             if (actualFile.EndsWith("." + Constants.DvdProfilerFileExtension))
             {
-                (new DvdWatchesProcessor(IOServices)).UpdateFromDvdWatches(entry);
+                (new DvdWatchesProcessor(_IOServices)).UpdateFromDvdWatches(entry);
             }
         }
 
@@ -429,7 +435,7 @@
 
             String fileName = e.OldFullPath;
 
-            lock (FilesLock)
+            lock (_FilesLock)
             {
                 String key = fileName.ToLower();
 
@@ -447,7 +453,7 @@
         private void OnFileDeleted(Object sender
             , FileSystemEventArgs e)
         {
-            lock (FilesLock)
+            lock (_FilesLock)
             {
                 String key = e.FullPath.ToLower();
 
@@ -476,7 +482,7 @@
 
         private void OnFileCreated(String fileName, FileEntry entry)
         {
-            lock (FilesLock)
+            lock (_FilesLock)
             {
                 String key = fileName.ToLower();
 

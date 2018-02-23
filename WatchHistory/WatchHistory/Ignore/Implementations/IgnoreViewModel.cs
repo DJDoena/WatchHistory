@@ -15,15 +15,17 @@
 
     internal sealed class IgnoreViewModel : IIgnoreViewModel
     {
-        private readonly IIgnoreModel Model;
+        private readonly IIgnoreModel _Model;
 
-        private readonly IDataManager DataManager;
+        private readonly IDataManager _DataManager;
 
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
-        private readonly IWindowFactory WindowFactory;
+        private readonly IWindowFactory _WindowFactory;
 
-        private readonly String UserName;
+        private readonly String _UserName;
+
+        private readonly ICommand _UndoIgnoreCommand;
 
         private event PropertyChangedEventHandler _PropertyChanged;
 
@@ -33,11 +35,13 @@
             , IWindowFactory windowFactory
             , String userName)
         {
-            Model = model;
-            DataManager = dataManager;
-            IOServices = ioServices;
-            WindowFactory = windowFactory;
-            UserName = userName;
+            _Model = model;
+            _DataManager = dataManager;
+            _IOServices = ioServices;
+            _WindowFactory = windowFactory;
+            _UserName = userName;
+
+            _UndoIgnoreCommand = new ParameterizedRelayCommand(UndoIgnore);
         }
 
         #region INotifyPropertyChanged
@@ -48,7 +52,7 @@
             {
                 if (_PropertyChanged == null)
                 {
-                    Model.FilesChanged += OnModelFilesChanged;
+                    _Model.FilesChanged += OnModelFilesChanged;
                 }
 
                 _PropertyChanged += value;
@@ -59,7 +63,7 @@
 
                 if (_PropertyChanged == null)
                 {
-                    Model.FilesChanged -= OnModelFilesChanged;
+                    _Model.FilesChanged -= OnModelFilesChanged;
                 }
             }
         }
@@ -69,16 +73,16 @@
         #region IIgnoreViewModel
 
         public String Title
-            => $"Watch History (user: {UserName})";
+            => $"Watch History (user: {_UserName})";
 
         public String Filter
         {
-            get => Model.Filter;
+            get => _Model.Filter;
             set
             {
-                if (value != Model.Filter)
+                if (value != _Model.Filter)
                 {
-                    Model.Filter = value;
+                    _Model.Filter = value;
 
                     RaisePropertyChanged(nameof(Filter));
                 }
@@ -89,16 +93,16 @@
         {
             get
             {
-                IEnumerable<FileEntry> modelEntries = Model.GetFiles();
+                IEnumerable<FileEntry> modelEntries = _Model.GetFiles();
 
-                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, UserName, DataManager, IOServices, SortColumn.File, true);
+                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, _UserName, _DataManager, _IOServices, SortColumn.File, true);
 
                 return (viewModelEntries);
             }
         }
 
         public ICommand UndoIgnoreCommand
-           => new ParameterizedRelayCommand(UndoIgnore);
+           => _UndoIgnoreCommand;
 
         #endregion
 
@@ -106,9 +110,9 @@
         {
             IEnumerable<IFileEntryViewModel> entries = ((IList)parameter).Cast<IFileEntryViewModel>().ToList();
 
-            entries.ForEach(entry => DataManager.UndoIgnore(entry.FileEntry, UserName));
+            entries.ForEach(entry => _DataManager.UndoIgnore(entry.FileEntry, _UserName));
 
-            DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+            _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
         }
 
         private void OnModelFilesChanged(Object sender

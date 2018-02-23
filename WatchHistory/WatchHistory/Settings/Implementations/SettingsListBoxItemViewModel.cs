@@ -5,21 +5,21 @@
 
     internal sealed class SettingsListBoxItemViewModel : ISettingsListBoxItemViewModel
     {
-        private String m_Value;
+        private String _Value;
 
         public SettingsListBoxItemViewModel(String value)
         {
-            m_Value = value;
+            _Value = value;
         }
 
         public String Value
         {
-            get => m_Value;
+            get => _Value;
             set
             {
-                if (value != m_Value)
+                if (value != _Value)
                 {
-                    m_Value = value;
+                    _Value = value;
 
                     RaisePropertyChanged(nameof(Value));
                 }

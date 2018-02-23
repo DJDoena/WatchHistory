@@ -14,14 +14,16 @@
     using SelectUser.Implementations;
     using Settings;
     using Settings.Implementations;
+    using WatchedOn;
+    using WatchedOn.Implementations;
 
     internal sealed class WindowFactory : IWindowFactory
     {
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
-        private readonly IUIServices UIServices;
+        private readonly IUIServices _UIServices;
 
-        private readonly IDataManager DataManager;
+        private readonly IDataManager _DataManager;
 
         private Window WaitWindow { get; set; }
 
@@ -29,18 +31,18 @@
             , IUIServices uiServices
             , IDataManager dataManager)
         {
-            IOServices = ioServices;
-            UIServices = uiServices;
-            DataManager = dataManager;
+            _IOServices = ioServices;
+            _UIServices = uiServices;
+            _DataManager = dataManager;
         }
 
         #region IWindowFactory
 
         public void OpenSelectUserWindow()
         {
-            if (DataManager.Users.Count() > 1)
+            if (_DataManager.Users.Count() > 1)
             {
-                ISelectUserViewModel viewModel = new SelectUserViewModel(DataManager, this);
+                ISelectUserViewModel viewModel = new SelectUserViewModel(_DataManager, this);
 
                 Window window = new SelectUserWindow()
                 {
@@ -51,7 +53,7 @@
             }
             else
             {
-                String user = DataManager.Users.FirstOrDefault() ?? Constants.DefaultUser;
+                String user = _DataManager.Users.FirstOrDefault() ?? Constants.DefaultUser;
 
                 OpenMainWindow(user);
             }
@@ -59,9 +61,9 @@
 
         public void OpenMainWindow(String userName)
         {
-            IMainModel model = new MainModel(DataManager, IOServices, UIServices, userName);
+            IMainModel model = new MainModel(_DataManager, _IOServices, _UIServices, userName);
 
-            IMainViewModel viewModel = new MainViewModel(model, DataManager, IOServices, this, userName);
+            IMainViewModel viewModel = new MainViewModel(model, _DataManager, _IOServices, this, userName);
 
             Window window = new MainWindow()
             {
@@ -70,12 +72,12 @@
 
             window.Show();
 
-            DataManager.Resume();
+            _DataManager.Resume();
         }
 
         public void OpenSettingsWindow()
         {
-            ISettingsViewModel viewModel = new SettingsViewModel(DataManager, UIServices);
+            ISettingsViewModel viewModel = new SettingsViewModel(_DataManager, _UIServices);
 
             Window window = new SettingsWindow()
             {
@@ -87,9 +89,9 @@
 
         public void OpenIgnoreWindow(String userName)
         {
-            IIgnoreModel model = new IgnoreModel(DataManager, userName);
+            IIgnoreModel model = new IgnoreModel(_DataManager, userName);
 
-            IIgnoreViewModel viewModel = new IgnoreViewModel(model, DataManager, IOServices, this, userName);
+            IIgnoreViewModel viewModel = new IgnoreViewModel(model, _DataManager, _IOServices, this, userName);
 
             Window window = new IgnoreWindow()
             {
@@ -97,6 +99,23 @@
             };
 
             window.ShowDialog();
+        }
+
+        public Nullable<DateTime> OpenWatchedOnWindow()
+        {
+            IWatchedOnViewModel viewModel = new WatchedOnViewModel();
+
+            Window window = new WatchedOnWindow()
+            {
+                DataContext = viewModel
+            };
+
+            if (window.ShowDialog() == true)
+            {
+                return (viewModel.Value);
+            }
+
+            return (null);
         }
 
         #endregion

@@ -8,11 +8,11 @@
 
     internal sealed class FilesSerializer : IFilesSerializer
     {
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
         public FilesSerializer(IIOServices ioServices)
         {
-            IOServices = ioServices;
+            _IOServices = ioServices;
         }
 
         #region IFilesSerializer
@@ -34,7 +34,7 @@
 
         public void SaveFile(String fileName
             , Files files)
-            => SerializerHelper.Serialize(IOServices, fileName, files);
+            => SerializerHelper.Serialize(_IOServices, fileName, files);
 
         public void CreateBackup(String fileName)
         {
@@ -50,26 +50,26 @@
 
                 String newFileName = fileBaseName + "." + MaximumBackups.ToString() + extension;
 
-                if (IOServices.File.Exists(newFileName))
+                if (_IOServices.File.Exists(newFileName))
                 {
-                    IOServices.File.Delete(newFileName);
+                    _IOServices.File.Delete(newFileName);
                 }
 
                 for (Int32 backupIndex = MaximumBackups - 1; backupIndex > 0; backupIndex--)
                 {
                     String oldFileName = fileBaseName + "." + backupIndex.ToString() + extension;
 
-                    if (IOServices.File.Exists(oldFileName))
+                    if (_IOServices.File.Exists(oldFileName))
                     {
-                        IOServices.File.Move(oldFileName, newFileName);
+                        _IOServices.File.Move(oldFileName, newFileName);
                     }
 
                     newFileName = oldFileName;
                 }
 
-                if (IOServices.File.Exists(fileName))
+                if (_IOServices.File.Exists(fileName))
                 {
-                    IOServices.File.Copy(fileName, newFileName);
+                    _IOServices.File.Copy(fileName, newFileName);
                 }
             }
             catch (IOException)
@@ -83,7 +83,7 @@
 
         private Boolean IsVersion2File(String fileName)
         {
-            using (Stream fs = IOServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (Stream fs = _IOServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 using (StreamReader sr = new StreamReader(fs, Encoding.UTF8))
                 {
@@ -104,11 +104,11 @@
         }
 
         private Files ReadVersion2File(String fileName)
-            => SerializerHelper.Deserialize<Files>(IOServices, fileName);
+            => SerializerHelper.Deserialize<Files>(_IOServices, fileName);
 
         private Files ReadVersion1File(String fileName)
         {
-            v1_0.Files oldFiles = SerializerHelper.Deserialize<v1_0.Files>(IOServices, fileName);
+            v1_0.Files oldFiles = SerializerHelper.Deserialize<v1_0.Files>(_IOServices, fileName);
 
             Files newFiles = FilesModelConverter.Convert(oldFiles);
 

@@ -9,11 +9,11 @@
 
     internal sealed class FileEntryViewModel : IFileEntryViewModel
     {
-        private readonly String UserName;
+        private readonly String _UserName;
 
-        private readonly IDataManager DataManager;
+        private readonly IDataManager _DataManager;
 
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
         private User _User;
 
@@ -25,9 +25,9 @@
             , IIOServices ioServices)
         {
             FileEntry = entry;
-            UserName = userName;
-            DataManager = dataManager;
-            IOServices = ioServices;
+            _UserName = userName;
+            _DataManager = dataManager;
+            _IOServices = ioServices;
 
             _User = TryGetUser();
         }
@@ -82,7 +82,7 @@
             {
                 String name = FileEntry.FullName;
 
-                DataManager.RootFolders.ForEach(folder => name = name.Replace(folder, String.Empty));
+                _DataManager.RootFolders.ForEach(folder => name = name.Replace(folder, String.Empty));
 
                 name = name.Trim('\\', '/');
 
@@ -98,7 +98,7 @@
         {
             get
             {
-                DateTime lastWatched = DataManager.GetLastWatched(FileEntry, UserName);
+                DateTime lastWatched = _DataManager.GetLastWatched(FileEntry, _UserName);
 
                 String text = String.Empty;
 
@@ -115,7 +115,7 @@
         {
             get
             {
-                DateTime creationTime = FileEntry.GetCreationTime(DataManager);
+                DateTime creationTime = FileEntry.GetCreationTime(_DataManager);
 
                 String text = String.Empty;
 
@@ -129,12 +129,12 @@
         }
 
         public Brush Color
-            => IOServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red;
+            => _IOServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red;
 
         #endregion
 
         private User TryGetUser()
-            => FileEntry.Users?.Where(item => item.UserName == UserName).FirstOrDefault();
+            => FileEntry.Users?.Where(item => item.UserName == _UserName).FirstOrDefault();
 
         private void OnUsersChanged(Object sender
             , EventArgs e)

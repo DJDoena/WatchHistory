@@ -11,13 +11,13 @@
 
     internal sealed class DvdWatchesProcessor
     {
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
         private Dictionary<User, HashSet<Watch>> ExistingWatches { get; set; }
 
         public DvdWatchesProcessor(IIOServices ioServices)
         {
-            IOServices = ioServices;
+            _IOServices = ioServices;
         }
 
         internal void UpdateFromDvdWatches(FileEntry entry)
@@ -25,7 +25,7 @@
             DvdWatches watches = null;
             try
             {
-                watches = SerializerHelper.Deserialize<DvdWatches>(IOServices, entry.FullName);
+                watches = SerializerHelper.Deserialize<DvdWatches>(_IOServices, entry.FullName);
             }
             catch
             { }

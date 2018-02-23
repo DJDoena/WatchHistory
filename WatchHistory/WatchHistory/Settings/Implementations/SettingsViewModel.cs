@@ -9,13 +9,26 @@
     using AbstractionLayer.UIServices;
     using Data;
     using ToolBox.Commands;
-    using ToolBox.Extensions;
 
     internal sealed class SettingsViewModel : ISettingsViewModel
     {
-        private readonly IDataManager DataManager;
+        private readonly IDataManager _DataManager;
 
-        private readonly IUIServices UIServices;
+        private readonly IUIServices _UIServices;
+
+        private readonly ICommand _AddUserCommand;
+
+        private readonly ICommand _RemoveUserCommand;
+
+        private readonly ICommand _AddRootFolderCommand;
+
+        private readonly ICommand _RemoveRootFolderCommand;
+
+        private readonly ICommand _AddFileExtensionCommand;
+
+        private readonly ICommand _RemoveFileExtensionCommand;
+
+        private readonly ICommand _AcceptCommand;
 
         private ISettingsListBoxItemViewModel _SelectedUser;
 
@@ -26,14 +39,22 @@
         public SettingsViewModel(IDataManager dataManager
             , IUIServices uiServices)
         {
-            DataManager = dataManager;
-            UIServices = uiServices;
+            _DataManager = dataManager;
+            _UIServices = uiServices;
 
-            Users = new ObservableCollection<ISettingsListBoxItemViewModel>(DataManager.Users.Select(item => new SettingsListBoxItemViewModel(item)));
+            Users = new ObservableCollection<ISettingsListBoxItemViewModel>(_DataManager.Users.Select(item => new SettingsListBoxItemViewModel(item)));
 
-            RootFolders = new ObservableCollection<String>(DataManager.RootFolders);
+            RootFolders = new ObservableCollection<String>(_DataManager.RootFolders);
 
-            FileExtensions = new ObservableCollection<ISettingsListBoxItemViewModel>(DataManager.FileExtensions.Select(item => new SettingsListBoxItemViewModel(item)));
+            FileExtensions = new ObservableCollection<ISettingsListBoxItemViewModel>(_DataManager.FileExtensions.Select(item => new SettingsListBoxItemViewModel(item)));
+
+            _AddUserCommand = new RelayCommand(AddUser);
+            _RemoveUserCommand = new RelayCommand(RemoveUser, CanRemoveUser);
+            _AddRootFolderCommand = new RelayCommand(AddRootFolder);
+            _RemoveRootFolderCommand = new RelayCommand(RemoveRootFolder, CanRemoveRootFolder);
+            _AddFileExtensionCommand = new RelayCommand(AddFileExtension);
+            _RemoveFileExtensionCommand = new RelayCommand(RemoveFileExtension, CanRemoveFileExtension);
+            _AcceptCommand = new RelayCommand(Accept);
         }
 
         #region INotifyPropertyChanged
@@ -61,10 +82,10 @@
         }
 
         public ICommand AddUserCommand
-            => new RelayCommand(AddUser);
+            => _AddUserCommand;
 
         public ICommand RemoveUserCommand
-            => new RelayCommand(RemoveUser, CanRemoveUser);
+            => _RemoveUserCommand;
 
         public ObservableCollection<String> RootFolders { get; private set; }
 
@@ -83,10 +104,10 @@
         }
 
         public ICommand AddRootFolderCommand
-            => new RelayCommand(AddRootFolder);
+            => _AddRootFolderCommand;
 
         public ICommand RemoveRootFolderCommand
-            => new RelayCommand(RemoveRootFolder, CanRemoveRootFolder);
+            => _RemoveRootFolderCommand;
 
         public ObservableCollection<ISettingsListBoxItemViewModel> FileExtensions { get; private set; }
 
@@ -105,16 +126,15 @@
         }
 
         public ICommand AddFileExtensionCommand
-            => new RelayCommand(AddFileExtension);
+            => _AddFileExtensionCommand;
 
         public ICommand RemoveFileExtensionCommand
-            => new RelayCommand(RemoveFileExtension, CanRemoveFileExtension);
+            => _RemoveFileExtensionCommand;
 
         public ICommand AcceptCommand
-            => new RelayCommand(Accept);
+            => _AcceptCommand;
 
         public event EventHandler Closing;
-
 
         #endregion
 
@@ -129,7 +149,7 @@
 
         private void AddRootFolder()
         {
-            if (UIServices.ShowFolderBrowserDialog(new FolderBrowserDialogOptions(), out string rootFolder))
+            if (_UIServices.ShowFolderBrowserDialog(new FolderBrowserDialogOptions(), out string rootFolder))
             {
                 RootFolders.Add(rootFolder);
             }
@@ -154,15 +174,15 @@
         {
             HashSet<String> users = new HashSet<String>(Users.Select(item => item.Value));
 
-            DataManager.Users = users.Where(item => String.IsNullOrEmpty(item) == false);
+            _DataManager.Users = users.Where(item => String.IsNullOrEmpty(item) == false);
 
             HashSet<String> rootFolders = new HashSet<String>(RootFolders);
 
-            DataManager.RootFolders = rootFolders.Where(item => String.IsNullOrEmpty(item) == false);
+            _DataManager.RootFolders = rootFolders.Where(item => String.IsNullOrEmpty(item) == false);
 
             HashSet<String> fileExtensions = new HashSet<String>(FileExtensions.Select(item => item.Value));
 
-            DataManager.FileExtensions = fileExtensions.Where(item => String.IsNullOrEmpty(item) == false);
+            _DataManager.FileExtensions = fileExtensions.Where(item => String.IsNullOrEmpty(item) == false);
 
             Closing?.Invoke(this, EventArgs.Empty);
         }

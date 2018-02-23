@@ -15,18 +15,38 @@
 
     internal sealed class MainViewModel : IMainViewModel
     {
-        private readonly IMainModel Model;
+        private readonly IMainModel _Model;
 
-        private readonly IDataManager DataManager;
+        private readonly IDataManager _DataManager;
 
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
-        private readonly IWindowFactory WindowFactory;
+        private readonly IWindowFactory _WindowFactory;
 
-        private readonly String UserName;
+        private readonly String _UserName;
+
+        private readonly ICommand _AddWatchedCommand;
+
+        private readonly ICommand _PlayFileAndAddWatchedCommand;
+
+        private readonly ICommand _IgnoreCommand;
+
+        private readonly ICommand _OpenSettingsCommand;
+
+        private readonly ICommand _ImportCollectionCommand;
+
+        private readonly ICommand _UndoIgnoreCommand;
+
+        private readonly ICommand _PlayFileCommand;
+
+        private readonly ICommand _SortCommand;
+
+        private readonly ICommand _OpenFileLocationCommand;
+
+        private readonly ICommand _AddWatchedOnCommand;
 
         private event PropertyChangedEventHandler _PropertyChanged;
-
+        
         private SortColumn _SortColumn;
 
         private Boolean SortAscending { get; set; }
@@ -54,16 +74,27 @@
             , IWindowFactory windowFactory
             , String userName)
         {
-            Model = model;
-            DataManager = dataManager;
-            IOServices = ioServices;
-            WindowFactory = windowFactory;
-            UserName = userName;
+            _Model = model;
+            _DataManager = dataManager;
+            _IOServices = ioServices;
+            _WindowFactory = windowFactory;
+            _UserName = userName;
 
             _SortColumn = SortColumn.CreationTime;
             SortAscending = false;
             SuspendEvents = false;
             EventRaisedWhileSuspended = false;
+
+            _AddWatchedCommand = new ParameterizedRelayCommand(AddWatched);
+            _PlayFileAndAddWatchedCommand = new ParameterizedRelayCommand(PlayFileAndAddWatched, CanPlayFile);
+            _OpenSettingsCommand = new RelayCommand(OpenSettings);
+            _ImportCollectionCommand = new RelayCommand(ImportCollection, CanImportCollection);
+            _IgnoreCommand = new ParameterizedRelayCommand(Ignore);
+            _UndoIgnoreCommand = new RelayCommand(UndoIgnore);
+            _PlayFileCommand = new ParameterizedRelayCommand(PlayFile, CanPlayFile);
+            _SortCommand = new ParameterizedRelayCommand(Sort);
+            _OpenFileLocationCommand = new ParameterizedRelayCommand(OpenFileLocation);
+            _AddWatchedOnCommand = new ParameterizedRelayCommand(AddWatchedOn);
         }
 
         #region INotifyPropertyChanged
@@ -74,9 +105,9 @@
             {
                 if (_PropertyChanged == null)
                 {
-                    Model.FilesChanged += OnModelFilesChanged;
+                    _Model.FilesChanged += OnModelFilesChanged;
 
-                    DataManager.IsSynchronizingChanged += OnDataManagerIsSynchronizingChanged;
+                    _DataManager.IsSynchronizingChanged += OnDataManagerIsSynchronizingChanged;
                 }
 
                 _PropertyChanged += value;
@@ -87,9 +118,9 @@
 
                 if (_PropertyChanged == null)
                 {
-                    DataManager.IsSynchronizingChanged -= OnDataManagerIsSynchronizingChanged;
+                    _DataManager.IsSynchronizingChanged -= OnDataManagerIsSynchronizingChanged;
 
-                    Model.FilesChanged -= OnModelFilesChanged;
+                    _Model.FilesChanged -= OnModelFilesChanged;
                 }
             }
         }
@@ -99,16 +130,16 @@
         #region IMainViewModel
 
         public String Title
-            => $"Watch History (user: {UserName})";
+            => $"Watch History (user: {_UserName})";
 
         public String Filter
         {
-            get => Model.Filter;
+            get => _Model.Filter;
             set
             {
-                if (value != Model.Filter)
+                if (value != _Model.Filter)
                 {
-                    Model.Filter = value;
+                    _Model.Filter = value;
 
                     RaisePropertyChanged(nameof(Filter));
                 }
@@ -117,12 +148,12 @@
 
         public Boolean IgnoreWatched
         {
-            get => Model.IgnoreWatched;
+            get => _Model.IgnoreWatched;
             set
             {
-                if (value != Model.IgnoreWatched)
+                if (value != _Model.IgnoreWatched)
                 {
-                    Model.IgnoreWatched = value;
+                    _Model.IgnoreWatched = value;
 
                     RaisePropertyChanged(nameof(IgnoreWatched));
                 }
@@ -133,40 +164,43 @@
         {
             get
             {
-                IEnumerable<FileEntry> modelEntries = Model.GetFiles();
+                IEnumerable<FileEntry> modelEntries = _Model.GetFiles();
 
-                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, UserName, DataManager, IOServices, SortColumn, SortAscending);
+                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, _UserName, _DataManager, _IOServices, SortColumn, SortAscending);
 
                 return (viewModelEntries);
             }
         }
 
         public ICommand AddWatchedCommand
-            => new ParameterizedRelayCommand(AddWatched);
+            => _AddWatchedCommand;
 
         public ICommand PlayFileAndAddWatchedCommand
-            => new ParameterizedRelayCommand(PlayFileAndAddWatched, CanPlayFile);
+            => _PlayFileAndAddWatchedCommand;
 
         public ICommand OpenSettingsCommand
-            => new RelayCommand(OpenSettings);
+            => _OpenSettingsCommand;
 
         public ICommand ImportCollectionCommand
-            => new RelayCommand(ImportCollection, CanImportCollection);
+            => _ImportCollectionCommand;
 
         public ICommand IgnoreCommand
-           => new ParameterizedRelayCommand(Ignore);
+           => _IgnoreCommand;
 
         public ICommand UndoIgnoreCommand
-            => new RelayCommand(UndoIgnore);
+            => _UndoIgnoreCommand;
 
         public ICommand PlayFileCommand
-            => new ParameterizedRelayCommand(PlayFile, CanPlayFile);
+            => _PlayFileCommand;
 
         public ICommand SortCommand
-            => new ParameterizedRelayCommand(Sort);
+            => _SortCommand;
 
         public ICommand OpenFileLocationCommand
-            => new ParameterizedRelayCommand(OpenFileLocation);
+            => _OpenFileLocationCommand;
+
+        public ICommand AddWatchedOnCommand
+            => _AddWatchedOnCommand;
 
         #endregion
 
@@ -174,13 +208,13 @@
         {
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => DataManager.AddWatched(entry, UserName));
+            GetEntries(parameter).ForEach(entry => _DataManager.AddWatched(entry, _UserName));
 
-            DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+            _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
 
             ResumeEvents();
         }
-
+        
         private void ResumeEvents()
         {
             SuspendEvents = false;
@@ -200,31 +234,31 @@
         {
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => DataManager.AddIgnore(entry, UserName));
+            GetEntries(parameter).ForEach(entry => _DataManager.AddIgnore(entry, _UserName));
 
-            DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+            _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
 
             ResumeEvents();
         }
 
         private void OpenSettings()
-            => WindowFactory.OpenSettingsWindow();
+            => _WindowFactory.OpenSettingsWindow();
 
         private void UndoIgnore()
-            => WindowFactory.OpenIgnoreWindow(UserName);
+            => _WindowFactory.OpenIgnoreWindow(_UserName);
 
         private void PlayFile(Object parameter)
         {
             FileEntry fileEntry = GetFileEntry(parameter);
 
-            Model.PlayFile(fileEntry);
+            _Model.PlayFile(fileEntry);
         }
 
         private Boolean CanPlayFile(Object parameter)
         {
             FileEntry fileEntry = GetFileEntry(parameter);
 
-            Boolean canPlay = (fileEntry != null) && (Model.CanPlayFile(fileEntry));
+            Boolean canPlay = (fileEntry != null) && (_Model.CanPlayFile(fileEntry));
 
             return (canPlay);
         }
@@ -233,11 +267,11 @@
         {
             FileEntry fileEntry = GetFileEntry(parameter);
 
-            Model.PlayFile(fileEntry);
+            _Model.PlayFile(fileEntry);
 
-            DataManager.AddWatched(fileEntry, UserName);
+            _DataManager.AddWatched(fileEntry, _UserName);
 
-            DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+            _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
         }
 
         private static FileEntry GetFileEntry(Object parameter)
@@ -247,20 +281,20 @@
         {
             FileEntry fileEntry = GetFileEntry(parameter);
 
-            Model.OpenFileLocation(fileEntry);
+            _Model.OpenFileLocation(fileEntry);
         }
 
         private void Sort(Object parameter)
             => SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (String)parameter));
 
         private Boolean CanImportCollection()
-            => DataManager.IsSynchronizing == false;
+            => _DataManager.IsSynchronizing == false;
 
         private void ImportCollection()
         {
             SuspendEvents = true;
 
-            Model.ImportCollection();
+            _Model.ImportCollection();
 
             ResumeEvents();
         }
@@ -285,6 +319,24 @@
             , EventArgs e)
         {
             RaisePropertyChanged(nameof(ImportCollectionCommand));
+        }
+
+        private void AddWatchedOn(Object parameter)
+        {
+            Nullable<DateTime> watchedOn = _WindowFactory.OpenWatchedOnWindow();
+
+            if (watchedOn.HasValue == false)
+            {
+                return;
+            }
+            
+            SuspendEvents = true;
+
+            GetEntries(parameter).ForEach(entry => _DataManager.AddWatched(entry, _UserName, watchedOn.Value));
+
+            _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+
+            ResumeEvents();
         }
     }
 }

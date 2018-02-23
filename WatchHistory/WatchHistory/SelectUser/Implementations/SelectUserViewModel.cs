@@ -10,19 +10,23 @@
 
     internal sealed class SelectUserViewModel : ISelectUserViewModel
     {
-        private readonly IDataManager DataManager;
+        private readonly IDataManager _DataManager;
 
-        private readonly IWindowFactory WindowFactory;
+        private readonly IWindowFactory _WindowFactory;
+
+        private readonly ICommand _SelectCommand;
 
         private String _SelectedUser;
-
+        
         public SelectUserViewModel(IDataManager dataManager
             , IWindowFactory windowFactory)
         {
-            DataManager = dataManager;
-            WindowFactory = windowFactory;
+            _DataManager = dataManager;
+            _WindowFactory = windowFactory;
 
-            _SelectedUser = DataManager.Users.First();
+            _SelectedUser = _DataManager.Users.First();
+
+            _SelectCommand = new RelayCommand(Select);
         }
 
         #region INotifyPropertyChanged
@@ -34,7 +38,7 @@
         #region ISelectUserViewModel
 
         public IEnumerable<String> Users
-            => (DataManager.Users);
+            => (_DataManager.Users);
 
         public String SelectedUser
         {
@@ -51,7 +55,7 @@
         }
 
         public ICommand SelectCommand
-            => new RelayCommand(Select);
+            => _SelectCommand;
 
         public event EventHandler Closing;
 
@@ -59,7 +63,7 @@
 
         private void Select()
         {
-            WindowFactory.OpenMainWindow(SelectedUser);
+            _WindowFactory.OpenMainWindow(SelectedUser);
 
             Closing?.Invoke(this, EventArgs.Empty);
         }

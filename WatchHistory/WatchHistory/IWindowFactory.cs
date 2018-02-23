@@ -11,5 +11,7 @@
         void OpenSettingsWindow();
 
         void OpenIgnoreWindow(String userName);
+
+        Nullable<DateTime> OpenWatchedOnWindow();
     }
 }

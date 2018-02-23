@@ -33,5 +33,7 @@
         ICommand SortCommand { get; }
 
         ICommand OpenFileLocationCommand { get; }
+
+        ICommand AddWatchedOnCommand { get; }
     }
 }

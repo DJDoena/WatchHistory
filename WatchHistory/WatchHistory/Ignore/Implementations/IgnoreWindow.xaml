@@ -1,11 +1,10 @@
 ﻿<Window x:Class="DoenaSoft.WatchHistory.Ignore.Implementations.IgnoreWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DoenaSoft.WatchHistory.Ignore.Implementations"
         mc:Ignorable="d"
-        Title="{Binding Title, Mode=OneTime}" Height="718" Width="1024" WindowStartupLocation="CenterScreen" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO"
+        Title="{Binding Title, Mode=OneTime}" Height="900" Width="1200" WindowStartupLocation="CenterScreen" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO"
         FocusManager.FocusedElement="{Binding ElementName=FilterTextBox}">
     <Grid >
         <Grid.ColumnDefinitions>

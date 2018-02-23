@@ -22,6 +22,10 @@
         void AddWatched(FileEntry entry
             , String userName);
 
+        void AddWatched(FileEntry entry
+            , String userName
+            , DateTime watchedOn);
+
         void AddIgnore(FileEntry entry
             , String userName);
 

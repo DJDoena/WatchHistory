@@ -8,7 +8,7 @@
 
     internal sealed class FileObserver : IFileObserver
     {
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
         private Dictionary<String, Dictionary<String, IFileSystemWatcher>> _FileSystemWatchers;
 
@@ -22,7 +22,7 @@
 
         public FileObserver(IIOServices ioServices)
         {
-            IOServices = ioServices;
+            _IOServices = ioServices;
         }
 
         #region IFileObserver
@@ -118,7 +118,7 @@
             , IEnumerable<String> fileExtensions
             , Dictionary<String, Dictionary<String, IFileSystemWatcher>> byFolderWatchers)
         {
-            if (IOServices.Folder.Exists(rootFolder))
+            if (_IOServices.Folder.Exists(rootFolder))
             {
                 Dictionary<String, IFileSystemWatcher> byExtensionWatchers = CreateWatchers(rootFolder, fileExtensions);
 
@@ -146,7 +146,7 @@
         private IFileSystemWatcher CreateWatcher(String rootFolder
             , String fileExtension)
         {
-            IFileSystemWatcher fsw = IOServices.GetFileSystemWatcher(rootFolder, "*." + fileExtension);
+            IFileSystemWatcher fsw = _IOServices.GetFileSystemWatcher(rootFolder, "*." + fileExtension);
 
             if (_Created != null)
             {

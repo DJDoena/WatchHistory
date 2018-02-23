@@ -9,20 +9,20 @@
 
     internal sealed class EpisodeTitleProcessor
     {
-        private readonly Collection Collection;
+        private readonly Collection _Collection;
 
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
         public EpisodeTitleProcessor(Collection collection
             , IIOServices ioServices)
         {
-            Collection = collection;
-            IOServices = ioServices;
+            _Collection = collection;
+            _IOServices = ioServices;
         }
 
         internal IEnumerable<EpisodeTitle> GetEpisodeTitles()
         {
-            IEnumerable<DVD> dvds = Collection.DVDList.EnsureNotNull();
+            IEnumerable<DVD> dvds = _Collection.DVDList.EnsureNotNull();
 
             IEnumerable<IEnumerable<EpisodeTitle>> castTitles = dvds.Select(dvd => GetEpisodeTitles(dvd, dvd.CastList));
 
@@ -44,7 +44,7 @@
 
             IEnumerable<String> captions = episodeDividers.Select(divider => divider.Caption);
 
-            IEnumerable<EpisodeTitle> titles = captions.Select(caption => new EpisodeTitle(dvd, caption, IOServices));
+            IEnumerable<EpisodeTitle> titles = captions.Select(caption => new EpisodeTitle(dvd, caption, _IOServices));
 
             return (titles);
         }

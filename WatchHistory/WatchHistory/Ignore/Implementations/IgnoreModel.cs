@@ -8,9 +8,9 @@
 
     internal sealed class IgnoreModel : IIgnoreModel
     {
-        private readonly IDataManager DataManager;
+        private readonly IDataManager _DataManager;
 
-        private readonly String UserName;
+        private readonly String _UserName;
 
         private String _Filter;
 
@@ -19,8 +19,8 @@
         public IgnoreModel(IDataManager dataManager
             , String userName)
         {
-            DataManager = dataManager;
-            UserName = userName;
+            _DataManager = dataManager;
+            _UserName = userName;
         }
 
         #region IIgnoreModel
@@ -45,7 +45,7 @@
             {
                 if (_FilesChanged == null)
                 {
-                    DataManager.FilesChanged += OnDataManagerFilesChanged;
+                    _DataManager.FilesChanged += OnDataManagerFilesChanged;
                 }
 
                 _FilesChanged += value;
@@ -56,14 +56,14 @@
 
                 if (_FilesChanged == null)
                 {
-                    DataManager.FilesChanged -= OnDataManagerFilesChanged;
+                    _DataManager.FilesChanged -= OnDataManagerFilesChanged;
                 }
             }
         }
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            IEnumerable<FileEntry> allFiles = DataManager.GetFiles();
+            IEnumerable<FileEntry> allFiles = _DataManager.GetFiles();
 
             IEnumerable<FileEntry> ignoredFiles = allFiles.Where(UserIgnores);
 
@@ -80,7 +80,7 @@
             => file.Users?.HasItemsWhere(UserIgnores) == true;
 
         private Boolean UserIgnores(User user)
-            => (user.UserName == UserName) && (user.Ignore);
+            => (user.UserName == _UserName) && (user.Ignore);
 
         #endregion
 

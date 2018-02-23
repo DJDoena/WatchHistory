@@ -8,21 +8,21 @@
 
     internal sealed class EpisodeTitle : IEquatable<EpisodeTitle>
     {
-        private readonly DVD Dvd;
+        private readonly DVD _Dvd;
 
         internal String Title { get; }
 
         internal DateTime PurchaseDate 
-            => Dvd.PurchaseInfo?.Date ?? new DateTime(0);
+            => _Dvd.PurchaseInfo?.Date ?? new DateTime(0);
 
         internal IEnumerable<Event> Watches
-            => CollectionProcessor.GetWatches(Dvd);
+            => CollectionProcessor.GetWatches(_Dvd);
 
         public EpisodeTitle(DVD dvd
             , String caption
             , IIOServices ioServices)
         {
-            Dvd = dvd;
+            _Dvd = dvd;
 
             Title = GetTitle(dvd, caption);
 
@@ -40,7 +40,7 @@
                 return (false);
             }
 
-            Boolean equals = Dvd.ID == other.Dvd.ID;
+            Boolean equals = _Dvd.ID == other._Dvd.ID;
 
             if (equals)
             {
@@ -53,7 +53,7 @@
         #endregion
 
         public override Int32 GetHashCode()
-            => ((Dvd.ID.GetHashCode() / 2) + (Title.GetHashCode() / 2));
+            => ((_Dvd.ID.GetHashCode() / 2) + (Title.GetHashCode() / 2));
 
         public override Boolean Equals(Object obj)
             => (Equals(obj as EpisodeTitle));

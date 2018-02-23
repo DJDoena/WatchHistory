@@ -13,13 +13,13 @@
 
     internal sealed class MainModel : IMainModel
     {
-        private readonly IDataManager DataManager;
+        private readonly IDataManager _DataManager;
 
-        private readonly IIOServices IOServices;
+        private readonly IIOServices _IOServices;
 
-        private readonly IUIServices UIServices;
+        private readonly IUIServices _UIServices;
 
-        private readonly String UserName;
+        private readonly String _UserName;
 
         private String _Filter;
 
@@ -32,10 +32,10 @@
             , IUIServices uiServices
             , String userName)
         {
-            DataManager = dataManager;
-            IOServices = ioServices;
-            UIServices = uiServices;
-            UserName = userName;
+            _DataManager = dataManager;
+            _IOServices = ioServices;
+            _UIServices = uiServices;
+            _UserName = userName;
 
             IgnoreWatched = true;
         }
@@ -76,7 +76,7 @@
             {
                 if (_FilesChanged == null)
                 {
-                    DataManager.FilesChanged += OnDataManagerFilesChanged;
+                    _DataManager.FilesChanged += OnDataManagerFilesChanged;
                 }
 
                 _FilesChanged += value;
@@ -87,14 +87,14 @@
 
                 if (_FilesChanged == null)
                 {
-                    DataManager.FilesChanged -= OnDataManagerFilesChanged;
+                    _DataManager.FilesChanged -= OnDataManagerFilesChanged;
                 }
             }
         }
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            IEnumerable<FileEntry> allFiles = DataManager.GetFiles();
+            IEnumerable<FileEntry> allFiles = _DataManager.GetFiles();
 
             IEnumerable<FileEntry> notIgnoredFiles = allFiles.Except(allFiles.Where(UserIgnores));
 
@@ -111,19 +111,19 @@
         {
             OpenFileDialogOptions options = GetImportCollectionFileDialogOptions();
 
-            if (UIServices.ShowOpenFileDialog(options, out String fileName))
+            if (_UIServices.ShowOpenFileDialog(options, out String fileName))
             {
                 try
                 {
-                    Collection collection = SerializerHelper.Deserialize<Collection>(IOServices, fileName);
+                    Collection collection = SerializerHelper.Deserialize<Collection>(_IOServices, fileName);
 
-                    CollectionProcessor processor = new CollectionProcessor(collection, DataManager, IOServices);
+                    CollectionProcessor processor = new CollectionProcessor(collection, _DataManager, _IOServices);
 
                     processor.Process();
                 }
                 catch
                 {
-                    UIServices.ShowMessageBox("Collection file could not be read", String.Empty, Buttons.OK, Icon.Warning);
+                    _UIServices.ShowMessageBox("Collection file could not be read", String.Empty, Buttons.OK, Icon.Warning);
                 }
             }
 
@@ -132,7 +132,7 @@
 
         public void PlayFile(FileEntry fileEntry)
         {
-            if (IOServices.GetFileInfo(fileEntry.FullName).Exists)
+            if (_IOServices.GetFileInfo(fileEntry.FullName).Exists)
             {
                 Process.Start(fileEntry.FullName);
             }
@@ -143,7 +143,7 @@
 
         public void OpenFileLocation(FileEntry fileEntry)
         {
-            if (IOServices.GetFileInfo(fileEntry.FullName).Exists)
+            if (_IOServices.GetFileInfo(fileEntry.FullName).Exists)
             {
                 Process.Start("explorer.exe", $"/select, \"{fileEntry.FullName}\"");
             }
@@ -157,7 +157,7 @@
             => file.Users?.HasItemsWhere(UserIgnores) == true;
 
         private Boolean UserIgnores(Data.User user)
-            => (user.UserName == UserName) && (user.Ignore);
+            => (user.UserName == _UserName) && (user.Ignore);
 
         #endregion
 
@@ -182,7 +182,7 @@
             => file.Users?.HasItemsWhere(UserHasWatched) == true;
 
         private Boolean UserHasWatched(Data.User user)
-            => (user.UserName == UserName) && (user.Watches?.HasItems() == true);
+            => (user.UserName == _UserName) && (user.Watches?.HasItems() == true);
 
         #endregion
 
