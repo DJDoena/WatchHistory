@@ -166,13 +166,20 @@
         private Boolean ContainsFilter(FileEntry file)
             => ContainsFilter(file, Filter.Trim().Split(' '));
 
-        private static Boolean ContainsFilter(FileEntry file
+        private Boolean ContainsFilter(FileEntry file
            , IEnumerable<String> filters)
             => filters.All(filter => ContainsFilter(file, filter));
 
-        private static Boolean ContainsFilter(FileEntry file
+        private Boolean ContainsFilter(FileEntry file
             , String filter)
-            => file.FullName.IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1;
+            => CutRootFolders(file.FullName).IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1;
+
+        private String CutRootFolders(String fullName)
+        {
+            _DataManager.RootFolders.ForEach(folder => fullName = fullName.Replace(folder, String.Empty));
+
+            return (fullName);
+        }
 
         #endregion
 
@@ -188,13 +195,14 @@
 
         private static OpenFileDialogOptions GetImportCollectionFileDialogOptions()
         {
-            OpenFileDialogOptions options = new OpenFileDialogOptions();
-
-            options.CheckFileExists = true;
-            options.FileName = "Collection.xml";
-            options.Filter = "Collection files|*.xml";
-            options.RestoreFolder = true;
-            options.Title = "Please select a DVD Profiler Collection Export file";
+            OpenFileDialogOptions options = new OpenFileDialogOptions()
+            {
+                CheckFileExists = true,
+                FileName = "Collection.xml",
+                Filter = "Collection files|*.xml",
+                RestoreFolder = true,
+                Title = "Please select a DVD Profiler Collection Export file"
+            };
 
             return (options);
         }
