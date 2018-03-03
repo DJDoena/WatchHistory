@@ -10,7 +10,13 @@
 
         ICommand CancelCommand { get; }
 
-        DateTime Value { get; set; }
+        DateTime Date { get; set; }
+
+        Byte Hour { get; set; }
+
+        Byte Minute { get; set; }
+
+        DateTime WatchedOn { get; }
 
         event EventHandler<CloseEventArgs> Closing;
     }

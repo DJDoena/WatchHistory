@@ -12,37 +12,78 @@
 
         private readonly ICommand _CancelCommand;
 
-        private DateTime _Value;
+        private DateTime _Date;
+
+        private Byte _Hour;
+
+        private Byte _Minute;
 
         public WatchedOnViewModel()
-        {            
+        {
             _AcceptCommand = new RelayCommand(Accept);
             _CancelCommand = new RelayCommand(Cancel);
 
-            _Value = DateTime.Now;
+            DateTime now = DateTime.Now;
+
+            _Date = now.Date;
+
+            _Hour = (Byte)(now.Hour);
+
+            _Minute = (Byte)(now.Minute);
         }
 
         #region IMainViewModel
 
-        public ICommand AcceptCommand 
+        public ICommand AcceptCommand
             => _AcceptCommand;
 
-        public ICommand CancelCommand 
+        public ICommand CancelCommand
             => _CancelCommand;
 
-        public DateTime Value
+        public DateTime Date
         {
-            get => _Value;
+            get => _Date;
             set
             {
-                if(_Value != value)
+                if (_Date != value)
                 {
-                    _Value = value;
+                    _Date = value;
 
-                    RaisePropertyChanged(nameof(Value));
+                    RaisePropertyChanged(nameof(Date));
                 }
             }
         }
+
+        public Byte Hour
+        {
+            get => _Hour;
+            set
+            {
+                if (_Hour != value)
+                {
+                    _Hour = value;
+
+                    RaisePropertyChanged(nameof(Hour));
+                }
+            }
+        }
+
+        public Byte Minute
+        {
+            get => _Minute;
+            set
+            {
+                if (_Minute != value)
+                {
+                    _Minute = value;
+
+                    RaisePropertyChanged(nameof(Minute));
+                }
+            }
+        }
+
+        public DateTime WatchedOn
+            => new DateTime(Date.Year, Date.Month, Date.Day, Hour, Minute, 0);
 
         public event EventHandler<CloseEventArgs> Closing;
 
@@ -55,18 +96,12 @@
         #endregion
 
         private void Accept()
-        {
-            Closing?.Invoke(this, new CloseEventArgs(Result.OK));
-        }
+            => Closing?.Invoke(this, new CloseEventArgs(Result.OK));
 
         private void Cancel()
-        {
-            Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
-        }
+            => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
 
         private void RaisePropertyChanged(String attribute)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
-        }
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

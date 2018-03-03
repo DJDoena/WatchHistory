@@ -12,12 +12,18 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="60"/>
             <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="60"/>
         </Grid.ColumnDefinitions>
-        <xctk:DateTimePicker Grid.Column="0" Margin="5,5,5,5"
-                             Value="{Binding Value}" />
-        <Button Grid.Column="1" Content="Accept" Margin="5,5,5,5"
-            Command="{Binding AcceptCommand}" />
-        <Button Grid.Column="2" Content="Cancel" Margin="5,5,5,5"
-            Command="{Binding CancelCommand}" />
+        <DatePicker Grid.Column="0" Margin="5,5,5,5" Padding="5,6,5,5"
+                    SelectedDate="{Binding Date}" />
+        <xctk:ByteUpDown Grid.Column="1" Minimum="0" Maximum="23" Margin="5,5,5,5"
+                         Value="{Binding Hour}" />
+        <xctk:ByteUpDown Grid.Column="2" Minimum="0" Maximum="59" Margin="5,5,5,5"
+                         Value="{Binding Minute}" />
+        <Button Grid.Column="3" Content="Accept" Margin="5,5,5,5"
+                Command="{Binding AcceptCommand}" />
+        <Button Grid.Column="4" Content="Cancel" Margin="5,5,5,5"
+                Command="{Binding CancelCommand}" />
     </Grid>
 </Window>

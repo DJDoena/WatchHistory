@@ -112,7 +112,7 @@
 
             if (window.ShowDialog() == true)
             {
-                return (viewModel.Value);
+                return (viewModel.WatchedOn);
             }
 
             return (null);
