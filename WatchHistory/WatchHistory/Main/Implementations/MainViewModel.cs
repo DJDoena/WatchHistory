@@ -223,7 +223,7 @@
 
             GetEntries(parameter).ForEach(entry => _DataManager.AddWatched(entry, _UserName));
 
-            _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+            _DataManager.SaveDataFile();
 
             ResumeEvents();
         }
@@ -249,7 +249,7 @@
 
             GetEntries(parameter).ForEach(entry => _DataManager.AddIgnore(entry, _UserName));
 
-            _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+            _DataManager.SaveDataFile();
 
             ResumeEvents();
         }
@@ -284,7 +284,7 @@
 
             _DataManager.AddWatched(fileEntry, _UserName);
 
-            _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+            _DataManager.SaveDataFile();
         }
 
         private static FileEntry GetFileEntry(Object parameter)
@@ -347,7 +347,7 @@
 
             GetEntries(parameter).ForEach(entry => _DataManager.AddWatched(entry, _UserName, watchedOn.Value));
 
-            _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+            _DataManager.SaveDataFile();
 
             ResumeEvents();
         }

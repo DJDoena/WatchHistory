@@ -19,6 +19,10 @@
 
         private readonly IFilesSerializer _FilesSerializer;
 
+        private readonly String _DataFile;
+
+        private readonly String _SettingsFile;
+
         private IEnumerable<String> _RootFolders;
 
         private IEnumerable<String> _FileExtensions;
@@ -43,13 +47,17 @@
 
             _FileObserver = new FileObserver(ioServices);
 
-            LoadSettings(settingsFile);
+            _SettingsFile = settingsFile;
+
+            LoadSettings();
 
             _FilesSerializer = new FilesSerializer(ioServices);
 
             _FilesSerializer.CreateBackup(dataFile);
 
-            LoadData(dataFile);
+            _DataFile = dataFile;
+
+            LoadData();
         }
 
         #region IDataManager
@@ -211,7 +219,7 @@
             return (creationTime);
         }
 
-        public void SaveSettingsFile(String fileName)
+        public void SaveSettingsFile()
         {
             DefaultValues defaultValues = new DefaultValues()
             {
@@ -225,10 +233,10 @@
                 DefaultValues = defaultValues
             };
 
-            SerializerHelper.Serialize(_IOServices, fileName, settings);
+            SerializerHelper.Serialize(_IOServices, _SettingsFile, settings);
         }
 
-        public void SaveDataFile(String fileName)
+        public void SaveDataFile()
         {
             lock (_FilesLock)
             {
@@ -241,7 +249,7 @@
                     Entries = entries.ToArray()
                 };
 
-                _FilesSerializer.SaveFile(fileName, files);
+                _FilesSerializer.SaveFile(_DataFile, files);
             }
         }
 
@@ -263,12 +271,12 @@
 
         #endregion
 
-        private void LoadSettings(String fileName)
+        private void LoadSettings()
         {
             Settings settings;
             try
             {
-                settings = SerializerHelper.Deserialize<Settings>(_IOServices, fileName);
+                settings = SerializerHelper.Deserialize<Settings>(_IOServices, _SettingsFile);
             }
             catch
             {
@@ -285,9 +293,9 @@
             _FileExtensions = settings?.DefaultValues?.FileExtensions ?? Enumerable.Empty<String>();
         }
 
-        private void LoadData(String fileName)
+        private void LoadData()
         {
-            Files files = _FilesSerializer.LoadData(fileName);
+            Files files = _FilesSerializer.LoadData(_DataFile);
 
             lock (_FilesLock)
             {
@@ -376,6 +384,8 @@
                 actualFiles.ForEach(AddActualFile);
 
                 RemoveObsoletesFiles(actualFiles);
+
+                SaveDataFile();
             }
 
             IsSynchronizing = false;

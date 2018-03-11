@@ -39,8 +39,8 @@
 
         protected override void OnExit(ExitEventArgs e)
         {
-            DataManager.SaveSettingsFile(Environment.SettingsFile);
-            DataManager.SaveDataFile(Environment.DataFile);
+            DataManager.SaveSettingsFile();
+            DataManager.SaveDataFile();
         }
 
         private void OnUnhandledException(Object sender

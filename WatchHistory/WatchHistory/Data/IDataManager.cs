@@ -35,9 +35,9 @@
         DateTime GetLastWatched(FileEntry entry
             , String userName);
 
-        void SaveSettingsFile(String fileName);
+        void SaveSettingsFile();
 
-        void SaveDataFile(String fileName);
+        void SaveDataFile();
 
         void Suspend();
 

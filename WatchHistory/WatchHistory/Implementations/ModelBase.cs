@@ -83,20 +83,20 @@
 
         private Boolean ContainsFilter(FileEntry file
             , String filter)
+            => file.TitleSpecified
+                ? ContainsFilter(file.Title, filter)
+                : ContainsFilterInFileName(file, filter);
+
+        private Boolean ContainsFilterInFileName(FileEntry file, String filter)
         {
-            Boolean contains = file.TitleSpecified && Contains(file.Title, filter);
+            String fileName = CutRootFolders(file.FullName);
 
-            if (contains == false)
-            {
-                String fileName = CutRootFolders(file.FullName);
-
-                contains = Contains(fileName, filter);
-            }
+            Boolean contains = ContainsFilter(fileName, filter);
 
             return (contains);
         }
 
-        private static Boolean Contains(String text, String filter)
+        private static Boolean ContainsFilter(String text, String filter)
             => text.IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1;
 
         private String CutRootFolders(String fullName)

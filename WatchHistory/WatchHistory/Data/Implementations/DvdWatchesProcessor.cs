@@ -90,32 +90,13 @@
                 ExistingWatches.Add(user, entryWatches);
             }
 
-            if (entryWatches.HasItemsWhere(entryWatch => DatesAreEqual(entryWatch, dvdWatch.Timestamp)) == false)
+            Watch entryWatch = new Watch()
             {
-                Watch entryWatch = new Watch()
-                {
-                    Value = dvdWatch.Timestamp.Conform(),
-                    Source = Constants.DvdProfilerSource
-                };
+                Value = dvdWatch.Timestamp.Conform(),
+                Source = Constants.DvdProfilerSource
+            };
 
-                entryWatches.Add(entryWatch);
-            }
-        }
-
-        private static Boolean DatesAreEqual(Watch entryWatch, DateTime dvdWatch)
-        {
-            DateTime left = entryWatch.Value.ToLocalTime();
-
-            DateTime right = dvdWatch.ToLocalTime();
-
-            if (entryWatch.Source.IsEmpty())
-            {
-                left = left.Date;
-
-                right = right.Date;
-            }
-
-            return (left.Equals(right));
+            entryWatches.Add(entryWatch);
         }
 
         private void AddExistingWatches(User user)

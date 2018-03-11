@@ -72,9 +72,6 @@
 
         #region IIgnoreViewModel
 
-        public String Title
-            => $"Watch History (user: {_UserName})";
-
         public String Filter
         {
             get => _Model.Filter;
@@ -112,7 +109,7 @@
 
             entries.ForEach(entry => _DataManager.UndoIgnore(entry.FileEntry, _UserName));
 
-            _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
+            _DataManager.SaveDataFile();
         }
 
         private void OnModelFilesChanged(Object sender

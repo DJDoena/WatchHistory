@@ -8,8 +8,6 @@
 
     internal interface IIgnoreViewModel : INotifyPropertyChanged
     {
-        String Title { get; }
-
         String Filter { get; set; }
 
         ObservableCollection<IFileEntryViewModel> Entries { get; }
