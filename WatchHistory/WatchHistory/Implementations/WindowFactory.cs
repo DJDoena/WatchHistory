@@ -1,6 +1,7 @@
 ﻿namespace DoenaSoft.WatchHistory.Implementations
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Windows;
     using AbstractionLayer.IOServices;
@@ -16,6 +17,8 @@
     using Settings.Implementations;
     using WatchedOn;
     using WatchedOn.Implementations;
+    using Watches;
+    using Watches.Implementations;
 
     internal sealed class WindowFactory : IWindowFactory
     {
@@ -116,6 +119,18 @@
             }
 
             return (null);
+        }
+
+        public void OpenWatchesWindow(IEnumerable<Watch> watches)
+        {
+            IWatchesViewModel viewModel = new WatchesViewModel(watches);
+
+            Window window = new WatchesWindow()
+            {
+                DataContext = viewModel
+            };
+
+            window.ShowDialog();
         }
 
         #endregion

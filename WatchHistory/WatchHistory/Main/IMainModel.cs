@@ -21,5 +21,7 @@
         Boolean CanPlayFile(FileEntry fileEntry);
 
         void OpenFileLocation(FileEntry fileEntry);
+
+        IEnumerable<Watch> GetWatches(FileEntry fileEntry);
     }
 }

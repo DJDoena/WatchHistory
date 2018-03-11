@@ -38,6 +38,7 @@
     <Reference Include="System.Windows.Controls.Layout.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\WPFToolkit.3.5.50211.1\lib\System.Windows.Controls.Layout.Toolkit.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -56,11 +57,14 @@
     </ApplicationDefinition>
     <Compile Include="Data\DateTimeConformer.cs" />
     <Compile Include="Data\Files.Extended.cs">
-      <DependentUpon>Files.v2_1.cs</DependentUpon>
+      <DependentUpon>Files.v2_2.cs</DependentUpon>
     </Compile>
     <Compile Include="Data\Files.v1_0.cs" />
     <Compile Include="Data\Files.v2_1.cs">
       <DependentUpon>Files.v2_1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Files.v2_2.cs">
+      <DependentUpon>Files.v2_2.xsd</DependentUpon>
     </Compile>
     <Compile Include="Data\Implementations\DvdWatchesProcessor.cs" />
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
@@ -74,6 +78,7 @@
     <Compile Include="Ignore\Implementations\IgnoreWindow.xaml.cs">
       <DependentUpon>IgnoreWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Implementations\ModelBase.cs" />
     <Compile Include="Implementations\SerializerHelper.cs" />
     <Compile Include="Implementations\SortColumn.cs" />
     <Compile Include="Implementations\ViewModelHelper.cs" />
@@ -100,6 +105,13 @@
       <DependentUpon>WatchedOnWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WatchedOn\IWatchedOnViewModel.cs" />
+    <Compile Include="Watches\Implementations\WatchesViewModel.cs" />
+    <Compile Include="Watches\Implementations\WatchViewModel.cs" />
+    <Compile Include="Watches\IWatchesViewModel.cs" />
+    <Compile Include="Watches\IWatchViewModel.cs" />
+    <Compile Include="Watches\Implementations\WatchesWindow.xaml.cs">
+      <DependentUpon>WatchesWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Ignore\Implementations\IgnoreWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -145,6 +157,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Watches\Implementations\WatchesWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -153,6 +169,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Files.v2_2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Data\Files.v2_1.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -182,6 +201,7 @@
       <Name>ToolBox</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"%25ProgramFiles%25\Inno Setup 5\iscc.exe"  ..\..\..\..\WatchHistorySetup\setup.iss</PostBuildEvent>

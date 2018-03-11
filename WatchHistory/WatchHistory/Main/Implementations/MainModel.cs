@@ -11,50 +11,26 @@
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
 
-    internal sealed class MainModel : IMainModel
+    internal sealed class MainModel : ModelBase, IMainModel
     {
-        private readonly IDataManager _DataManager;
-
         private readonly IIOServices _IOServices;
 
         private readonly IUIServices _UIServices;
 
-        private readonly String _UserName;
-
-        private String _Filter;
-
         private Boolean _IgnoreWatched;
-
-        private event EventHandler _FilesChanged;
 
         public MainModel(IDataManager dataManager
             , IIOServices ioServices
             , IUIServices uiServices
             , String userName)
+            : base(dataManager, userName)
         {
-            _DataManager = dataManager;
             _IOServices = ioServices;
             _UIServices = uiServices;
-            _UserName = userName;
-
             IgnoreWatched = true;
         }
 
         #region IMainModel
-
-        public String Filter
-        {
-            get => _Filter ?? String.Empty;
-            set
-            {
-                if (value != _Filter)
-                {
-                    _Filter = value;
-
-                    RaiseFilesChanged(EventArgs.Empty);
-                }
-            }
-        }
 
         public Boolean IgnoreWatched
         {
@@ -66,28 +42,6 @@
                     _IgnoreWatched = value;
 
                     RaiseFilesChanged(EventArgs.Empty);
-                }
-            }
-        }
-
-        public event EventHandler FilesChanged
-        {
-            add
-            {
-                if (_FilesChanged == null)
-                {
-                    _DataManager.FilesChanged += OnDataManagerFilesChanged;
-                }
-
-                _FilesChanged += value;
-            }
-            remove
-            {
-                _FilesChanged -= value;
-
-                if (_FilesChanged == null)
-                {
-                    _DataManager.FilesChanged -= OnDataManagerFilesChanged;
                 }
             }
         }
@@ -149,37 +103,8 @@
             }
         }
 
-        #endregion
-
-        #region UserIgnores
-
-        private Boolean UserIgnores(FileEntry file)
-            => file.Users?.HasItemsWhere(UserIgnores) == true;
-
-        private Boolean UserIgnores(Data.User user)
-            => (user.UserName == _UserName) && (user.Ignore);
-
-        #endregion
-
-        #region ContainsFilter
-
-        private Boolean ContainsFilter(FileEntry file)
-            => ContainsFilter(file, Filter.Trim().Split(' '));
-
-        private Boolean ContainsFilter(FileEntry file
-           , IEnumerable<String> filters)
-            => filters.All(filter => ContainsFilter(file, filter));
-
-        private Boolean ContainsFilter(FileEntry file
-            , String filter)
-            => CutRootFolders(file.FullName).IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1;
-
-        private String CutRootFolders(String fullName)
-        {
-            _DataManager.RootFolders.ForEach(folder => fullName = fullName.Replace(folder, String.Empty));
-
-            return (fullName);
-        }
+        public IEnumerable<Watch> GetWatches(FileEntry fileEntry)
+            => fileEntry.Users?.FirstOrDefault(IsUser)?.Watches.ToList() ?? Enumerable.Empty<Watch>();
 
         #endregion
 
@@ -189,7 +114,7 @@
             => file.Users?.HasItemsWhere(UserHasWatched) == true;
 
         private Boolean UserHasWatched(Data.User user)
-            => (user.UserName == _UserName) && (user.Watches?.HasItems() == true);
+            => (IsUser(user)) && (user.Watches?.HasItems() == true);
 
         #endregion
 
@@ -206,12 +131,5 @@
 
             return (options);
         }
-
-        private void OnDataManagerFilesChanged(Object sender
-            , EventArgs e)
-            => RaiseFilesChanged(e);
-
-        private void RaiseFilesChanged(EventArgs e)
-            => _FilesChanged?.Invoke(this, e);
     }
 }

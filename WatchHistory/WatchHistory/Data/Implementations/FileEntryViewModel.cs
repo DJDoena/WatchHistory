@@ -6,6 +6,7 @@
     using System.Windows.Media;
     using AbstractionLayer.IOServices;
     using ToolBox.Extensions;
+    using WatchHistory.Implementations;
 
     internal sealed class FileEntryViewModel : IFileEntryViewModel
     {
@@ -80,6 +81,11 @@
         {
             get
             {
+                if (FileEntry.TitleSpecified)
+                {
+                    return (FileEntry.Title);
+                }
+
                 String name = FileEntry.FullName;
 
                 _DataManager.RootFolders.ForEach(folder => name = name.Replace(folder, String.Empty));
@@ -104,7 +110,7 @@
 
                 if (lastWatched.Ticks != 0)
                 {
-                    text = $"{lastWatched.ToShortDateString()} {lastWatched.ToShortTimeString()}";
+                    text = ViewModelHelper.GetFormattedDateTime(lastWatched);
                 }
 
                 return (text);
@@ -121,7 +127,7 @@
 
                 if (creationTime.Ticks != 0)
                 {
-                    text = $"{creationTime.ToShortDateString()} {creationTime.ToShortTimeString()}";
+                    text = ViewModelHelper.GetFormattedDateTime(creationTime);
                 }
 
                 return (text);

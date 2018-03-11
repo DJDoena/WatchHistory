@@ -30,6 +30,8 @@
             catch
             { }
 
+            entry.Title = watches?.Title;
+
             if (watches?.Watches?.Length > 0)
             {
                 UpdateFromDvdWatches(entry, watches);

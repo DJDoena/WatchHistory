@@ -35,5 +35,9 @@
         ICommand OpenFileLocationCommand { get; }
 
         ICommand AddWatchedOnCommand { get; }
+
+        ICommand CheckForUpdateCommand { get; }
+
+        ICommand ShowHistoryCommand { get; }
     }
 }

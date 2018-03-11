@@ -7,7 +7,6 @@
     using AbstractionLayer.IOServices;
     using Data;
     using Data.Implementations;
-    using ToolBox.Extensions;
 
     internal static class ViewModelHelper
     {
@@ -24,6 +23,9 @@
 
             return (new ObservableCollection<IFileEntryViewModel>(viewModelEntries));
         }
+
+        internal static string GetFormattedDateTime(DateTime dateTime)
+            => $"{dateTime.ToShortDateString()} {dateTime.ToShortTimeString()}";
 
         private static Int32 Compare(FileEntryViewModel left
             , FileEntryViewModel right

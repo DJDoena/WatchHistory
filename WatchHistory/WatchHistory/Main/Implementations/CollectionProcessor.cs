@@ -107,10 +107,11 @@
         private void CreateCollectionFile(String folder
             , EpisodeTitle title)
         {
-            String fileName = _IOServices.Path.Combine(folder, title.Title + "." + Constants.DvdProfilerFileExtension);
+            String fileName = _IOServices.Path.Combine(folder, title.FileName + "." + Constants.DvdProfilerFileExtension);
 
             DvdWatches watches = new DvdWatches()
             {
+                Title = title.Title,
                 Watches = title.Watches?.ToArray()
             };
 

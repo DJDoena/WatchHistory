@@ -1,6 +1,8 @@
 ﻿namespace DoenaSoft.WatchHistory
 {
     using System;
+    using System.Collections.Generic;
+    using Data;
 
     internal interface IWindowFactory
     {
@@ -13,5 +15,7 @@
         void OpenIgnoreWindow(String userName);
 
         Nullable<DateTime> OpenWatchedOnWindow();
+
+        void OpenWatchesWindow(IEnumerable<Watch> watches);
     }
 }

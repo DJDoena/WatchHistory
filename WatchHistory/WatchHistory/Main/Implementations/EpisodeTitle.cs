@@ -10,9 +10,15 @@
     {
         private readonly DVD _Dvd;
 
+        internal String ID
+            => _Dvd.ID;
+
+        internal String FileName
+            => $"{ID}  {Title.ReplaceInvalidFileNameChars('_')}";
+
         internal String Title { get; }
 
-        internal DateTime PurchaseDate 
+        internal DateTime PurchaseDate
             => _Dvd.PurchaseInfo?.Date ?? new DateTime(0);
 
         internal IEnumerable<Event> Watches
@@ -24,11 +30,12 @@
         {
             _Dvd = dvd;
 
-            Title = GetTitle(dvd, caption);
+            Title = $"{dvd.Title}: {caption}";
 
-            Title = Title.Replace(" :", ":").Replace(":", " -");
-
-            Title = Title.ReplaceInvalidFileNameChars(' ');
+            if ((dvd.OriginalTitle.IsNotEmpty()) && (dvd.Title != dvd.OriginalTitle))
+            {
+                Title += $" ({dvd.Title})";
+            }
         }
 
         #region IEquatable<DvdTitle>
@@ -40,7 +47,7 @@
                 return (false);
             }
 
-            Boolean equals = _Dvd.ID == other._Dvd.ID;
+            Boolean equals = ID == other.ID;
 
             if (equals)
             {
@@ -53,16 +60,9 @@
         #endregion
 
         public override Int32 GetHashCode()
-            => ((_Dvd.ID.GetHashCode() / 2) + (Title.GetHashCode() / 2));
+            => ((ID.GetHashCode() / 2) + (Title.GetHashCode() / 2));
 
         public override Boolean Equals(Object obj)
             => (Equals(obj as EpisodeTitle));
-
-        private static string GetTitle(DVD dvd
-            , String caption)
-            => ($"{GetTitle(dvd)}{Constants.Backslash}{caption}");
-
-        private static String GetTitle(DVD dvd)
-            => (dvd.Title.Replace(": ", Constants.Backslash));
     }
 }

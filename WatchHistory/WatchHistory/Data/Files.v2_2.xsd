@@ -17,11 +17,12 @@
 
   <xs:complexType name="FileEntry">
     <xs:sequence>
-      <xs:element name="FullName" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="FullName" type="xs:string" minOccurs="1" maxOccurs="1" />      
       <xs:element name="Users" type="Users" minOccurs="0" maxOccurs="1" />
     </xs:sequence>
     <xs:attribute name="CreationTime" type="xs:dateTime" use="required" />
     <xs:attribute name="VideoLength" type="xs:unsignedInt" use="optional" />
+    <xs:attribute name="Title" type="xs:string" use="optional" />
   </xs:complexType>
 
   <xs:complexType name="Users">

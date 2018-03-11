@@ -9,6 +9,7 @@
     using System.Windows.Input;
     using AbstractionLayer.IOServices;
     using Data;
+    using DVDProfiler.DVDProfilerHelper;
     using ToolBox.Commands;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
@@ -45,8 +46,12 @@
 
         private readonly ICommand _AddWatchedOnCommand;
 
+        private readonly ICommand _CheckForUpdateCommand;
+
+        private readonly ICommand _ShowHistoryCommand;
+
         private event PropertyChangedEventHandler _PropertyChanged;
-        
+
         private SortColumn _SortColumn;
 
         private Boolean SortAscending { get; set; }
@@ -95,6 +100,8 @@
             _SortCommand = new ParameterizedRelayCommand(Sort);
             _OpenFileLocationCommand = new ParameterizedRelayCommand(OpenFileLocation);
             _AddWatchedOnCommand = new ParameterizedRelayCommand(AddWatchedOn);
+            _CheckForUpdateCommand = new RelayCommand(CheckForUpdate);
+            _ShowHistoryCommand = new ParameterizedRelayCommand(ShowHistory);
         }
 
         #region INotifyPropertyChanged
@@ -202,6 +209,12 @@
         public ICommand AddWatchedOnCommand
             => _AddWatchedOnCommand;
 
+        public ICommand CheckForUpdateCommand
+            => _CheckForUpdateCommand;
+
+        public ICommand ShowHistoryCommand
+            => _ShowHistoryCommand;
+
         #endregion
 
         private void AddWatched(Object parameter)
@@ -214,7 +227,7 @@
 
             ResumeEvents();
         }
-        
+
         private void ResumeEvents()
         {
             SuspendEvents = false;
@@ -329,7 +342,7 @@
             {
                 return;
             }
-            
+
             SuspendEvents = true;
 
             GetEntries(parameter).ForEach(entry => _DataManager.AddWatched(entry, _UserName, watchedOn.Value));
@@ -337,6 +350,20 @@
             _DataManager.SaveDataFile(WatchHistory.Environment.DataFile);
 
             ResumeEvents();
+        }
+
+        private void CheckForUpdate()
+        {
+            OnlineAccess.CheckForNewVersion("http://doena-soft.de/dvdprofiler/3.9.0/versions.xml", new WindowHandle(), "WatchHistory", GetType().Assembly);
+        }
+
+        private void ShowHistory(Object parameter)
+        {
+            FileEntry fileEntry = GetFileEntry(parameter);
+
+            IEnumerable<Watch> watches = _Model.GetWatches(fileEntry);
+
+            _WindowFactory.OpenWatchesWindow(watches);
         }
     }
 }

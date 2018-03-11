@@ -340,7 +340,7 @@
         {
             if (IsSuspended == false)
             {
-                GetActualFiles();                
+                GetActualFiles();
             }
         }
 
@@ -348,7 +348,7 @@
             => entry.Users?.HasItemsWhere(HasEvents) == true;
 
         private static Boolean HasEvents(User user)
-            => user.Watches?.HasItems() == true;
+            => user.Watches?.HasItemsWhere(w => w.SourceSpecified == false) == true;
 
         private void GetActualFiles()
         {
@@ -397,7 +397,7 @@
             {
                 entry = new FileEntry()
                 {
-                    FullName = actualFile,                    
+                    FullName = actualFile,
                 };
 
                 entry.CreationTime = entry.GetCreationTime(this);

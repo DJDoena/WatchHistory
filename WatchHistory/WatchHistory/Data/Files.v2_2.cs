@@ -1,4 +1,4 @@
-﻿namespace DoenaSoft.WatchHistory.Data.v2_1
+﻿namespace DoenaSoft.WatchHistory.Data
 {
     using System;
     using System.Diagnostics;
@@ -24,7 +24,7 @@
 
         public Files()
         {
-            Version = 2.1m;
+            Version = 2.2m;
         }
     }
 
@@ -66,7 +66,15 @@
         public UInt32 VideoLength;
 
         [XmlIgnore]
-        public Boolean VideoLengthSpecified;
+        public Boolean VideoLengthSpecified
+            => VideoLength > 0;
+
+        [XmlAttribute]
+        public String Title;
+
+        [XmlIgnore]
+        public Boolean TitleSpecified
+            => Title.IsNotEmpty();
 
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
