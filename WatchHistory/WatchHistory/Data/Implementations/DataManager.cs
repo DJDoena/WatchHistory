@@ -415,6 +415,11 @@
                 Files.Add(key, entry);
             }
 
+            if (entry.TitleSpecified == false)
+            {
+                (new VideoInfoAdder(_IOServices, entry)).Add();
+            }
+
             if (actualFile.EndsWith("." + Constants.DvdProfilerFileExtension))
             {
                 (new DvdWatchesProcessor(_IOServices)).UpdateFromDvdWatches(entry);

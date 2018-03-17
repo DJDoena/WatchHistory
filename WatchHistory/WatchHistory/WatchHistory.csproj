@@ -70,6 +70,10 @@
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
     <Compile Include="Data\Implementations\FilesSerializer.cs" />
     <Compile Include="Data\IFilesSerializer.cs" />
+    <Compile Include="Data\Implementations\VideoInfo.cs">
+      <DependentUpon>VideoInfo.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Implementations\VideoInfoAdder.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Ignore\IIgnoreModel.cs" />
     <Compile Include="Ignore\IIgnoreViewModel.cs" />
@@ -169,15 +173,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Files.v2_2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Data\Files.v2_1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Data\Files.v2_0.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="Data\Files.v2_2.xsd" />
+    <None Include="Data\Files.v2_1.xsd" />
+    <None Include="Data\Files.v2_0.xsd" />
+    <None Include="Data\Implementations\VideoInfo.xsd" />
     <None Include="DJDSOFT.ICO">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

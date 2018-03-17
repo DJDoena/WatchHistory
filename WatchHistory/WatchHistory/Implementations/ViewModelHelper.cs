@@ -24,7 +24,7 @@
             return (new ObservableCollection<IFileEntryViewModel>(viewModelEntries));
         }
 
-        internal static string GetFormattedDateTime(DateTime dateTime)
+        internal static String GetFormattedDateTime(DateTime dateTime)
             => $"{dateTime.ToShortDateString()} {dateTime.ToShortTimeString()}";
 
         private static Int32 Compare(FileEntryViewModel left
@@ -92,7 +92,11 @@
         {
             String leftName = PadName(left.Name);
 
+            ReplaceArticles(ref leftName);
+
             String rightName = PadName(right.Name);
+
+            ReplaceArticles(ref rightName);
 
             return (leftName.CompareTo(rightName));
         }
@@ -116,6 +120,38 @@
             if (UInt32.TryParse(part, out uint number))
             {
                 part = number.ToString("D10");
+            }
+        }
+
+        private static void ReplaceArticles(ref String name)
+        {
+            if (name.StartsWith("the ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                name = name.Substring(4);
+            }
+            else if (name.StartsWith("a ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                name = name.Substring(2);
+            }
+            else if (name.StartsWith("an ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                name = name.Substring(3);
+            }
+            else if (name.StartsWith("der ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                name = name.Substring(4);
+            }
+            else if (name.StartsWith("das ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                name = name.Substring(4);
+            }
+            else if (name.StartsWith("ein ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                name = name.Substring(4);
+            }
+            else if (name.StartsWith("eine ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                name = name.Substring(5);
             }
         }
     }
