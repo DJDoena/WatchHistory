@@ -34,7 +34,7 @@
 
             if ((dvd.OriginalTitle.IsNotEmpty()) && (dvd.Title != dvd.OriginalTitle))
             {
-                Title += $" ({dvd.Title})";
+                Title += $" ({dvd.OriginalTitle})";
             }
         }
 
