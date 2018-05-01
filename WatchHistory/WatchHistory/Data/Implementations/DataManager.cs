@@ -126,7 +126,6 @@
                 {
                     _FileObserver.Created += OnFileCreated;
                     _FileObserver.Deleted += OnFileDeleted;
-                    _FileObserver.Renamed += OnFileRenamed;
                 }
 
                 _FilesChanged += value;
@@ -139,7 +138,6 @@
                 {
                     _FileObserver.Created -= OnFileCreated;
                     _FileObserver.Deleted -= OnFileDeleted;
-                    _FileObserver.Renamed -= OnFileRenamed;
                 }
             }
         }
@@ -441,28 +439,6 @@
             {
                 Files.Remove(file.Key);
             }
-        }
-
-        private void OnFileRenamed(Object sender
-            , RenamedEventArgs e)
-        {
-            FileEntry entry = new FileEntry();
-
-            String fileName = e.OldFullPath;
-
-            lock (_FilesLock)
-            {
-                String key = fileName.ToLower();
-
-                if (Files.TryGetValue(key, out entry))
-                {
-                    Files.Remove(key);
-                }
-
-                OnFileCreated(fileName, entry);
-            }
-
-            RaiseFilesChanged();
         }
 
         private void OnFileDeleted(Object sender
