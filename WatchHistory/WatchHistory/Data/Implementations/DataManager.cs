@@ -23,6 +23,8 @@
 
         private readonly String _SettingsFile;
 
+        private static readonly DateTime _TurnOfTheCentury;
+
         private IEnumerable<String> _RootFolders;
 
         private IEnumerable<String> _FileExtensions;
@@ -36,6 +38,11 @@
         private Boolean IsSuspended { get; set; }
 
         private event EventHandler _FilesChanged;
+
+        static DataManager()
+        {
+            _TurnOfTheCentury = new DateTime(1999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+        }
 
         public DataManager(String settingsFile
             , String dataFile
@@ -56,7 +63,7 @@
             _FilesSerializer.CreateBackup(dataFile);
 
             _DataFile = dataFile;
-
+            
             LoadData();
         }
 
@@ -350,11 +357,11 @@
             }
         }
 
-        private Boolean HasEvents(FileEntry entry)
+        private Boolean HasValidEvents(FileEntry entry)
             => entry.Users?.HasItemsWhere(HasEvents) == true;
 
         private static Boolean HasEvents(User user)
-            => user.Watches?.HasItemsWhere(w => w.SourceSpecified == false) == true;
+            => user.Watches?.HasItemsWhere(w => w.SourceSpecified == false && w.Value > _TurnOfTheCentury) == true;
 
         private void GetActualFiles()
         {
@@ -435,7 +442,7 @@
 
         private void TryRemoveFile(List<String> fileKeys, KeyValuePair<String, FileEntry> file)
         {
-            if ((fileKeys.Contains(file.Key) == false) && (HasEvents(file.Value) == false))
+            if ((fileKeys.Contains(file.Key) == false) && (HasValidEvents(file.Value) == false))
             {
                 Files.Remove(file.Key);
             }
@@ -448,7 +455,7 @@
             {
                 String key = e.FullPath.ToLower();
 
-                if ((Files.TryGetValue(key, out FileEntry entry)) && (HasEvents(entry) == false))
+                if ((Files.TryGetValue(key, out FileEntry entry)) && (HasValidEvents(entry) == false))
                 {
                     Files.Remove(key);
                 }
