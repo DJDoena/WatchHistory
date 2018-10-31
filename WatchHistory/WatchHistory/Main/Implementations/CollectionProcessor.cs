@@ -44,11 +44,7 @@
         {
             String folder = _IOServices.Path.Combine(WatchHistory.Environment.AppDataFolder, "DVDProfiler");
 
-            if (_IOServices.Folder.Exists(folder))
-            {
-                DeleteProfiles(folder);
-            }
-            else
+            if (_IOServices.Folder.Exists(folder) == false)
             {
                 _IOServices.Folder.CreateFolder(folder);
             }
@@ -60,13 +56,6 @@
             _DataManager.FileExtensions = Constants.DvdProfilerFileExtension.Enumerate().Union(_DataManager.FileExtensions);
 
             CreateCollectionFiles(folder);
-        }
-
-        private void DeleteProfiles(String folder)
-        {
-            IEnumerable<String> files = _IOServices.Folder.GetFiles(folder, "*." + Constants.DvdProfilerFileExtension);
-
-            files.ForEach(file => _IOServices.File.Delete(file));
         }
 
         private IEnumerable<String> GetUsers()
