@@ -85,6 +85,9 @@
                                                   Command="{Binding SortCommand}" 
                                                   CommandParameter="CreationTime" />
                         </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding VideoLength}" Width="100">
+                            <GridViewColumnHeader Content="Running Time" />
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

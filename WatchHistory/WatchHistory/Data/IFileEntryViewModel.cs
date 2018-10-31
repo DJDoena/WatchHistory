@@ -14,6 +14,8 @@
 
         String CreationTime { get; }
 
+        String VideoLength { get; }
+
         Brush Color { get; }
     }
 }

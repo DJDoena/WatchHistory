@@ -134,6 +134,23 @@
             }
         }
 
+        public String VideoLength
+        {
+            get
+            {
+                UInt32 videoLength = FileEntry.GetVideoLength(_DataManager);
+
+                String text = String.Empty;
+
+                if (videoLength > 0)
+                {
+                    text = ViewModelHelper.GetFormattedVideoLength(videoLength);
+                }
+
+                return (text);
+            }
+        }
+
         public Brush Color
             => _IOServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red;
 

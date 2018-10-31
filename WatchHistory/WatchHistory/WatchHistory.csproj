@@ -68,6 +68,7 @@
       <DependentUpon>VideoInfo.xsd</DependentUpon>
     </Compile>
     <Compile Include="Data\Implementations\VideoInfoAdder.cs" />
+    <Compile Include="Data\Implementations\VideoReader.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Ignore\IIgnoreModel.cs" />
     <Compile Include="Ignore\IIgnoreViewModel.cs" />

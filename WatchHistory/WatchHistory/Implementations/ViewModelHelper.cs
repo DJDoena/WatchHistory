@@ -115,6 +115,26 @@
             return (name);
         }
 
+        internal static string GetFormattedVideoLength(UInt32 videoLength)
+        {
+            UInt32 hours = videoLength / 3600;
+
+            UInt32 modulo = videoLength % 3600;
+
+            UInt32 minutes = modulo / 60;
+
+            UInt32 seconds = modulo % 60;
+
+            String text = $"{minutes:D2}:{seconds:D2}";
+
+            if (hours > 0)
+            {
+                text = $"{hours:D2}:{text}";
+            }
+
+            return text;
+        }
+
         private static void TryPadName(ref String part)
         {
             if (UInt32.TryParse(part, out uint number))

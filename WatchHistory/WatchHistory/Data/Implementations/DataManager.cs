@@ -63,7 +63,7 @@
             _FilesSerializer.CreateBackup(dataFile);
 
             _DataFile = dataFile;
-            
+
             LoadData();
         }
 
@@ -224,6 +224,22 @@
             return (creationTime);
         }
 
+        public UInt32 GetVideoLength(FileEntry fileEntry)
+        {
+            try
+            {
+                using (VideoReader videoReader = new VideoReader(_IOServices, fileEntry))
+                {
+                    UInt32 videoLength = videoReader.GetLength();
+
+                    return videoLength;
+                }
+            }
+            catch
+            {
+                return 0;
+            }
+        }
         public void SaveSettingsFile()
         {
             DefaultValues defaultValues = new DefaultValues()
@@ -425,7 +441,7 @@
                 (new VideoInfoAdder(_IOServices, entry)).Add();
             }
 
-            if (actualFile.EndsWith("." + Constants.DvdProfilerFileExtension))
+            if (actualFile.EndsWith(Constants.DvdProfilerFileExtension))
             {
                 (new DvdWatchesProcessor(_IOServices)).UpdateFromDvdWatches(entry);
             }

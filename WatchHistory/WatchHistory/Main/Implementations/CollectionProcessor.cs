@@ -53,7 +53,7 @@
 
             _DataManager.RootFolders = folder.Enumerate().Union(_DataManager.RootFolders);
 
-            _DataManager.FileExtensions = Constants.DvdProfilerFileExtension.Enumerate().Union(_DataManager.FileExtensions);
+            _DataManager.FileExtensions = Constants.DvdProfilerFileExtensionName.Enumerate().Union(_DataManager.FileExtensions);
 
             CreateCollectionFiles(folder);
         }
@@ -96,7 +96,7 @@
         private void CreateCollectionFile(String folder
             , EpisodeTitle title)
         {
-            String fileName = _IOServices.Path.Combine(folder, title.FileName + "." + Constants.DvdProfilerFileExtension);
+            String fileName = _IOServices.Path.Combine(folder, title.FileName + Constants.DvdProfilerFileExtension);
 
             DvdWatches watches = new DvdWatches()
             {

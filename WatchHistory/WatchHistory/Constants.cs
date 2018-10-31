@@ -10,6 +10,8 @@
 
         internal const String DvdProfilerSource = "DVD Profiler";
 
-        internal const String DvdProfilerFileExtension = "dvdp";
+        internal const String DvdProfilerFileExtensionName = "dvdp";
+
+        internal const String DvdProfilerFileExtension = "."+ DvdProfilerFileExtensionName;
     }
 }

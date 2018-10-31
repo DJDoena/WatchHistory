@@ -44,5 +44,7 @@
         void Resume();
 
         DateTime GetCreationTime(FileEntry fileEntry);
+
+        UInt32 GetVideoLength(FileEntry fileEntry);
     }
 }

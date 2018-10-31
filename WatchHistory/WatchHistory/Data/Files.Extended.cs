@@ -1,6 +1,7 @@
 ﻿namespace DoenaSoft.WatchHistory.Data
 {
     using System;
+    using DoenaSoft.WatchHistory.Data.Implementations;
 
     partial class FileEntry
     {
@@ -12,6 +13,16 @@
             }
 
             return (m_CreationTime.Value.ToLocalTime());
+        }
+
+        internal uint GetVideoLength(IDataManager dataManager)
+        {
+            if (VideoLengthSpecified == false)
+            {
+                VideoLength = dataManager.GetVideoLength(this);
+            }
+
+            return VideoLength;
         }
     }
 }
