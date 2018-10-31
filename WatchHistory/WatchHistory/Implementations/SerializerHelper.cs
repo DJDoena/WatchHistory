@@ -1,7 +1,6 @@
 ﻿namespace DoenaSoft.WatchHistory.Implementations
 {
     using System;
-    using System.IO;
     using AbstractionLayer.IOServices;
     using ToolBox.Generics;
 
@@ -11,7 +10,7 @@
             , String fileName)
             where T : class, new()
         {
-            using (Stream fs = ioServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (System.IO.Stream fs = ioServices.GetFileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
             {
                 return (Serializer<T>.Deserialize(fs));
             }
@@ -22,7 +21,7 @@
             , T instance)
             where T : class, new()
         {
-            using (Stream fs = ioServices.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.Read))
+            using (System.IO.Stream fs = ioServices.GetFileStream(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read))
             {
                 Serializer<T>.Serialize(fs, instance);
             }

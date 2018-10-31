@@ -1,13 +1,12 @@
 ﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
     using System;
-    using System.IO;
     using System.Threading;
     using System.Timers;
     using System.Windows;
     using System.Windows.Media;
     using DoenaSoft.AbstractionLayer.IOServices;
-    using ToolBox.Generics;
+    using DoenaSoft.WatchHistory.Implementations;
     using WatchHistory.Data;
 
     sealed class VideoReader : IDisposable
@@ -75,7 +74,7 @@
             {
                 try
                 {
-                    VideoInfo info = GetVideoInfo(xmlFile);
+                    VideoInfo info = SerializerHelper.Deserialize<VideoInfo>(_IOServices, xmlFile);
 
                     return info.Duration;
                 }
@@ -84,16 +83,6 @@
             }
 
             return 0;
-        }
-
-        private VideoInfo GetVideoInfo(String xmlFile)
-        {
-            using (Stream fs = _IOServices.GetFileStream(xmlFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                VideoInfo info = Serializer<VideoInfo>.Deserialize(fs);
-
-                return (info);
-            }
         }
 
         private Duration GetDuration()

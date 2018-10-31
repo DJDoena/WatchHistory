@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using AbstractionLayer.IOServices;
@@ -417,7 +416,7 @@
         private IEnumerable<String> GetFiles(String rootFolder
             , String fileExtension)
             => _IOServices.Folder.Exists(rootFolder)
-                ? (_IOServices.Folder.GetFiles(rootFolder, "*." + fileExtension, SearchOption.AllDirectories))
+                ? (_IOServices.Folder.GetFiles(rootFolder, "*." + fileExtension, System.IO.SearchOption.AllDirectories))
                 : (Enumerable.Empty<String>());
 
         private void AddActualFile(String actualFile)
@@ -465,7 +464,7 @@
         }
 
         private void OnFileDeleted(Object sender
-            , FileSystemEventArgs e)
+            , System.IO.FileSystemEventArgs e)
         {
             lock (_FilesLock)
             {
@@ -481,14 +480,14 @@
         }
 
         private void OnFileCreated(Object sender
-            , FileSystemEventArgs e)
+            , System.IO.FileSystemEventArgs e)
         {
             OnFileCreated(e, new FileEntry());
 
             RaiseFilesChanged();
         }
 
-        private void OnFileCreated(FileSystemEventArgs e
+        private void OnFileCreated(System.IO.FileSystemEventArgs e
             , FileEntry entry)
         {
             OnFileCreated(e.FullPath, entry);

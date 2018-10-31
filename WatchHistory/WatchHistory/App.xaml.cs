@@ -1,7 +1,6 @@
 ﻿namespace DoenaSoft.WatchHistory
 {
     using System;
-    using System.IO;
     using System.Windows;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.IOServices.Implementations;

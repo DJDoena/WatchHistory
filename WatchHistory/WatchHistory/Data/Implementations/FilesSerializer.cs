@@ -1,7 +1,6 @@
 ﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
     using System;
-    using System.IO;
     using System.Text;
     using AbstractionLayer.IOServices;
     using WatchHistory.Implementations;
@@ -72,7 +71,7 @@
                     _IOServices.File.Copy(fileName, newFileName);
                 }
             }
-            catch (IOException)
+            catch (System.IO.IOException)
             { }
         }
 
@@ -83,9 +82,9 @@
 
         private Boolean IsVersion2File(String fileName)
         {
-            using (Stream fs = _IOServices.GetFileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (System.IO.Stream fs = _IOServices.GetFileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
             {
-                using (StreamReader sr = new StreamReader(fs, Encoding.UTF8))
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(fs, Encoding.UTF8))
                 {
                     Int32 lineNumber = 1;
 

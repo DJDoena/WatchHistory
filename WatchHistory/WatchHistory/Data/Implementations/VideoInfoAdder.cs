@@ -1,11 +1,10 @@
 ﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
     using System;
-    using System.IO;
     using System.Text;
     using AbstractionLayer.IOServices;
+    using DoenaSoft.WatchHistory.Implementations;
     using ToolBox.Extensions;
-    using ToolBox.Generics;
 
     internal sealed class VideoInfoAdder
     {
@@ -37,21 +36,11 @@
 
         private void TryAddVideoInfo(String xmlFile)
         {
-            VideoInfo info = GetVideoInfo(xmlFile);
+            VideoInfo info = SerializerHelper.Deserialize<VideoInfo>(_IOServices, xmlFile);
 
             _FileEntry.VideoLength = info.Duration;
 
             _FileEntry.Title = BuildTitle(info.Episode);
-        }
-
-        private VideoInfo GetVideoInfo(String xmlFile)
-        {
-            using (Stream fs = _IOServices.GetFileStream(xmlFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                VideoInfo info = Serializer<VideoInfo>.Deserialize(fs);
-
-                return (info);
-            }
         }
 
         private static String BuildTitle(Episode episode)
