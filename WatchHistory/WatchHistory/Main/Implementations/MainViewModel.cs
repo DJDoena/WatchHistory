@@ -26,30 +26,6 @@
 
         private readonly String _UserName;
 
-        private readonly ICommand _AddWatchedCommand;
-
-        private readonly ICommand _PlayFileAndAddWatchedCommand;
-
-        private readonly ICommand _IgnoreCommand;
-
-        private readonly ICommand _OpenSettingsCommand;
-
-        private readonly ICommand _ImportCollectionCommand;
-
-        private readonly ICommand _UndoIgnoreCommand;
-
-        private readonly ICommand _PlayFileCommand;
-
-        private readonly ICommand _SortCommand;
-
-        private readonly ICommand _OpenFileLocationCommand;
-
-        private readonly ICommand _AddWatchedOnCommand;
-
-        private readonly ICommand _CheckForUpdateCommand;
-
-        private readonly ICommand _ShowHistoryCommand;
-
         private event PropertyChangedEventHandler _PropertyChanged;
 
         private SortColumn _SortColumn;
@@ -90,18 +66,19 @@
             SuspendEvents = false;
             EventRaisedWhileSuspended = false;
 
-            _AddWatchedCommand = new ParameterizedRelayCommand(AddWatched);
-            _PlayFileAndAddWatchedCommand = new ParameterizedRelayCommand(PlayFileAndAddWatched, CanPlayFile);
-            _OpenSettingsCommand = new RelayCommand(OpenSettings);
-            _ImportCollectionCommand = new RelayCommand(ImportCollection, CanImportCollection);
-            _IgnoreCommand = new ParameterizedRelayCommand(Ignore);
-            _UndoIgnoreCommand = new RelayCommand(UndoIgnore);
-            _PlayFileCommand = new ParameterizedRelayCommand(PlayFile, CanPlayFile);
-            _SortCommand = new ParameterizedRelayCommand(Sort);
-            _OpenFileLocationCommand = new ParameterizedRelayCommand(OpenFileLocation);
-            _AddWatchedOnCommand = new ParameterizedRelayCommand(AddWatchedOn);
-            _CheckForUpdateCommand = new RelayCommand(CheckForUpdate);
-            _ShowHistoryCommand = new ParameterizedRelayCommand(ShowHistory);
+            AddWatchedCommand = new ParameterizedRelayCommand(AddWatched);
+            PlayFileAndAddWatchedCommand = new ParameterizedRelayCommand(PlayFileAndAddWatched, CanPlayFile);
+            OpenSettingsCommand = new RelayCommand(OpenSettings);
+            ImportCollectionCommand = new RelayCommand(ImportCollection, CanImportCollection);
+            IgnoreCommand = new ParameterizedRelayCommand(Ignore);
+            UndoIgnoreCommand = new RelayCommand(UndoIgnore);
+            PlayFileCommand = new ParameterizedRelayCommand(PlayFile, CanPlayFile);
+            SortCommand = new ParameterizedRelayCommand(Sort);
+            OpenFileLocationCommand = new ParameterizedRelayCommand(OpenFileLocation);
+            AddWatchedOnCommand = new ParameterizedRelayCommand(AddWatchedOn);
+            CheckForUpdateCommand = new RelayCommand(CheckForUpdate);
+            ShowHistoryCommand = new ParameterizedRelayCommand(ShowHistory);
+            EditRunningTimeCommand = new ParameterizedRelayCommand(EditRunningTime);
         }
 
         #region INotifyPropertyChanged
@@ -179,41 +156,31 @@
             }
         }
 
-        public ICommand AddWatchedCommand
-            => _AddWatchedCommand;
+        public ICommand AddWatchedCommand { get; }
 
-        public ICommand PlayFileAndAddWatchedCommand
-            => _PlayFileAndAddWatchedCommand;
+        public ICommand PlayFileAndAddWatchedCommand { get; }
 
-        public ICommand OpenSettingsCommand
-            => _OpenSettingsCommand;
+        public ICommand OpenSettingsCommand { get; }
 
-        public ICommand ImportCollectionCommand
-            => _ImportCollectionCommand;
+        public ICommand ImportCollectionCommand { get; }
 
-        public ICommand IgnoreCommand
-           => _IgnoreCommand;
+        public ICommand IgnoreCommand { get; }
 
-        public ICommand UndoIgnoreCommand
-            => _UndoIgnoreCommand;
+        public ICommand UndoIgnoreCommand { get; }
 
-        public ICommand PlayFileCommand
-            => _PlayFileCommand;
+        public ICommand PlayFileCommand { get; }
 
-        public ICommand SortCommand
-            => _SortCommand;
+        public ICommand SortCommand { get; }
 
-        public ICommand OpenFileLocationCommand
-            => _OpenFileLocationCommand;
+        public ICommand OpenFileLocationCommand { get; }
 
-        public ICommand AddWatchedOnCommand
-            => _AddWatchedOnCommand;
+        public ICommand AddWatchedOnCommand { get; }
 
-        public ICommand CheckForUpdateCommand
-            => _CheckForUpdateCommand;
+        public ICommand CheckForUpdateCommand { get; }
 
-        public ICommand ShowHistoryCommand
-            => _ShowHistoryCommand;
+        public ICommand ShowHistoryCommand { get; }
+
+        public ICommand EditRunningTimeCommand { get; }
 
         #endregion
 
@@ -364,6 +331,22 @@
             IEnumerable<Watch> watches = _Model.GetWatches(fileEntry);
 
             _WindowFactory.OpenWatchesWindow(watches);
+        }
+
+        private void EditRunningTime(Object parameter)
+        {
+            FileEntry fileEntry = GetFileEntry(parameter);
+
+            Nullable<UInt32> runningTime = _WindowFactory.OpenRunningTimeWindow(fileEntry.VideoLength);
+
+            if (runningTime.HasValue == false)
+            {
+                return;
+            }
+
+            fileEntry.VideoLength = runningTime.Value;
+
+            _DataManager.SaveDataFile();
         }
     }
 }

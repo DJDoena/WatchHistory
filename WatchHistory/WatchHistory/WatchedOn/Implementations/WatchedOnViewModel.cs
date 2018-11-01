@@ -5,6 +5,7 @@
     using System.Windows.Input;
     using AbstractionLayer.UIServices;
     using ToolBox.Commands;
+    using WatchHistory.Implementations;
 
     internal sealed class WatchedOnViewModel : IWatchedOnViewModel
     {
@@ -32,7 +33,7 @@
             _Minute = (Byte)(now.Minute);
         }
 
-        #region IMainViewModel
+        #region IWatchedOnViewModel
 
         public ICommand AcceptCommand
             => _AcceptCommand;
@@ -92,6 +93,19 @@
         #region INotifyPropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        event EventHandler<CloseEventArgs> IWatchedOnViewModel.Closing
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         #endregion
 

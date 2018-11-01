@@ -35,6 +35,8 @@
 
         private Nullable<DateTime> m_CreationTime;
 
+        private UInt32 m_VideoLength;
+
         [XmlElement]
         public String FullName;
 
@@ -63,7 +65,19 @@
         }
 
         [XmlAttribute]
-        public UInt32 VideoLength;
+        public UInt32 VideoLength
+        {
+            get => m_VideoLength;
+            set
+            {
+                if (m_VideoLength != value)
+                {
+                    m_VideoLength = value;
+
+                    VideoLengthChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
 
         [XmlIgnore]
         public Boolean VideoLengthSpecified
@@ -83,6 +97,8 @@
         public XmlElement[] AnyElements;
 
         public event EventHandler UsersChanged;
+
+        public event EventHandler VideoLengthChanged;
     }
 
     [DebuggerDisplay("User: {UserName}")]

@@ -7,6 +7,8 @@
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
     using Data;
+    using DoenaSoft.WatchHistory.RunningTime;
+    using DoenaSoft.WatchHistory.RunningTime.Implementations;
     using Ignore;
     using Ignore.Implementations;
     using Main;
@@ -116,6 +118,23 @@
             if (window.ShowDialog() == true)
             {
                 return (viewModel.WatchedOn);
+            }
+
+            return (null);
+        }
+
+        public Nullable<UInt32> OpenRunningTimeWindow(UInt32 seconds)
+        {
+            IRunningTimeViewModel viewModel = new RunningTimeViewModel(seconds);
+
+            Window window = new RunningTimeWindow()
+            {
+                DataContext = viewModel
+            };
+
+            if (window.ShowDialog() == true)
+            {
+                return (viewModel.RunningTime);
             }
 
             return (null);

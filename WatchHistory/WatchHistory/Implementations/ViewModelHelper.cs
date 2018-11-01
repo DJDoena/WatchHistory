@@ -115,11 +115,11 @@
             return (name);
         }
 
-        internal static string GetFormattedVideoLength(UInt32 videoLength)
+        internal static string GetFormattedRunningTime(UInt32 runningTime)
         {
-            UInt32 hours = videoLength / 3600;
+            UInt32 hours = runningTime / 3600;
 
-            UInt32 modulo = videoLength % 3600;
+            UInt32 modulo = runningTime % 3600;
 
             UInt32 minutes = modulo / 60;
 

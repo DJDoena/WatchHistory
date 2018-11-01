@@ -49,6 +49,8 @@
                     {
                         FileEntry.UsersChanged += OnUsersChanged;
                     }
+
+                    FileEntry.VideoLengthChanged += OnVideoLengthChanged;
                 }
 
                 _PropertyChanged += value;
@@ -59,6 +61,8 @@
 
                 if (_PropertyChanged == null)
                 {
+                    FileEntry.VideoLengthChanged -= OnVideoLengthChanged;
+
                     if (_User != null)
                     {
                         _User.WatchesChanged -= OnWatchesChanged;
@@ -134,17 +138,17 @@
             }
         }
 
-        public String VideoLength
+        public String RunningTime
         {
             get
             {
-                UInt32 videoLength = FileEntry.GetVideoLength(_DataManager);
+                UInt32 runningTime = FileEntry.GetVideoLength(_DataManager);
 
                 String text = String.Empty;
 
-                if (videoLength > 0)
+                if (runningTime > 0)
                 {
-                    text = ViewModelHelper.GetFormattedVideoLength(videoLength);
+                    text = ViewModelHelper.GetFormattedRunningTime(runningTime);
                 }
 
                 return (text);
@@ -178,6 +182,9 @@
         private void OnWatchesChanged(Object sender
             , EventArgs e)
             => RaisePropertyChanged(nameof(LastWatched));
+
+        private void OnVideoLengthChanged(object sender, EventArgs e)
+            => RaisePropertyChanged(nameof(RunningTime));
 
         private void RaisePropertyChanged(String attribute)
             => _PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));

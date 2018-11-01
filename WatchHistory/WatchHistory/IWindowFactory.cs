@@ -16,6 +16,8 @@
 
         Nullable<DateTime> OpenWatchedOnWindow();
 
+        Nullable<UInt32> OpenRunningTimeWindow(UInt32 seconds);
+
         void OpenWatchesWindow(IEnumerable<Watch> watches);
     }
 }

@@ -39,5 +39,7 @@
         ICommand CheckForUpdateCommand { get; }
 
         ICommand ShowHistoryCommand { get; }
+
+        ICommand EditRunningTimeCommand { get; }
     }
 }

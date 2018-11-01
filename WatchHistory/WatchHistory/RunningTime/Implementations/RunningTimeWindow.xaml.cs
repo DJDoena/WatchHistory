@@ -1,13 +1,13 @@
-﻿namespace DoenaSoft.WatchHistory.WatchedOn.Implementations
+﻿namespace DoenaSoft.WatchHistory.RunningTime.Implementations
 {
     using System;
     using System.Windows;
     using AbstractionLayer.UIServices;
     using WatchHistory.Implementations;
 
-    public partial class WatchedOnWindow : Window
+    public partial class RunningTimeWindow : Window
     {
-        public WatchedOnWindow()
+        public RunningTimeWindow()
         {
             InitializeComponent();
         }
@@ -15,7 +15,7 @@
         private void OnLoaded(Object sender
             , RoutedEventArgs e)
         {
-            IWatchedOnViewModel viewModel = (IWatchedOnViewModel)DataContext;
+            IRunningTimeViewModel viewModel = (IRunningTimeViewModel)DataContext;
 
             viewModel.Closing += OnClosing;
         }
@@ -23,7 +23,7 @@
         private void OnClosing(Object sender
             , CloseEventArgs e)
         {
-            IWatchedOnViewModel viewModel = (IWatchedOnViewModel)DataContext;
+            IRunningTimeViewModel viewModel = (IRunningTimeViewModel)DataContext;
 
             viewModel.Closing -= OnClosing;
 

@@ -98,7 +98,12 @@
     </Compile>
     <Compile Include="Settings\ISettingsListBoxItemViewModel.cs" />
     <Compile Include="Settings\ISettingsViewModel.cs" />
-    <Compile Include="WatchedOn\CloseEventArgs.cs" />
+    <Compile Include="Implementations\CloseEventArgs.cs" />
+    <Compile Include="RunningTime\Implementations\RunningTimeViewModel.cs" />
+    <Compile Include="RunningTime\Implementations\RunningTimeWindow.xaml.cs">
+      <DependentUpon>RunningTimeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RunningTime\IRunningTimeViewModel.cs" />
     <Compile Include="WatchedOn\Implementations\WatchedOnViewModel.cs" />
     <Compile Include="WatchedOn\Implementations\WatchedOnWindow.xaml.cs">
       <DependentUpon>WatchedOnWindow.xaml</DependentUpon>
@@ -151,6 +156,10 @@
     <Page Include="Settings\Implementations\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RunningTime\Implementations\RunningTimeWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="WatchedOn\Implementations\WatchedOnWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

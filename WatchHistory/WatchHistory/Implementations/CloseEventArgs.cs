@@ -1,4 +1,4 @@
-﻿namespace DoenaSoft.WatchHistory.WatchedOn
+﻿namespace DoenaSoft.WatchHistory.Implementations
 {
     using System;
     using AbstractionLayer.UIServices;

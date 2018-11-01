@@ -1,23 +1,23 @@
-﻿namespace DoenaSoft.WatchHistory.WatchedOn
+﻿namespace DoenaSoft.WatchHistory.RunningTime
 {
     using System;
     using System.ComponentModel;
     using System.Windows.Input;
     using DoenaSoft.WatchHistory.Implementations;
 
-    internal interface IWatchedOnViewModel : INotifyPropertyChanged
+    internal interface IRunningTimeViewModel : INotifyPropertyChanged
     {
         ICommand AcceptCommand { get; }
 
         ICommand CancelCommand { get; }
 
-        DateTime Date { get; set; }
+        Byte Hours { get; set; }
 
-        Byte Hour { get; set; }
+        Byte Minutes { get; set; }
 
-        Byte Minute { get; set; }
+        Byte Seconds { get; set; }
 
-        DateTime WatchedOn { get; }
+        UInt32 RunningTime { get; }
 
         event EventHandler<CloseEventArgs> Closing;
     }
