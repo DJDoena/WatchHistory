@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel;
     using System.Windows.Input;
-    using DoenaSoft.WatchHistory.Implementations;
+    using WatchHistory.Implementations;
 
     internal interface IWatchedOnViewModel : INotifyPropertyChanged
     {

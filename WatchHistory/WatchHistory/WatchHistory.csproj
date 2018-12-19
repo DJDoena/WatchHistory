@@ -184,7 +184,9 @@
     <None Include="DJDSOFT.ICO">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\AbstractionLayer\AbstractionLayer\AbstractionLayer.csproj">

@@ -94,19 +94,6 @@
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        event EventHandler<CloseEventArgs> IWatchedOnViewModel.Closing
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         #endregion
 
         private void Accept()

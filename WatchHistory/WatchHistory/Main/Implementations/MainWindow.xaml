@@ -10,7 +10,7 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Settings" Command="{Binding OpenSettingsCommand}" />
             <MenuItem Header="Import DVD Profiler Collection" Command="{Binding ImportCollectionCommand}" />
-            <MenuItem Header="Undo Ignore" Command="{Binding UndoIgnoreCommand}" />
+            <MenuItem Header="Undo Hide" Command="{Binding UndoIgnoreCommand}" />
             <MenuItem Header="Check for Update" Command="{Binding CheckForUpdateCommand}" />
         </Menu>
 
@@ -55,7 +55,7 @@
                                   Command="{Binding AddWatchedOnCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}" />
                         <MenuItem Header="Play file &amp; Add &quot;Watched&quot; event"
                                   Command="{Binding PlayFileAndAddWatchedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                        <MenuItem Header="Ignore"
+                        <MenuItem Header="Hide"
                                   Command="{Binding IgnoreCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}" />
                         <MenuItem Header="Open file location"
                                   Command="{Binding OpenFileLocationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
