@@ -104,7 +104,7 @@
         }
 
         public IEnumerable<Watch> GetWatches(FileEntry fileEntry)
-            => fileEntry.Users?.FirstOrDefault(IsUser)?.Watches.ToList() ?? Enumerable.Empty<Watch>();
+            => fileEntry.Users?.FirstOrDefault(IsUser)?.Watches?.ToList() ?? Enumerable.Empty<Watch>();
 
         #endregion
 

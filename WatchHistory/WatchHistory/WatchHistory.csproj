@@ -31,6 +31,9 @@
     <ApplicationIcon>DJDSOFT.ICO</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NReco.VideoInfo, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8f59ee36d2987295, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NReco.VideoInfo.1.1.1\lib\net35\NReco.VideoInfo.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -61,9 +64,11 @@
       <DependentUpon>Files.v2_2.xsd</DependentUpon>
     </Compile>
     <Compile Include="Data\Implementations\DvdWatchesProcessor.cs" />
+    <Compile Include="Data\Implementations\FFProbe.cs" />
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
     <Compile Include="Data\Implementations\FilesSerializer.cs" />
     <Compile Include="Data\IFilesSerializer.cs" />
+    <Compile Include="Data\Implementations\MediaInfo2XmlConverter.cs" />
     <Compile Include="Data\Implementations\VideoInfo.cs">
       <DependentUpon>VideoInfo.xsd</DependentUpon>
     </Compile>

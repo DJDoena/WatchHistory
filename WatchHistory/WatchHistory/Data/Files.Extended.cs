@@ -1,7 +1,6 @@
 ﻿namespace DoenaSoft.WatchHistory.Data
 {
     using System;
-    using DoenaSoft.WatchHistory.Data.Implementations;
 
     partial class FileEntry
     {

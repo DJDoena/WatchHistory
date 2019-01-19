@@ -1,8 +1,8 @@
 [Setup]
 AppName=WatchHistory
 AppId=WatchHistory
-AppVerName=WatchHistory 1.3.3.1
-AppCopyright=Copyright © Doena Soft. 2016 - 2018
+AppVerName=WatchHistory 1.3.4.0
+AppCopyright=Copyright © Doena Soft. 2016 - 2019
 AppPublisher=Doena Soft.
 ; AppPublisherURL=http://doena-journal.net/en/dvd-profiler-tools/
 DefaultDirName={pf32}\Doena Soft.\WatchHistory
@@ -20,9 +20,9 @@ WizardSmallImageFile=compiler:wizmodernsmallimage-is.bmp
 DisableReadyPage=yes
 ShowLanguageDialog=no
 VersionInfoCompany=Doena Soft.
-VersionInfoCopyright=2016 - 2018
+VersionInfoCopyright=2016 - 2019
 VersionInfoDescription=WatchHistory Setup
-VersionInfoVersion=1.3.3.1
+VersionInfoVersion=1.3.4.0
 UninstallDisplayIcon={app}\djdsoft.ico
 
 [Languages]
@@ -44,6 +44,8 @@ Source: "DVDProfilerXML.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DVDProfilerXML.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Xceed.Wpf.Toolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "NReco.VideoInfo.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "de\DVDProfilerHelper.resources.dll"; DestDir: "{app}\de"; Flags: ignoreversion
 

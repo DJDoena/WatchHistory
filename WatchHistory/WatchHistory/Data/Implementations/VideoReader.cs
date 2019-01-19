@@ -1,25 +1,16 @@
 ﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
     using System;
-    using System.Threading;
-    using System.Timers;
-    using System.Windows;
-    using System.Windows.Media;
-    using DoenaSoft.AbstractionLayer.IOServices;
-    using DoenaSoft.WatchHistory.Implementations;
+    using AbstractionLayer.IOServices;
+    using ToolBox.Generics;
     using WatchHistory.Data;
+    using WatchHistory.Implementations;
 
-    sealed class VideoReader : IDisposable
+    internal sealed class VideoReader
     {
         private readonly IIOServices _IOServices;
 
         private readonly FileEntry _fileEntry;
-
-        private Boolean Elapsed;
-
-        private System.Timers.Timer Timer;
-
-        private MediaPlayer MediaPlayer;
 
         private String FullName => _fileEntry.FullName;
 
@@ -27,15 +18,6 @@
         {
             _IOServices = ioServices;
             _fileEntry = entry;
-
-            Timer = new System.Timers.Timer(10000)
-            {
-                AutoReset = false
-            };
-
-            Timer.Elapsed += OnTimerElapsed;
-
-            MediaPlayer = new MediaPlayer();
         }
 
         internal UInt32 GetLength()
@@ -59,9 +41,7 @@
                 return videoLength;
             }
 
-            Duration duration = GetDuration();
-
-            videoLength = duration.HasTimeSpan ? (uint)(duration.TimeSpan.TotalSeconds) : 0;
+            videoLength = GetDuration();
 
             return videoLength;
         }
@@ -85,40 +65,35 @@
             return 0;
         }
 
-        private Duration GetDuration()
+        private UInt32 GetDuration()
         {
-            MediaPlayer.Open(new Uri(FullName, UriKind.Absolute));
+            FFProbe mediaInfo = GetMediaInfo();
 
-            Elapsed = false;
-
-            Timer.Start();
-
-            while ((MediaPlayer.NaturalDuration.HasTimeSpan == false) && (Elapsed == false))
+            if (mediaInfo != null)
             {
-                Thread.Sleep(100);
+                var xmlInfo = MediaInfo2XmlConverter.Convert(mediaInfo);
+
+                return xmlInfo.DurationSpecified ? xmlInfo.Duration : 0;
             }
 
-            Timer.Stop();
-
-            Duration duration = MediaPlayer.NaturalDuration;
-
-            MediaPlayer.Close();
-
-            return duration;
+            return 0;
         }
 
-        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        private FFProbe GetMediaInfo()
         {
-            Elapsed = true;
-        }
-
-        public void Dispose()
-        {
-            if (Timer != null)
+            try
             {
-                Timer.Elapsed -= OnTimerElapsed;
+                var mediaInfo = (new NReco.VideoInfo.FFProbe()).GetMediaInfo(FullName);
 
-                Timer = null;
+                var xml = mediaInfo.Result.CreateNavigator().OuterXml;
+
+                var ffprobe = Serializer<FFProbe>.FromString(xml);
+
+                return (ffprobe);
+            }
+            catch
+            {
+                return (null);
             }
         }
     }

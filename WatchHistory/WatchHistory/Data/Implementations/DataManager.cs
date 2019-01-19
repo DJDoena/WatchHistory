@@ -227,12 +227,11 @@
         {
             try
             {
-                using (VideoReader videoReader = new VideoReader(_IOServices, fileEntry))
-                {
-                    UInt32 videoLength = videoReader.GetLength();
+                VideoReader videoReader = new VideoReader(_IOServices, fileEntry);
 
-                    return videoLength;
-                }
+                UInt32 videoLength = videoReader.GetLength();
+
+                return videoLength;
             }
             catch
             {
