@@ -64,12 +64,12 @@
       <DependentUpon>Files.v2_2.xsd</DependentUpon>
     </Compile>
     <Compile Include="Data\Implementations\DvdWatchesProcessor.cs" />
-    <Compile Include="Data\Implementations\FFProbe.cs" />
+    <Compile Include="Data\FFProbe.cs" />
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
     <Compile Include="Data\Implementations\FilesSerializer.cs" />
     <Compile Include="Data\IFilesSerializer.cs" />
     <Compile Include="Data\Implementations\MediaInfo2XmlConverter.cs" />
-    <Compile Include="Data\Implementations\VideoInfo.cs">
+    <Compile Include="Data\VideoInfo.cs">
       <DependentUpon>VideoInfo.xsd</DependentUpon>
     </Compile>
     <Compile Include="Data\Implementations\VideoInfoAdder.cs" />
@@ -185,7 +185,7 @@
     <None Include="Data\Files.v2_2.xsd" />
     <None Include="Data\Files.v2_1.xsd" />
     <None Include="Data\Files.v2_0.xsd" />
-    <None Include="Data\Implementations\VideoInfo.xsd" />
+    <None Include="Data\VideoInfo.xsd" />
     <None Include="DJDSOFT.ICO">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -1,4 +1,4 @@
-﻿namespace DoenaSoft.WatchHistory.Data.Implementations
+﻿namespace DoenaSoft.WatchHistory.Data
 {
     using System;
     using System.Diagnostics;

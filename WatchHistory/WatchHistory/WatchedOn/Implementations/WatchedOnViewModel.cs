@@ -9,10 +9,6 @@
 
     internal sealed class WatchedOnViewModel : IWatchedOnViewModel
     {
-        private readonly ICommand _AcceptCommand;
-
-        private readonly ICommand _CancelCommand;
-
         private DateTime _Date;
 
         private Byte _Hour;
@@ -21,8 +17,8 @@
 
         public WatchedOnViewModel()
         {
-            _AcceptCommand = new RelayCommand(Accept);
-            _CancelCommand = new RelayCommand(Cancel);
+            AcceptCommand = new RelayCommand(Accept);
+            CancelCommand = new RelayCommand(Cancel);
 
             DateTime now = DateTime.Now;
 
@@ -35,11 +31,9 @@
 
         #region IWatchedOnViewModel
 
-        public ICommand AcceptCommand
-            => _AcceptCommand;
+        public ICommand AcceptCommand { get; }
 
-        public ICommand CancelCommand
-            => _CancelCommand;
+        public ICommand CancelCommand { get; }
 
         public DateTime Date
         {
