@@ -7,100 +7,99 @@
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
     using Data;
-    using DoenaSoft.WatchHistory.RunningTime;
-    using DoenaSoft.WatchHistory.RunningTime.Implementations;
-    using Ignore;
     using Ignore.Implementations;
-    using Main;
     using Main.Implementations;
-    using SelectUser;
     using SelectUser.Implementations;
-    using Settings;
     using Settings.Implementations;
-    using WatchedOn;
     using WatchedOn.Implementations;
-    using Watches;
     using Watches.Implementations;
+    using WatchHistory.RunningTime.Implementations;
+    using WatchHistory.YoutubeLink;
+    using WatchHistory.YoutubeLink.Implementations;
 
     internal sealed class WindowFactory : IWindowFactory
     {
-        private readonly IIOServices _IOServices;
+        private readonly IIOServices _ioServices;
 
-        private readonly IUIServices _UIServices;
+        private readonly IUIServices _uiServices;
 
-        private readonly IDataManager _DataManager;
+        private readonly IDataManager _dataManager;
+
+        private readonly IYoutubeManager _youtubeManager;
 
         private Window WaitWindow { get; set; }
 
         public WindowFactory(IIOServices ioServices
             , IUIServices uiServices
-            , IDataManager dataManager)
+            , IDataManager dataManager
+            , IYoutubeManager youtubeManager)
         {
-            _IOServices = ioServices;
-            _UIServices = uiServices;
-            _DataManager = dataManager;
+            _ioServices = ioServices;
+            _uiServices = uiServices;
+            _dataManager = dataManager;
+            _youtubeManager = youtubeManager;
         }
 
         #region IWindowFactory
 
         public void OpenSelectUserWindow()
         {
-            if (_DataManager.Users.Count() > 1)
+            if (_dataManager.Users.Count() > 1)
             {
-                ISelectUserViewModel viewModel = new SelectUserViewModel(_DataManager, this);
+                var viewModel = new SelectUserViewModel(_dataManager, this);
 
-                Window window = new SelectUserWindow()
+                var window = new SelectUserWindow()
                 {
-                    DataContext = viewModel
+                    DataContext = viewModel,
                 };
 
                 window.Show();
             }
             else
             {
-                String user = _DataManager.Users.FirstOrDefault() ?? Constants.DefaultUser;
+                var user = _dataManager.Users.FirstOrDefault() ?? Constants.DefaultUser;
 
                 OpenMainWindow(user);
             }
         }
 
-        public void OpenMainWindow(String userName)
+        public void OpenMainWindow(string userName)
         {
-            IMainModel model = new MainModel(_DataManager, _IOServices, _UIServices, userName);
+            var model = new MainModel(_dataManager, _ioServices, _uiServices, userName);
 
-            IMainViewModel viewModel = new MainViewModel(model, _DataManager, _IOServices, this, userName);
+            var viewModel = new MainViewModel(model, _dataManager, _ioServices, this, userName);
 
-            Window window = new MainWindow()
+            var window = new MainWindow()
             {
-                DataContext = viewModel
+                DataContext = viewModel,
             };
 
             window.Show();
 
-            _DataManager.Resume();
+            _dataManager.Resume();
         }
 
         public void OpenSettingsWindow()
         {
-            ISettingsViewModel viewModel = new SettingsViewModel(_DataManager, _UIServices);
+            var viewModel = new SettingsViewModel(_dataManager, _uiServices);
 
-            Window window = new SettingsWindow()
+            var window = new SettingsWindow()
             {
-                DataContext = viewModel
+                DataContext = viewModel,
             };
 
             window.ShowDialog();
         }
 
-        public void OpenIgnoreWindow(String userName)
+        public void OpenIgnoreWindow(string userName)
         {
-            IIgnoreModel model = new IgnoreModel(_DataManager, userName);
+            var model = new IgnoreModel(_dataManager, userName);
 
-            IIgnoreViewModel viewModel = new IgnoreViewModel(model, _DataManager, _IOServices, this, userName);
+            var viewModel = new IgnoreViewModel(model, _dataManager, _ioServices, this, userName);
 
-            Window window = new IgnoreWindow()
+            var window = new IgnoreWindow()
             {
-                DataContext = viewModel
+                DataContext = viewModel,
             };
 
             window.ShowDialog();
@@ -108,11 +107,11 @@
 
         public Nullable<DateTime> OpenWatchedOnWindow()
         {
-            IWatchedOnViewModel viewModel = new WatchedOnViewModel();
+            var viewModel = new WatchedOnViewModel();
 
-            Window window = new WatchedOnWindow()
+            var window = new WatchedOnWindow()
             {
-                DataContext = viewModel
+                DataContext = viewModel,
             };
 
             if (window.ShowDialog() == true)
@@ -120,33 +119,45 @@
                 return (viewModel.WatchedOn);
             }
 
-            return (null);
+            return null;
         }
 
-        public Nullable<UInt32> OpenRunningTimeWindow(UInt32 seconds)
+        public uint? OpenRunningTimeWindow(uint seconds)
         {
-            IRunningTimeViewModel viewModel = new RunningTimeViewModel(seconds);
+            var viewModel = new RunningTimeViewModel(seconds);
 
-            Window window = new RunningTimeWindow()
+            var window = new RunningTimeWindow()
             {
-                DataContext = viewModel
+                DataContext = viewModel,
             };
 
             if (window.ShowDialog() == true)
             {
-                return (viewModel.RunningTime);
+                return viewModel.RunningTime;
             }
 
-            return (null);
+            return null;
         }
 
         public void OpenWatchesWindow(IEnumerable<Watch> watches)
         {
-            IWatchesViewModel viewModel = new WatchesViewModel(watches);
+            var viewModel = new WatchesViewModel(watches);
 
-            Window window = new WatchesWindow()
+            var window = new WatchesWindow()
             {
-                DataContext = viewModel
+                DataContext = viewModel,
+            };
+
+            window.ShowDialog();
+        }
+
+        public void OpenAddYoutubeLinkVideo(string userName)
+        {
+            var viewModel = new YoutubeLinkViewModel(_dataManager, _ioServices, _uiServices, _youtubeManager, userName);
+
+            var window = new YoutubeLinkWindow()
+            {
+                DataContext = viewModel,
             };
 
             window.ShowDialog();

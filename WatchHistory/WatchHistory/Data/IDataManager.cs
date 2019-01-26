@@ -5,13 +5,13 @@
 
     internal interface IDataManager
     {
-        IEnumerable<String> Users { get; set; }
+        IEnumerable<string> Users { get; set; }
 
-        IEnumerable<String> RootFolders { get; set; }
+        IEnumerable<string> RootFolders { get; set; }
 
-        IEnumerable<String> FileExtensions { get; set; }
+        IEnumerable<string> FileExtensions { get; set; }
 
-        Boolean IsSynchronizing { get; }
+        bool IsSynchronizing { get; }
 
         event EventHandler IsSynchronizingChanged;
 
@@ -20,20 +20,20 @@
         IEnumerable<FileEntry> GetFiles();
 
         void AddWatched(FileEntry entry
-            , String userName);
+            , string userName);
 
         void AddWatched(FileEntry entry
-            , String userName
+            , string userName
             , DateTime watchedOn);
 
         void AddIgnore(FileEntry entry
-            , String userName);
+            , string userName);
 
         void UndoIgnore(FileEntry entry
-            , String userName);
+            , string userName);
 
         DateTime GetLastWatched(FileEntry entry
-            , String userName);
+            , string userName);
 
         void SaveSettingsFile();
 
@@ -45,6 +45,8 @@
 
         DateTime GetCreationTime(FileEntry fileEntry);
 
-        UInt32 GetVideoLength(FileEntry fileEntry);
+        uint GetVideoLength(FileEntry fileEntry);
+
+        FileEntry TryCreateEntry(FileEntry fileEntry);
     }
 }

@@ -41,5 +41,7 @@
         ICommand ShowHistoryCommand { get; }
 
         ICommand EditRunningTimeCommand { get; }
+
+        ICommand AddYoutubeLinkCommand { get; }
     }
 }

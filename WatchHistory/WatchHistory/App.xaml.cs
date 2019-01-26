@@ -10,6 +10,7 @@
     using Data.Implementations;
     using DVDProfiler.DVDProfilerHelper;
     using Implementations;
+    using WatchHistory.YoutubeLink.Implementations;
 
     public partial class App : Application
     {
@@ -31,7 +32,9 @@
 
             DataManager = new DataManager(Environment.SettingsFile, Environment.DataFile, IOServices);
 
-            IWindowFactory windowFactory = new WindowFactory(IOServices, UIServices, DataManager);
+            var youtubeManager = new YoutubeManager();
+
+            IWindowFactory windowFactory = new WindowFactory(IOServices, UIServices, DataManager, youtubeManager);
 
             windowFactory.OpenSelectUserWindow();
         }

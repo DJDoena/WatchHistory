@@ -16,34 +16,34 @@
 
     internal sealed class MainViewModel : IMainViewModel
     {
-        private readonly IMainModel _Model;
+        private readonly IMainModel _model;
 
-        private readonly IDataManager _DataManager;
+        private readonly IDataManager _dataManager;
 
-        private readonly IIOServices _IOServices;
+        private readonly IIOServices _ioServices;
 
-        private readonly IWindowFactory _WindowFactory;
+        private readonly IWindowFactory _windowFactory;
 
-        private readonly String _UserName;
+        private readonly string _userName;
 
-        private event PropertyChangedEventHandler _PropertyChanged;
+        private event PropertyChangedEventHandler _propertyChanged;
 
-        private SortColumn _SortColumn;
+        private SortColumn _sortColumn;
 
-        private Boolean SortAscending { get; set; }
+        private bool SortAscending { get; set; }
 
-        private Boolean SuspendEvents { get; set; }
+        private bool SuspendEvents { get; set; }
 
-        private Boolean EventRaisedWhileSuspended { get; set; }
+        private bool EventRaisedWhileSuspended { get; set; }
 
         private SortColumn SortColumn
         {
-            get => _SortColumn;
+            get => _sortColumn;
             set
             {
-                SortAscending = (value != _SortColumn) ? true : (SortAscending == false);
+                SortAscending = (value != _sortColumn) ? true : (SortAscending == false);
 
-                _SortColumn = value;
+                _sortColumn = value;
 
                 RaisePropertyChanged(nameof(Entries));
             }
@@ -53,15 +53,15 @@
             , IDataManager dataManager
             , IIOServices ioServices
             , IWindowFactory windowFactory
-            , String userName)
+            , string userName)
         {
-            _Model = model;
-            _DataManager = dataManager;
-            _IOServices = ioServices;
-            _WindowFactory = windowFactory;
-            _UserName = userName;
+            _model = model;
+            _dataManager = dataManager;
+            _ioServices = ioServices;
+            _windowFactory = windowFactory;
+            _userName = userName;
 
-            _SortColumn = SortColumn.CreationTime;
+            _sortColumn = SortColumn.CreationTime;
             SortAscending = false;
             SuspendEvents = false;
             EventRaisedWhileSuspended = false;
@@ -79,6 +79,7 @@
             CheckForUpdateCommand = new RelayCommand(CheckForUpdate);
             ShowHistoryCommand = new ParameterizedRelayCommand(ShowHistory);
             EditRunningTimeCommand = new ParameterizedRelayCommand(EditRunningTime);
+            AddYoutubeLinkCommand = new RelayCommand(AddYoutubeLink, CanAddYoutubeLink);
         }
 
         #region INotifyPropertyChanged
@@ -87,24 +88,24 @@
         {
             add
             {
-                if (_PropertyChanged == null)
+                if (_propertyChanged == null)
                 {
-                    _Model.FilesChanged += OnModelFilesChanged;
+                    _model.FilesChanged += OnModelFilesChanged;
 
-                    _DataManager.IsSynchronizingChanged += OnDataManagerIsSynchronizingChanged;
+                    _dataManager.IsSynchronizingChanged += OnDataManagerIsSynchronizingChanged;
                 }
 
-                _PropertyChanged += value;
+                _propertyChanged += value;
             }
             remove
             {
-                _PropertyChanged -= value;
+                _propertyChanged -= value;
 
-                if (_PropertyChanged == null)
+                if (_propertyChanged == null)
                 {
-                    _DataManager.IsSynchronizingChanged -= OnDataManagerIsSynchronizingChanged;
+                    _dataManager.IsSynchronizingChanged -= OnDataManagerIsSynchronizingChanged;
 
-                    _Model.FilesChanged -= OnModelFilesChanged;
+                    _model.FilesChanged -= OnModelFilesChanged;
                 }
             }
         }
@@ -113,31 +114,31 @@
 
         #region IMainViewModel
 
-        public String Title
-            => $"Watch History (user: {_UserName})";
+        public string Title
+            => $"Watch History (user: {_userName})";
 
-        public String Filter
+        public string Filter
         {
-            get => _Model.Filter;
+            get => _model.Filter;
             set
             {
-                if (value != _Model.Filter)
+                if (value != _model.Filter)
                 {
-                    _Model.Filter = value;
+                    _model.Filter = value;
 
                     RaisePropertyChanged(nameof(Filter));
                 }
             }
         }
 
-        public Boolean IgnoreWatched
+        public bool IgnoreWatched
         {
-            get => _Model.IgnoreWatched;
+            get => _model.IgnoreWatched;
             set
             {
-                if (value != _Model.IgnoreWatched)
+                if (value != _model.IgnoreWatched)
                 {
-                    _Model.IgnoreWatched = value;
+                    _model.IgnoreWatched = value;
 
                     RaisePropertyChanged(nameof(IgnoreWatched));
                 }
@@ -148,11 +149,11 @@
         {
             get
             {
-                IEnumerable<FileEntry> modelEntries = _Model.GetFiles();
+                var modelEntries = _model.GetFiles();
 
-                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, _UserName, _DataManager, _IOServices, SortColumn, SortAscending);
+                var viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, _userName, _dataManager, _ioServices, SortColumn, SortAscending);
 
-                return (viewModelEntries);
+                return viewModelEntries;
             }
         }
 
@@ -182,15 +183,17 @@
 
         public ICommand EditRunningTimeCommand { get; }
 
+        public ICommand AddYoutubeLinkCommand { get; }
+
         #endregion
 
         private void AddWatched(Object parameter)
         {
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => _DataManager.AddWatched(entry, _UserName));
+            GetEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName));
 
-            _DataManager.SaveDataFile();
+            _dataManager.SaveDataFile();
 
             ResumeEvents();
         }
@@ -214,44 +217,44 @@
         {
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => _DataManager.AddIgnore(entry, _UserName));
+            GetEntries(parameter).ForEach(entry => _dataManager.AddIgnore(entry, _userName));
 
-            _DataManager.SaveDataFile();
+            _dataManager.SaveDataFile();
 
             ResumeEvents();
         }
 
         private void OpenSettings()
-            => _WindowFactory.OpenSettingsWindow();
+            => _windowFactory.OpenSettingsWindow();
 
         private void UndoIgnore()
-            => _WindowFactory.OpenIgnoreWindow(_UserName);
+            => _windowFactory.OpenIgnoreWindow(_userName);
 
         private void PlayFile(Object parameter)
         {
-            FileEntry fileEntry = GetFileEntry(parameter);
+            var fileEntry = GetFileEntry(parameter);
 
-            _Model.PlayFile(fileEntry);
+            _model.PlayFile(fileEntry);
         }
 
-        private Boolean CanPlayFile(Object parameter)
+        private bool CanPlayFile(Object parameter)
         {
-            FileEntry fileEntry = GetFileEntry(parameter);
+            var fileEntry = GetFileEntry(parameter);
 
-            Boolean canPlay = (fileEntry != null) && (_Model.CanPlayFile(fileEntry));
+            var canPlay = (fileEntry != null) && (_model.CanPlayFile(fileEntry));
 
-            return (canPlay);
+            return canPlay;
         }
 
         private void PlayFileAndAddWatched(Object parameter)
         {
-            FileEntry fileEntry = GetFileEntry(parameter);
+            var fileEntry = GetFileEntry(parameter);
 
-            _Model.PlayFile(fileEntry);
+            _model.PlayFile(fileEntry);
 
-            _DataManager.AddWatched(fileEntry, _UserName);
+            _dataManager.AddWatched(fileEntry, _userName);
 
-            _DataManager.SaveDataFile();
+            _dataManager.SaveDataFile();
         }
 
         private static FileEntry GetFileEntry(Object parameter)
@@ -259,22 +262,25 @@
 
         private void OpenFileLocation(Object parameter)
         {
-            FileEntry fileEntry = GetFileEntry(parameter);
+            var fileEntry = GetFileEntry(parameter);
 
-            _Model.OpenFileLocation(fileEntry);
+            _model.OpenFileLocation(fileEntry);
         }
 
         private void Sort(Object parameter)
-            => SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (String)parameter));
+            => SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (string)parameter));
 
-        private Boolean CanImportCollection()
-            => _DataManager.IsSynchronizing == false;
+        private bool CanImportCollection()
+            => IsNotSynchronizing;
+
+        private bool IsNotSynchronizing
+            => _dataManager.IsSynchronizing == false;
 
         private void ImportCollection()
         {
             SuspendEvents = true;
 
-            _Model.ImportCollection();
+            _model.ImportCollection();
 
             ResumeEvents();
         }
@@ -292,8 +298,8 @@
             }
         }
 
-        private void RaisePropertyChanged(String attribute)
-            => _PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+        private void RaisePropertyChanged(string attribute)
+            => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
 
         private void OnDataManagerIsSynchronizingChanged(Object sender
             , EventArgs e)
@@ -303,7 +309,7 @@
 
         private void AddWatchedOn(Object parameter)
         {
-            Nullable<DateTime> watchedOn = _WindowFactory.OpenWatchedOnWindow();
+            var watchedOn = _windowFactory.OpenWatchedOnWindow();
 
             if (watchedOn.HasValue == false)
             {
@@ -312,9 +318,9 @@
 
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => _DataManager.AddWatched(entry, _UserName, watchedOn.Value));
+            GetEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName, watchedOn.Value));
 
-            _DataManager.SaveDataFile();
+            _dataManager.SaveDataFile();
 
             ResumeEvents();
         }
@@ -326,18 +332,18 @@
 
         private void ShowHistory(Object parameter)
         {
-            FileEntry fileEntry = GetFileEntry(parameter);
+            var fileEntry = GetFileEntry(parameter);
 
-            IEnumerable<Watch> watches = _Model.GetWatches(fileEntry);
+            var watches = _model.GetWatches(fileEntry);
 
-            _WindowFactory.OpenWatchesWindow(watches);
+            _windowFactory.OpenWatchesWindow(watches);
         }
 
         private void EditRunningTime(Object parameter)
         {
-            FileEntry fileEntry = GetFileEntry(parameter);
+            var fileEntry = GetFileEntry(parameter);
 
-            Nullable<UInt32> runningTime = _WindowFactory.OpenRunningTimeWindow(fileEntry.VideoLength);
+            var runningTime = _windowFactory.OpenRunningTimeWindow(fileEntry.VideoLength);
 
             if (runningTime.HasValue == false)
             {
@@ -346,7 +352,17 @@
 
             fileEntry.VideoLength = runningTime.Value;
 
-            _DataManager.SaveDataFile();
+            _dataManager.SaveDataFile();
+        }
+
+        private bool CanAddYoutubeLink()
+          => IsNotSynchronizing;
+
+        private void AddYoutubeLink()
+        {
+            _windowFactory.OpenAddYoutubeLinkVideo(_userName);
+
+            _dataManager.SaveDataFile();
         }
     }
 }

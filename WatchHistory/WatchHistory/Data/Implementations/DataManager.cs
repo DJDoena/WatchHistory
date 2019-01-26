@@ -10,113 +10,113 @@
 
     internal sealed class DataManager : IDataManager
     {
-        private readonly IIOServices _IOServices;
+        private readonly IIOServices _ioServices;
 
-        private readonly IFileObserver _FileObserver;
+        private readonly IFileObserver _fileObserver;
 
-        private readonly Object _FilesLock;
+        private readonly object _filesLock;
 
-        private readonly IFilesSerializer _FilesSerializer;
+        private readonly IFilesSerializer _filesSerializer;
 
-        private readonly String _DataFile;
+        private readonly string _dataFile;
 
-        private readonly String _SettingsFile;
+        private readonly string _settingsFile;
 
-        private static readonly DateTime _TurnOfTheCentury;
+        private static readonly DateTime _turnOfTheCentury;
 
-        private IEnumerable<String> _RootFolders;
+        private IEnumerable<string> _rootFolders;
 
-        private IEnumerable<String> _FileExtensions;
+        private IEnumerable<string> _fileExtensions;
 
-        private IEnumerable<String> _Users;
+        private IEnumerable<string> _users;
 
-        private Boolean _IsSynchronizing;
+        private bool _isSynchronizing;
 
-        private Dictionary<String, FileEntry> Files { get; set; }
+        private Dictionary<string, FileEntry> Files { get; set; }
 
-        private Boolean IsSuspended { get; set; }
+        private bool IsSuspended { get; set; }
 
         private event EventHandler _FilesChanged;
 
         static DataManager()
         {
-            _TurnOfTheCentury = new DateTime(1999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
+            _turnOfTheCentury = new DateTime(1999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
         }
 
-        public DataManager(String settingsFile
-            , String dataFile
+        public DataManager(string settingsFile
+            , string dataFile
             , IIOServices ioServices)
         {
-            _IOServices = ioServices;
+            _ioServices = ioServices;
 
-            _FilesLock = new Object();
+            _filesLock = new object();
 
-            _FileObserver = new FileObserver(ioServices);
+            _fileObserver = new FileObserver(ioServices);
 
-            _SettingsFile = settingsFile;
+            _settingsFile = settingsFile;
 
             LoadSettings();
 
-            _FilesSerializer = new FilesSerializer(ioServices);
+            _filesSerializer = new FilesSerializer(ioServices);
 
-            _FilesSerializer.CreateBackup(dataFile);
+            _filesSerializer.CreateBackup(dataFile);
 
-            _DataFile = dataFile;
+            _dataFile = dataFile;
 
             LoadData();
         }
 
         #region IDataManager
 
-        public IEnumerable<String> RootFolders
+        public IEnumerable<string> RootFolders
         {
-            get => _RootFolders.Select(folder => folder);
+            get => _rootFolders.Select(folder => folder);
             set
             {
-                value = new HashSet<String>(value);
+                value = new HashSet<string>(value);
 
-                _FileObserver.Observe(value, _FileExtensions);
+                _fileObserver.Observe(value, _fileExtensions);
 
-                _RootFolders = value.ToList();
+                _rootFolders = value.ToList();
 
                 SyncData();
             }
         }
 
-        public IEnumerable<String> FileExtensions
+        public IEnumerable<string> FileExtensions
         {
-            get => _FileExtensions.Select(ext => ext);
+            get => _fileExtensions.Select(ext => ext);
             set
             {
                 value = value.Select(ext => ext.ReplaceInvalidFileNameChars('_'));
 
-                value = new HashSet<String>(value);
+                value = new HashSet<string>(value);
 
-                _FileObserver.Observe(_RootFolders, value);
+                _fileObserver.Observe(_rootFolders, value);
 
-                _FileExtensions = value.ToList();
+                _fileExtensions = value.ToList();
 
                 SyncData();
             }
         }
 
-        public IEnumerable<String> Users
+        public IEnumerable<string> Users
         {
-            get => _Users.Select(user => user);
+            get => _users.Select(user => user);
             set
             {
-                value = new HashSet<String>(value);
+                value = new HashSet<string>(value);
 
-                _Users = value.ToList();
+                _users = value.ToList();
             }
         }
 
-        public Boolean IsSynchronizing
+        public bool IsSynchronizing
         {
-            get => _IsSynchronizing;
+            get => _isSynchronizing;
             private set
             {
-                _IsSynchronizing = value;
+                _isSynchronizing = value;
 
                 IsSynchronizingChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -130,8 +130,8 @@
             {
                 if (_FilesChanged == null)
                 {
-                    _FileObserver.Created += OnFileCreated;
-                    _FileObserver.Deleted += OnFileDeleted;
+                    _fileObserver.Created += OnFileCreated;
+                    _fileObserver.Deleted += OnFileDeleted;
                 }
 
                 _FilesChanged += value;
@@ -142,49 +142,57 @@
 
                 if (_FilesChanged == null)
                 {
-                    _FileObserver.Created -= OnFileCreated;
-                    _FileObserver.Deleted -= OnFileDeleted;
+                    _fileObserver.Created -= OnFileCreated;
+                    _fileObserver.Deleted -= OnFileDeleted;
                 }
             }
         }
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            lock (_FilesLock)
+            lock (_filesLock)
             {
-                return (Files.Values);
+                return Files.Values;
             }
         }
 
         public void AddWatched(FileEntry entry
-           , String userName)
+           , string userName)
             => AddWatched(entry, userName, DateTime.UtcNow);
 
         public void AddWatched(FileEntry entry
-            , String userName
+            , string userName
             , DateTime watchedOn)
         {
-            User user = TryGetUser(entry, userName);
+            lock (_filesLock)
+            {
+                var user = TryGetUser(entry, userName);
 
-            user = user ?? AddUser(entry, userName);
+                user = user ?? AddUser(entry, userName);
 
-            AddWatched(user, watchedOn);
+                AddWatched(user, watchedOn);
+            }
+
+            RaiseFilesChanged();
         }
 
         public void AddIgnore(FileEntry entry
-            , String userName)
+            , string userName)
         {
-            User user = TryGetUser(entry, userName) ?? AddUser(entry, userName);
+            lock (_filesLock)
+            {
+                var user = TryGetUser(entry, userName) ?? AddUser(entry, userName);
 
-            user.Ignore = true;
+                user.Ignore = true;
+            }
 
             RaiseFilesChanged();
         }
 
         public void UndoIgnore(FileEntry entry
-            , String userName)
+            , string userName)
         {
-            User user = TryGetUser(entry, userName);
+            var user = TryGetUser(entry, userName);
 
             if (user != null)
             {
@@ -195,41 +203,41 @@
         }
 
         public DateTime GetLastWatched(FileEntry entry
-            , String userName)
+            , string userName)
         {
-            User user = TryGetUser(entry, userName);
+            var user = TryGetUser(entry, userName);
 
-            DateTime lastWatched = new DateTime(0);
+            var lastWatched = new DateTime(0);
 
             if (user?.Watches?.HasItems() == true)
             {
                 lastWatched = user.Watches.Max(watch => watch.Value).ToLocalTime();
             }
 
-            return (lastWatched);
+            return lastWatched;
         }
 
         public DateTime GetCreationTime(FileEntry fileEntry)
         {
-            IFileInfo fi = _IOServices.GetFileInfo(fileEntry.FullName);
+            var fi = _ioServices.GetFileInfo(fileEntry.FullName);
 
-            DateTime creationTime = new DateTime(0);
+            var creationTime = new DateTime(0);
 
             if (fi.Exists)
             {
                 creationTime = fi.CreationTime;
             }
 
-            return (creationTime);
+            return creationTime;
         }
 
         public UInt32 GetVideoLength(FileEntry fileEntry)
         {
             try
             {
-                VideoReader videoReader = new VideoReader(_IOServices, fileEntry);
+                var videoReader = new VideoReader(_ioServices, fileEntry);
 
-                UInt32 videoLength = videoReader.GetLength();
+                var videoLength = videoReader.GetLength();
 
                 return videoLength;
             }
@@ -240,35 +248,35 @@
         }
         public void SaveSettingsFile()
         {
-            DefaultValues defaultValues = new DefaultValues()
+            var defaultValues = new DefaultValues()
             {
-                Users = _Users.ToArray(),
-                RootFolders = _RootFolders.ToArray(),
-                FileExtensions = _FileExtensions.ToArray()
+                Users = _users.ToArray(),
+                RootFolders = _rootFolders.ToArray(),
+                FileExtensions = _fileExtensions.ToArray()
             };
 
-            Settings settings = new Settings()
+            var settings = new Settings()
             {
                 DefaultValues = defaultValues
             };
 
-            SerializerHelper.Serialize(_IOServices, _SettingsFile, settings);
+            SerializerHelper.Serialize(_ioServices, _settingsFile, settings);
         }
 
         public void SaveDataFile()
         {
-            lock (_FilesLock)
+            lock (_filesLock)
             {
-                List<FileEntry> entries = Files.Values.ToList();
+                var entries = Files.Values.ToList();
 
                 entries.Sort((left, right) => left.FullName.CompareTo(right.FullName));
 
-                Files files = new Files()
+                var files = new Files()
                 {
                     Entries = entries.ToArray()
                 };
 
-                _FilesSerializer.SaveFile(_DataFile, files);
+                _filesSerializer.SaveFile(_dataFile, files);
             }
         }
 
@@ -276,16 +284,41 @@
         {
             IsSuspended = true;
 
-            _FileObserver.Suspend();
+            _fileObserver.Suspend();
         }
 
         public void Resume()
         {
             IsSuspended = false;
 
-            _FileObserver.Observe(_RootFolders, _FileExtensions);
+            _fileObserver.Observe(_rootFolders, _fileExtensions);
 
             SyncData();
+        }
+
+        public FileEntry TryCreateEntry(FileEntry newFileEntry)
+        {
+            var result = newFileEntry;
+
+            lock (_filesLock)
+            {
+                var key = newFileEntry.Key;
+
+                if (Files.TryGetValue(key, out var existingFileEntry))
+                {
+                    MergeEntry(existingFileEntry, newFileEntry);
+
+                    result = existingFileEntry;
+                }
+                else
+                {
+                    Files.Add(key, newFileEntry);
+                }
+            }
+
+            RaiseFilesChanged();
+
+            return result;
         }
 
         #endregion
@@ -295,7 +328,7 @@
             Settings settings;
             try
             {
-                settings = SerializerHelper.Deserialize<Settings>(_IOServices, _SettingsFile);
+                settings = SerializerHelper.Deserialize<Settings>(_ioServices, _settingsFile);
             }
             catch
             {
@@ -305,33 +338,33 @@
                 };
             }
 
-            _Users = settings?.DefaultValues?.Users ?? Enumerable.Empty<String>();
+            _users = settings?.DefaultValues?.Users ?? Enumerable.Empty<string>();
 
-            _RootFolders = settings?.DefaultValues?.RootFolders ?? Enumerable.Empty<String>();
+            _rootFolders = settings?.DefaultValues?.RootFolders ?? Enumerable.Empty<string>();
 
-            _FileExtensions = settings?.DefaultValues?.FileExtensions ?? Enumerable.Empty<String>();
+            _fileExtensions = settings?.DefaultValues?.FileExtensions ?? Enumerable.Empty<string>();
         }
 
         private void LoadData()
         {
-            Files files = _FilesSerializer.LoadData(_DataFile);
+            var files = _filesSerializer.LoadData(_dataFile);
 
-            lock (_FilesLock)
+            lock (_filesLock)
             {
-                Files = new Dictionary<String, FileEntry>(files?.Entries?.Length ?? 0);
+                Files = new Dictionary<string, FileEntry>(files?.Entries?.Length ?? 0);
 
-                IEnumerable<FileEntry> entries = files?.Entries ?? Enumerable.Empty<FileEntry>();
+                var entries = files?.Entries ?? Enumerable.Empty<FileEntry>();
 
                 entries.ForEach(entry => Files[entry.Key] = entry);
             }
         }
 
         private User AddUser(FileEntry entry
-            , String userName)
+            , string userName)
         {
-            List<User> users = entry.Users?.ToList() ?? new List<User>(1);
+            var users = entry.Users?.ToList() ?? new List<User>(1);
 
-            User user = new User()
+            var user = new User()
             {
                 UserName = userName
             };
@@ -340,27 +373,28 @@
 
             entry.Users = users.ToArray();
 
-            return (user);
+            return user;
         }
 
         private void AddWatched(User user
             , DateTime watchedOn)
         {
-            List<Watch> watches = user.Watches?.ToList() ?? new List<Watch>(1);
+            var watches = user.Watches?.ToList() ?? new List<Watch>(1);
 
-            watches.Add(new Watch() { Value = watchedOn });
+            watches.Add(new Watch()
+            {
+                Value = watchedOn
+            });
 
             user.Watches = watches.ToArray();
-
-            RaiseFilesChanged();
         }
 
         private static User TryGetUser(FileEntry entry
-            , String userName)
+            , string userName)
             => entry.Users?.Where(user => IsUser(user, userName)).FirstOrDefault();
 
-        private static Boolean IsUser(User user
-            , String userName)
+        private static bool IsUser(User user
+            , string userName)
             => user.UserName == userName;
 
         private void SyncData()
@@ -371,34 +405,34 @@
             }
         }
 
-        private Boolean HasValidEvents(FileEntry entry)
+        private bool HasValidEvents(FileEntry entry)
             => entry.Users?.HasItemsWhere(HasEvents) == true;
 
-        private static Boolean HasEvents(User user)
-            => user.Watches?.HasItemsWhere(w => w.SourceSpecified == false && w.Value > _TurnOfTheCentury) == true;
+        private static bool HasEvents(User user)
+            => user.Watches?.HasItemsWhere(w => w.SourceSpecified == false && w.Value > _turnOfTheCentury) == true;
 
         private void GetActualFiles()
         {
             IsSynchronizing = true;
 
-            IEnumerable<Task<IEnumerable<String>>> tasks = _RootFolders.Select(GetActualFiles).SelectMany(task => task);
+            var tasks = _rootFolders.Select(GetActualFiles).SelectMany(task => task);
 
-            Task<IEnumerable<String>[]> readyTask = Task.WhenAll(tasks);
+            var readyTask = Task.WhenAll(tasks);
 
             readyTask.ContinueWith(ProcessActualFiles);
         }
 
-        private IEnumerable<Task<IEnumerable<String>>> GetActualFiles(String folder)
-            => _FileExtensions.Select(ext => GetActualFiles(folder, ext));
+        private IEnumerable<Task<IEnumerable<string>>> GetActualFiles(string folder)
+            => _fileExtensions.Select(ext => GetActualFiles(folder, ext));
 
-        private Task<IEnumerable<String>> GetActualFiles(String folder, String fileExtension)
+        private Task<IEnumerable<string>> GetActualFiles(string folder, string fileExtension)
             => Task.Run(() => GetFiles(folder, fileExtension));
 
-        private void ProcessActualFiles(Task<IEnumerable<String>[]> task)
+        private void ProcessActualFiles(Task<IEnumerable<string>[]> task)
         {
-            IEnumerable<String> actualFiles = task.Result.SelectMany(file => file).ToList();
+            var actualFiles = task.Result.SelectMany(file => file).ToList();
 
-            lock (_FilesLock)
+            lock (_filesLock)
             {
                 actualFiles.ForEach(AddActualFile);
 
@@ -412,17 +446,17 @@
             RaiseFilesChanged();
         }
 
-        private IEnumerable<String> GetFiles(String rootFolder
-            , String fileExtension)
-            => _IOServices.Folder.Exists(rootFolder)
-                ? (_IOServices.Folder.GetFiles(rootFolder, "*." + fileExtension, System.IO.SearchOption.AllDirectories))
-                : (Enumerable.Empty<String>());
+        private IEnumerable<string> GetFiles(string rootFolder
+            , string fileExtension)
+            => _ioServices.Folder.Exists(rootFolder)
+                ? (_ioServices.Folder.GetFiles(rootFolder, "*." + fileExtension, System.IO.SearchOption.AllDirectories))
+                : (Enumerable.Empty<string>());
 
-        private void AddActualFile(String actualFile)
+        private void AddActualFile(string actualFile)
         {
-            String key = actualFile.ToLower();
+            var key = FileEntry.GetKey(actualFile);
 
-            if (Files.TryGetValue(key, out FileEntry entry) == false)
+            if (Files.TryGetValue(key, out var entry) == false)
             {
                 entry = new FileEntry()
                 {
@@ -436,25 +470,29 @@
 
             if (entry.TitleSpecified == false)
             {
-                (new VideoInfoAdder(_IOServices, entry)).Add();
+                (new VideoInfoAdder(_ioServices, entry)).Add();
             }
 
             if (actualFile.EndsWith(Constants.DvdProfilerFileExtension))
             {
-                (new DvdWatchesProcessor(_IOServices)).UpdateFromDvdWatches(entry);
+                (new DvdWatchesProcessor(_ioServices)).Update(entry);
+            }
+            else if (actualFile.EndsWith(Constants.YoutubeFileExtension))
+            {
+                (new YoutubeWatchesProcessor(_ioServices)).Update(entry);
             }
         }
 
-        private void RemoveObsoletesFiles(IEnumerable<String> actualFiles)
+        private void RemoveObsoletesFiles(IEnumerable<string> actualFiles)
         {
-            List<KeyValuePair<String, FileEntry>> files = Files.ToList();
+            var files = Files.ToList();
 
-            List<String> fileKeys = actualFiles.Select(file => file.ToLower()).ToList();
+            var fileKeys = actualFiles.Select(file => file.ToLower()).ToList();
 
             files.ForEach(file => TryRemoveFile(fileKeys, file));
         }
 
-        private void TryRemoveFile(List<String> fileKeys, KeyValuePair<String, FileEntry> file)
+        private void TryRemoveFile(List<string> fileKeys, KeyValuePair<string, FileEntry> file)
         {
             if ((fileKeys.Contains(file.Key) == false) && (HasValidEvents(file.Value) == false))
             {
@@ -462,14 +500,14 @@
             }
         }
 
-        private void OnFileDeleted(Object sender
+        private void OnFileDeleted(object sender
             , System.IO.FileSystemEventArgs e)
         {
-            lock (_FilesLock)
+            lock (_filesLock)
             {
-                String key = e.FullPath.ToLower();
+                string key = e.FullPath.ToLower();
 
-                if ((Files.TryGetValue(key, out FileEntry entry)) && (HasValidEvents(entry) == false))
+                if ((Files.TryGetValue(key, out var entry)) && (HasValidEvents(entry) == false))
                 {
                     Files.Remove(key);
                 }
@@ -478,7 +516,7 @@
             RaiseFilesChanged();
         }
 
-        private void OnFileCreated(Object sender
+        private void OnFileCreated(object sender
             , System.IO.FileSystemEventArgs e)
         {
             OnFileCreated(e, new FileEntry());
@@ -492,11 +530,11 @@
             OnFileCreated(e.FullPath, entry);
         }
 
-        private void OnFileCreated(String fileName, FileEntry entry)
+        private void OnFileCreated(string fileName, FileEntry entry)
         {
-            lock (_FilesLock)
+            lock (_filesLock)
             {
-                String key = fileName.ToLower();
+                string key = entry.Key;
 
                 if (Files.ContainsKey(key) == false)
                 {
@@ -509,5 +547,66 @@
 
         private void RaiseFilesChanged()
             => _FilesChanged?.Invoke(this, EventArgs.Empty);
+
+        private void MergeEntry(FileEntry existingEntry, FileEntry newEntry)
+        {
+            existingEntry.Title = newEntry.Title;
+
+            if (newEntry.VideoLength > 0)
+            {
+                existingEntry.VideoLength = newEntry.VideoLength;
+            }
+
+            MergeUsers(existingEntry, newEntry);
+        }
+
+        private static void MergeUsers(FileEntry existingEntry, FileEntry newEntry)
+        {
+            if (newEntry.Users == null)
+            {
+                return;
+            }
+            else if (existingEntry.Users == null)
+            {
+                existingEntry.Users = newEntry.Users;
+
+                return;
+            }
+
+            foreach (var newUser in newEntry.Users)
+            {
+                MergeUser(existingEntry, newUser);
+            }
+        }
+
+        private static void MergeUser(FileEntry existingEntry, User newUser)
+        {
+            var existingUser = existingEntry.Users.FirstOrDefault(eu => eu.UserName == newUser.UserName);
+
+            if (existingUser == null)
+            {
+                existingEntry.Users = newUser.Enumerate().Union(existingEntry.Users).ToArray();
+
+                return;
+            }
+
+            MergeWatches(newUser, existingUser);
+        }
+
+        private static void MergeWatches(User newUser, User existingUser)
+        {
+            if (newUser.Watches == null)
+            {
+                return;
+            }
+            else if (existingUser.Watches == null)
+            {
+                existingUser.Watches = newUser.Watches;
+
+                return;
+            }
+
+            existingUser.Watches = existingUser.Watches.Union(newUser.Watches).ToArray();
+        }
     }
 }

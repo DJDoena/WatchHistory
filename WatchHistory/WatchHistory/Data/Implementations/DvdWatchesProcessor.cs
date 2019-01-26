@@ -1,6 +1,5 @@
 ﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using AbstractionLayer.IOServices;
@@ -20,15 +19,19 @@
             _IOServices = ioServices;
         }
 
-        internal void UpdateFromDvdWatches(FileEntry entry)
+        internal void Update(FileEntry entry)
         {
             DvdWatches watches = null;
-            try
+
+            if (_IOServices.File.Exists(entry.FullName))
             {
-                watches = SerializerHelper.Deserialize<DvdWatches>(_IOServices, entry.FullName);
+                try
+                {
+                    watches = SerializerHelper.Deserialize<DvdWatches>(_IOServices, entry.FullName);
+                }
+                catch
+                { }
             }
-            catch
-            { }
 
             entry.Title = watches?.Title;
 

@@ -1,7 +1,7 @@
 [Setup]
 AppName=WatchHistory
 AppId=WatchHistory
-AppVerName=WatchHistory 1.3.4.0
+AppVerName=WatchHistory 1.4.0.0
 AppCopyright=Copyright © Doena Soft. 2016 - 2019
 AppPublisher=Doena Soft.
 ; AppPublisherURL=http://doena-journal.net/en/dvd-profiler-tools/
@@ -22,7 +22,7 @@ ShowLanguageDialog=no
 VersionInfoCompany=Doena Soft.
 VersionInfoCopyright=2016 - 2019
 VersionInfoDescription=WatchHistory Setup
-VersionInfoVersion=1.3.4.0
+VersionInfoVersion=1.4.0.0
 UninstallDisplayIcon={app}\djdsoft.ico
 
 [Languages]
@@ -46,6 +46,13 @@ Source: "WatchHistory.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Xceed.Wpf.Toolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "NReco.VideoInfo.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
+; Source: "Google.Apis.Auth.dll"; DestDir: "{app}"; Flags: ignoreversion
+; Source: "Google.Apis.Auth.PlatformServices.dll"; DestDir: "{app}"; Flags: ignoreversion
+; Source: "Google.Apis.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+; Source: "Google.Apis.dll"; DestDir: "{app}"; Flags: ignoreversion
+; Source: "Google.Apis.PlatformServices.dll"; DestDir: "{app}"; Flags: ignoreversion
+; Source: "Google.Apis.YouTube.v3.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "de\DVDProfilerHelper.resources.dll"; DestDir: "{app}\de"; Flags: ignoreversion
 

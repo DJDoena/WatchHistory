@@ -40,10 +40,6 @@
         [XmlElement]
         public String FullName;
 
-        [XmlIgnore]
-        public String Key
-            => FullName?.ToLower() ?? String.Empty;
-
         [XmlAttribute]
         public DateTime CreationTime
         {

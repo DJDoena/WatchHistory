@@ -96,9 +96,9 @@
         private void CreateCollectionFile(String folder
             , EpisodeTitle title)
         {
-            String fileName = _IOServices.Path.Combine(folder, title.FileName + Constants.DvdProfilerFileExtension);
+            var fileName = _IOServices.Path.Combine(folder, title.FileName + Constants.DvdProfilerFileExtension);
 
-            DvdWatches watches = new DvdWatches()
+            var watches = new DvdWatches()
             {
                 Title = title.Title,
                 Watches = title.Watches?.ToArray()
@@ -106,9 +106,17 @@
 
             SerializerHelper.Serialize(_IOServices, fileName, watches);
 
-            IFileInfo fi = _IOServices.GetFileInfo(fileName);
+            var fi = _IOServices.GetFileInfo(fileName);
 
             fi.CreationTime = title.PurchaseDate;
+
+            var fileEntry = new FileEntry()
+            {
+                FullName = fileName,
+                Title = title.Title,
+            };
+
+            _DataManager.TryCreateEntry(fileEntry);
         }
     }
 }

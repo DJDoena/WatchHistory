@@ -14,10 +14,8 @@
 
         private readonly IWindowFactory _WindowFactory;
 
-        private readonly ICommand _SelectCommand;
-
         private String _SelectedUser;
-        
+
         public SelectUserViewModel(IDataManager dataManager
             , IWindowFactory windowFactory)
         {
@@ -26,7 +24,7 @@
 
             _SelectedUser = _DataManager.Users.First();
 
-            _SelectCommand = new RelayCommand(Select);
+            SelectCommand = new RelayCommand(Select);
         }
 
         #region INotifyPropertyChanged
@@ -54,8 +52,7 @@
             }
         }
 
-        public ICommand SelectCommand
-            => _SelectCommand;
+        public ICommand SelectCommand { get; }
 
         public event EventHandler Closing;
 

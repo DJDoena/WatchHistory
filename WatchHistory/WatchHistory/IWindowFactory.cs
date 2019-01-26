@@ -8,16 +8,18 @@
     {
         void OpenSelectUserWindow();
 
-        void OpenMainWindow(String userName);
+        void OpenMainWindow(string userName);
 
         void OpenSettingsWindow();
 
-        void OpenIgnoreWindow(String userName);
+        void OpenIgnoreWindow(string userName);
 
-        Nullable<DateTime> OpenWatchedOnWindow();
+        DateTime? OpenWatchedOnWindow();
 
-        Nullable<UInt32> OpenRunningTimeWindow(UInt32 seconds);
+        uint? OpenRunningTimeWindow(uint seconds);
 
         void OpenWatchesWindow(IEnumerable<Watch> watches);
+
+        void OpenAddYoutubeLinkVideo(string userName);
     }
 }

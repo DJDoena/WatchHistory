@@ -10,6 +10,7 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Settings" Command="{Binding OpenSettingsCommand}" />
             <MenuItem Header="Import DVD Profiler Collection" Command="{Binding ImportCollectionCommand}" />
+            <MenuItem Header="Add Youtube Link" Command="{Binding AddYoutubeLinkCommand}" />
             <MenuItem Header="Undo Hide" Command="{Binding UndoIgnoreCommand}" />
             <MenuItem Header="Check for Update" Command="{Binding CheckForUpdateCommand}" />
         </Menu>

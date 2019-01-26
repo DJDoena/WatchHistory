@@ -3,8 +3,8 @@
     using System;
     using System.Text;
     using AbstractionLayer.IOServices;
-    using DoenaSoft.WatchHistory.Implementations;
     using ToolBox.Extensions;
+    using WatchHistory.Implementations;
 
     internal sealed class VideoInfoAdder
     {
