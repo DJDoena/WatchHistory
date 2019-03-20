@@ -145,6 +145,20 @@
             }
         }
 
+        public bool SearchInPath
+        {
+            get => _model.SearchInPath;
+            set
+            {
+                if (value != _model.SearchInPath)
+                {
+                    _model.SearchInPath = value;
+
+                    RaisePropertyChanged(nameof(SearchInPath));
+                }
+            }
+        }
+
         public ObservableCollection<IFileEntryViewModel> Entries
         {
             get
@@ -228,7 +242,7 @@
             => _windowFactory.OpenSettingsWindow();
 
         private void UndoIgnore()
-            => _windowFactory.OpenIgnoreWindow(_userName);
+            => _windowFactory.OpenIgnoreWindow(_userName, Filter);
 
         private void PlayFile(Object parameter)
         {

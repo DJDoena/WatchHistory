@@ -15,19 +15,17 @@
 
     internal sealed class IgnoreViewModel : IIgnoreViewModel
     {
-        private readonly IIgnoreModel _Model;
+        private readonly IIgnoreModel _model;
 
-        private readonly IDataManager _DataManager;
+        private readonly IDataManager _dataManager;
 
-        private readonly IIOServices _IOServices;
+        private readonly IIOServices _ioServices;
 
-        private readonly IWindowFactory _WindowFactory;
+        private readonly IWindowFactory _windowFactory;
 
-        private readonly String _UserName;
+        private readonly String _userName;
 
-        private readonly ICommand _UndoIgnoreCommand;
-
-        private event PropertyChangedEventHandler _PropertyChanged;
+        private event PropertyChangedEventHandler _propertyChanged;
 
         public IgnoreViewModel(IIgnoreModel model
             , IDataManager dataManager
@@ -35,13 +33,13 @@
             , IWindowFactory windowFactory
             , String userName)
         {
-            _Model = model;
-            _DataManager = dataManager;
-            _IOServices = ioServices;
-            _WindowFactory = windowFactory;
-            _UserName = userName;
+            _model = model;
+            _dataManager = dataManager;
+            _ioServices = ioServices;
+            _windowFactory = windowFactory;
+            _userName = userName;
 
-            _UndoIgnoreCommand = new ParameterizedRelayCommand(UndoIgnore);
+            UndoIgnoreCommand = new ParameterizedRelayCommand(UndoIgnore);
         }
 
         #region INotifyPropertyChanged
@@ -50,20 +48,20 @@
         {
             add
             {
-                if (_PropertyChanged == null)
+                if (_propertyChanged == null)
                 {
-                    _Model.FilesChanged += OnModelFilesChanged;
+                    _model.FilesChanged += OnModelFilesChanged;
                 }
 
-                _PropertyChanged += value;
+                _propertyChanged += value;
             }
             remove
             {
-                _PropertyChanged -= value;
+                _propertyChanged -= value;
 
-                if (_PropertyChanged == null)
+                if (_propertyChanged == null)
                 {
-                    _Model.FilesChanged -= OnModelFilesChanged;
+                    _model.FilesChanged -= OnModelFilesChanged;
                 }
             }
         }
@@ -74,14 +72,28 @@
 
         public String Filter
         {
-            get => _Model.Filter;
+            get => _model.Filter;
             set
             {
-                if (value != _Model.Filter)
+                if (value != _model.Filter)
                 {
-                    _Model.Filter = value;
+                    _model.Filter = value;
 
                     RaisePropertyChanged(nameof(Filter));
+                }
+            }
+        }
+
+        public bool SearchInPath
+        {
+            get => _model.SearchInPath;
+            set
+            {
+                if (value != _model.SearchInPath)
+                {
+                    _model.SearchInPath = value;
+
+                    RaisePropertyChanged(nameof(SearchInPath));
                 }
             }
         }
@@ -90,16 +102,15 @@
         {
             get
             {
-                IEnumerable<FileEntry> modelEntries = _Model.GetFiles();
+                IEnumerable<FileEntry> modelEntries = _model.GetFiles();
 
-                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, _UserName, _DataManager, _IOServices, SortColumn.File, true);
+                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, _userName, _dataManager, _ioServices, SortColumn.File, true);
 
                 return (viewModelEntries);
             }
         }
 
-        public ICommand UndoIgnoreCommand
-           => _UndoIgnoreCommand;
+        public ICommand UndoIgnoreCommand { get; }
 
         #endregion
 
@@ -107,9 +118,9 @@
         {
             IEnumerable<IFileEntryViewModel> entries = ((IList)parameter).Cast<IFileEntryViewModel>().ToList();
 
-            entries.ForEach(entry => _DataManager.UndoIgnore(entry.FileEntry, _UserName));
+            entries.ForEach(entry => _dataManager.UndoIgnore(entry.FileEntry, _userName));
 
-            _DataManager.SaveDataFile();
+            _dataManager.SaveDataFile();
         }
 
         private void OnModelFilesChanged(Object sender
@@ -117,6 +128,6 @@
             => RaisePropertyChanged(nameof(Entries));
 
         private void RaisePropertyChanged(String attribute)
-            => _PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+            => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

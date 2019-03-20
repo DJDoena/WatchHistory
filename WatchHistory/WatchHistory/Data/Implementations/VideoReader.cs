@@ -54,9 +54,9 @@
             {
                 try
                 {
-                    VideoInfo info = SerializerHelper.Deserialize<VideoInfo>(_IOServices, xmlFile);
+                    var info = SerializerHelper.Deserialize<Doc>(_IOServices, xmlFile);
 
-                    return info.Duration;
+                    return info.VideoInfo.Duration;
                 }
                 catch
                 { }

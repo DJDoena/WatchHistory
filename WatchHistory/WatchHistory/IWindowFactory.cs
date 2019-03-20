@@ -12,7 +12,7 @@
 
         void OpenSettingsWindow();
 
-        void OpenIgnoreWindow(string userName);
+        void OpenIgnoreWindow(string userName, string filter);
 
         DateTime? OpenWatchedOnWindow();
 

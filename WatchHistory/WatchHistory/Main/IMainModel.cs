@@ -10,6 +10,8 @@
 
         Boolean IgnoreWatched { get; set; }
 
+        Boolean SearchInPath { get; set; }
+
         event EventHandler FilesChanged;
 
         IEnumerable<FileEntry> GetFiles();

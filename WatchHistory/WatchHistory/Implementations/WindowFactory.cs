@@ -91,11 +91,14 @@
             window.ShowDialog();
         }
 
-        public void OpenIgnoreWindow(string userName)
+        public void OpenIgnoreWindow(string userName, string filter)
         {
             var model = new IgnoreModel(_dataManager, userName);
 
-            var viewModel = new IgnoreViewModel(model, _dataManager, _ioServices, this, userName);
+            var viewModel = new IgnoreViewModel(model, _dataManager, _ioServices, this, userName)
+            {
+                Filter = filter,
+            };
 
             var window = new IgnoreWindow()
             {

@@ -10,6 +10,8 @@
     {
         String Filter { get; set; }
 
+        Boolean SearchInPath { get; set; }
+
         ObservableCollection<IFileEntryViewModel> Entries { get; }
 
         ICommand UndoIgnoreCommand { get; }

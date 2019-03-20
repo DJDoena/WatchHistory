@@ -51,5 +51,19 @@
 
             return VideoLength;
         }
+
+        public override int GetHashCode() => Key.GetHashCode();
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is FileEntry other))
+            {
+                return false;
+            }
+
+            bool equals = Key == other.Key;
+
+            return equals;
+        }
     }
 }

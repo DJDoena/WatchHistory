@@ -13,20 +13,20 @@
 
     internal sealed class MainModel : ModelBase, IMainModel
     {
-        private readonly IIOServices _IOServices;
+        private readonly IIOServices _ioServices;
 
-        private readonly IUIServices _UIServices;
+        private readonly IUIServices _uiServices;
 
-        private Boolean _IgnoreWatched;
-
+        private Boolean _ignoreWatched;
+        
         public MainModel(IDataManager dataManager
             , IIOServices ioServices
             , IUIServices uiServices
             , String userName)
             : base(dataManager, userName)
         {
-            _IOServices = ioServices;
-            _UIServices = uiServices;
+            _ioServices = ioServices;
+            _uiServices = uiServices;
             IgnoreWatched = true;
         }
 
@@ -34,12 +34,12 @@
 
         public Boolean IgnoreWatched
         {
-            get => _IgnoreWatched;
+            get => _ignoreWatched;
             set
             {
-                if (value != _IgnoreWatched)
+                if (value != _ignoreWatched)
                 {
-                    _IgnoreWatched = value;
+                    _ignoreWatched = value;
 
                     RaiseFilesChanged(EventArgs.Empty);
                 }
@@ -48,36 +48,36 @@
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            IEnumerable<FileEntry> allFiles = _DataManager.GetFiles();
+            var allFiles = _DataManager.GetFiles();
 
-            IEnumerable<FileEntry> notIgnoredFiles = allFiles.Except(allFiles.Where(UserIgnores));
+            var notIgnoredFiles = allFiles.Except(allFiles.Where(UserIgnores));
 
-            IEnumerable<FileEntry> filteredFiles = notIgnoredFiles.Where(ContainsFilter).ToList();
+            var filteredFiles = notIgnoredFiles.Where(ContainsFilter);
 
-            IEnumerable<FileEntry> unwatchedFiles = filteredFiles.Except(filteredFiles.Where(UserHasWatched));
+            var unwatchedFiles = IgnoreWatched ? filteredFiles.Except(filteredFiles.Where(UserHasWatched)) : filteredFiles;
 
-            IEnumerable<FileEntry> result = IgnoreWatched ? unwatchedFiles.ToList() : filteredFiles;
+            var result = unwatchedFiles.ToList();
 
-            return (result);
+            return result;
         }
 
         public void ImportCollection()
         {
             OpenFileDialogOptions options = GetImportCollectionFileDialogOptions();
 
-            if (_UIServices.ShowOpenFileDialog(options, out String fileName))
+            if (_uiServices.ShowOpenFileDialog(options, out String fileName))
             {
                 try
                 {
-                    Collection collection = SerializerHelper.Deserialize<Collection>(_IOServices, fileName);
+                    Collection collection = SerializerHelper.Deserialize<Collection>(_ioServices, fileName);
 
-                    CollectionProcessor processor = new CollectionProcessor(collection, _DataManager, _IOServices);
+                    CollectionProcessor processor = new CollectionProcessor(collection, _DataManager, _ioServices);
 
                     processor.Process();
                 }
                 catch
                 {
-                    _UIServices.ShowMessageBox("Collection file could not be read", String.Empty, Buttons.OK, Icon.Warning);
+                    _uiServices.ShowMessageBox("Collection file could not be read", String.Empty, Buttons.OK, Icon.Warning);
                 }
             }
 
@@ -86,7 +86,7 @@
 
         public void PlayFile(FileEntry fileEntry)
         {
-            if (_IOServices.GetFileInfo(fileEntry.FullName).Exists)
+            if (_ioServices.GetFileInfo(fileEntry.FullName).Exists)
             {
                 Process.Start(fileEntry.FullName);
             }
@@ -97,7 +97,7 @@
 
         public void OpenFileLocation(FileEntry fileEntry)
         {
-            if (_IOServices.GetFileInfo(fileEntry.FullName).Exists)
+            if (_ioServices.GetFileInfo(fileEntry.FullName).Exists)
             {
                 Process.Start("explorer.exe", $"/select, \"{fileEntry.FullName}\"");
             }

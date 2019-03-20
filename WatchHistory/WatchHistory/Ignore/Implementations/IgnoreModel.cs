@@ -17,13 +17,15 @@
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            IEnumerable<FileEntry> allFiles = _DataManager.GetFiles();
+            var allFiles = _DataManager.GetFiles();
 
-            IEnumerable<FileEntry> ignoredFiles = allFiles.Where(UserIgnores);
+            var ignoredFiles = allFiles.Where(UserIgnores);
 
-            IEnumerable<FileEntry> filteredFiles = ignoredFiles.Where(ContainsFilter).ToList();
+            var filteredFiles = ignoredFiles.Where(ContainsFilter);
 
-            return (filteredFiles);
+            var result = filteredFiles.ToList();
+
+            return filteredFiles;
         }
 
         #endregion

@@ -16,13 +16,23 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Column="0" Grid.Row="0">
-            <DockPanel DockPanel.Dock="Left">
-                <TextBlock DockPanel.Dock="Left"
+            <DockPanel Grid.Column="0" Grid.Row="0">
+                <DockPanel DockPanel.Dock="Right">
+                    <TextBlock DockPanel.Dock="Left"
+                               Text="Search in File Path: "
+                               Margin="5,5,5,5"/>
+                    <CheckBox DockPanel.Dock="Right"
+                              IsChecked="{Binding SearchInPath}"
+                              Margin="5,6,5,5"/>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Left">
+                    <TextBlock DockPanel.Dock="Left"
                                Text="Filter: "
                                Margin="5,5,5,5"/>
-                <TextBox DockPanel.Dock="Right" Name="FilterTextBox"
+                    <TextBox DockPanel.Dock="Right" Name="FilterTextBox"
                              Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"
                              Margin="5,5,5,5"/>
+                </DockPanel>
             </DockPanel>
         </DockPanel>
 

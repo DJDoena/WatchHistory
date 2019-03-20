@@ -14,6 +14,8 @@
 
         Boolean IgnoreWatched { get; set; }
 
+        Boolean SearchInPath { get; set; }
+
         ObservableCollection<IFileEntryViewModel> Entries { get; }
 
         ICommand AddWatchedCommand { get; }

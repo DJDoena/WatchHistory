@@ -75,7 +75,10 @@
             {
                 value = new HashSet<string>(value);
 
-                _fileObserver.Observe(value, _fileExtensions);
+                if (IsSuspended == false)
+                {
+                    _fileObserver.Observe(value, _fileExtensions);
+                }
 
                 _rootFolders = value.ToList();
 
@@ -92,7 +95,10 @@
 
                 value = new HashSet<string>(value);
 
-                _fileObserver.Observe(_rootFolders, value);
+                if (IsSuspended == false)
+                {
+                    _fileObserver.Observe(_rootFolders, value);
+                }
 
                 _fileExtensions = value.ToList();
 

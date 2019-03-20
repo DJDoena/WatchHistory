@@ -36,11 +36,11 @@
 
         private void TryAddVideoInfo(String xmlFile)
         {
-            VideoInfo info = SerializerHelper.Deserialize<VideoInfo>(_IOServices, xmlFile);
+            var info = SerializerHelper.Deserialize<Doc>(_IOServices, xmlFile);
 
-            _FileEntry.VideoLength = info.Duration;
+            _FileEntry.VideoLength = info.VideoInfo.Duration;
 
-            _FileEntry.Title = BuildTitle(info.Episode);
+            _FileEntry.Title = BuildTitle(info.VideoInfo.Episode);
         }
 
         private static String BuildTitle(Episode episode)

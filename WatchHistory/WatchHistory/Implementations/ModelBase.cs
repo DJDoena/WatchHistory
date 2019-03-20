@@ -14,6 +14,8 @@
 
         private String _Filter;
 
+        private Boolean _SearchInPath;
+
         private event EventHandler _FilesChanged;
 
         protected ModelBase(IDataManager dataManager
@@ -21,6 +23,7 @@
         {
             _DataManager = dataManager;
             _UserName = userName;
+            _SearchInPath = false;
         }
 
         public String Filter
@@ -31,6 +34,20 @@
                 if (value != _Filter)
                 {
                     _Filter = value;
+
+                    RaiseFilesChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        public Boolean SearchInPath
+        {
+            get => _SearchInPath;
+            set
+            {
+                if (value != _SearchInPath)
+                {
+                    _SearchInPath = value;
 
                     RaiseFilesChanged(EventArgs.Empty);
                 }
@@ -83,9 +100,18 @@
 
         private Boolean ContainsFilter(FileEntry file
             , String filter)
-            => file.TitleSpecified
-                ? ContainsFilter(file.Title, filter)
-                : ContainsFilterInFileName(file, filter);
+        {
+            bool contains = file.TitleSpecified
+                  ? ContainsFilter(file.Title, filter)
+                  : ContainsFilterInFileName(file, filter);
+
+            if (!contains && SearchInPath)
+            {
+                contains = ContainsFilter(file.FullName, filter);
+            }
+
+            return contains;
+        }
 
         private Boolean ContainsFilterInFileName(FileEntry file, String filter)
         {
