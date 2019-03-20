@@ -5,11 +5,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WatchHistory")]
+[assembly: AssemblyTitle("Watch History")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Doena Soft.")]
-[assembly: AssemblyProduct("WatchHistory")]
+[assembly: AssemblyProduct("Watch History")]
 [assembly: AssemblyCopyright("Copyright © Doena Soft. 2016 - 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
