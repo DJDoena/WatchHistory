@@ -19,7 +19,7 @@
             => _Watch.SourceSpecified ? _Watch.Source : "Watch History";
 
         public String Watched
-            => ViewModelHelper.GetFormattedDateTime(_Watch.Value);
+            => ViewModelHelper.GetFormattedDateTime(_Watch.Value.ToLocalTime());
 
         #endregion
     }

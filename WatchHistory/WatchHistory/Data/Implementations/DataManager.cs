@@ -213,7 +213,7 @@
         {
             var user = TryGetUser(entry, userName);
 
-            var lastWatched = new DateTime(0);
+            var lastWatched = new DateTime(0, DateTimeKind.Local);
 
             if (user?.Watches?.HasItems() == true)
             {
@@ -417,6 +417,9 @@
         private static bool HasEvents(User user)
             => user.Watches?.HasItemsWhere(w => w.SourceSpecified == false && w.Value > _turnOfTheCentury) == true;
 
+        private bool IsProtected(FileEntry entry)
+            => entry.FullName.EndsWith(Constants.DvdProfilerFileExtension) && entry.VideoLengthSpecified;
+
         private void GetActualFiles()
         {
             IsSynchronizing = true;
@@ -460,18 +463,22 @@
 
         private void AddActualFile(string actualFile)
         {
-            var key = FileEntry.GetKey(actualFile);
-
-            if (Files.TryGetValue(key, out var entry) == false)
+            FileEntry entry;
+            lock (_filesLock)
             {
-                entry = new FileEntry()
+                var key = FileEntry.GetKey(actualFile);
+
+                if (Files.TryGetValue(key, out entry) == false)
                 {
-                    FullName = actualFile,
-                };
+                    entry = new FileEntry()
+                    {
+                        FullName = actualFile,
+                    };
 
-                entry.CreationTime = entry.GetCreationTime(this);
+                    entry.CreationTime = entry.GetCreationTime(this);
 
-                Files.Add(key, entry);
+                    Files.Add(key, entry);
+                }
             }
 
             if (entry.TitleSpecified == false)
@@ -491,18 +498,24 @@
 
         private void RemoveObsoletesFiles(IEnumerable<string> actualFiles)
         {
-            var files = Files.ToList();
+            lock (_filesLock)
+            {
+                var files = Files.ToList();
 
-            var fileKeys = actualFiles.Select(file => file.ToLower()).ToList();
+                var fileKeys = actualFiles.Select(file => file.ToLower()).ToList();
 
-            files.ForEach(file => TryRemoveFile(fileKeys, file));
+                files.ForEach(file => TryRemoveFile(fileKeys, file));
+            }
         }
 
         private void TryRemoveFile(List<string> fileKeys, KeyValuePair<string, FileEntry> file)
         {
-            if ((fileKeys.Contains(file.Key) == false) && (HasValidEvents(file.Value) == false))
+            lock (_filesLock)
             {
-                Files.Remove(file.Key);
+                if ((fileKeys.Contains(file.Key) == false) && (HasValidEvents(file.Value) == false) && (IsProtected(file.Value) == false))
+                {
+                    Files.Remove(file.Key);
+                }
             }
         }
 
@@ -513,7 +526,7 @@
             {
                 string key = e.FullPath.ToLower();
 
-                if ((Files.TryGetValue(key, out var entry)) && (HasValidEvents(entry) == false))
+                if ((Files.TryGetValue(key, out var entry)) && (HasValidEvents(entry) == false) && (IsProtected(entry) == false))
                 {
                     Files.Remove(key);
                 }
