@@ -11,9 +11,10 @@
 
         public static string GetKey(string fullName)
         {
+            string key;
             if (string.IsNullOrEmpty(fullName))
             {
-                return string.Empty;
+                key = string.Empty;
             }
             else if (fullName.EndsWith(Constants.YoutubeFileExtension))
             {
@@ -24,12 +25,14 @@
                     parts[partIndex] = parts[partIndex].ToLowerInvariant();
                 }
 
-                var key = string.Join("\\", parts);
-
-                return key;
+                key = string.Join("\\", parts);
+            }
+            else
+            {
+                key = fullName.ToLowerInvariant();
             }
 
-            return fullName.ToLowerInvariant();
+            return key;
         }
 
         internal DateTime GetCreationTime(IDataManager dataManager)

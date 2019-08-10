@@ -524,7 +524,7 @@
         {
             lock (_filesLock)
             {
-                string key = e.FullPath.ToLower();
+                var key = FileEntry.GetKey(e.FullPath);
 
                 if ((Files.TryGetValue(key, out var entry)) && (HasValidEvents(entry) == false) && (IsProtected(entry) == false))
                 {
@@ -538,30 +538,22 @@
         private void OnFileCreated(object sender
             , System.IO.FileSystemEventArgs e)
         {
-            OnFileCreated(e, new FileEntry());
+            var entry = new FileEntry()
+            {
+                FullName = e.FullPath,
+            };
 
-            RaiseFilesChanged();
-        }
-
-        private void OnFileCreated(System.IO.FileSystemEventArgs e
-            , FileEntry entry)
-        {
-            OnFileCreated(e.FullPath, entry);
-        }
-
-        private void OnFileCreated(string fileName, FileEntry entry)
-        {
             lock (_filesLock)
             {
-                string key = entry.Key;
+                var key = entry.Key;
 
                 if (Files.ContainsKey(key) == false)
                 {
-                    entry.FullName = fileName;
-
                     Files.Add(key, entry);
                 }
             }
+
+            RaiseFilesChanged();
         }
 
         private void RaiseFilesChanged()
