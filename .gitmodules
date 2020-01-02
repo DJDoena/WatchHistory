@@ -7,3 +7,6 @@
 [submodule "ToolBox"]
 	path = ToolBox
 	url = https://github.com/DJDoena/ToolBox
+[submodule "MediaInfoHelper"]
+	path = MediaInfoHelper
+	url = https://github.com/DJDoena/MediaInfoHelper.git

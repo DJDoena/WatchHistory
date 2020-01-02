@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.Xml;
     using System.Xml.Serialization;
+    using MediaInfoHelper;
 
     [XmlRoot]
     public sealed class Files

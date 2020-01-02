@@ -32,10 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NReco.VideoInfo, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8f59ee36d2987295, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NReco.VideoInfo.1.1.1\lib\net35\NReco.VideoInfo.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\NReco.VideoInfo.1.1.1\lib\net35\NReco.VideoInfo.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
@@ -49,22 +49,22 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Xceed.Wpf.AvalonDock, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.DataGrid, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.4.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -72,7 +72,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Data\DateTimeConformer.cs" />
     <Compile Include="Data\Files.Extended.cs">
       <DependentUpon>Files.v2_2.cs</DependentUpon>
     </Compile>
@@ -85,23 +84,16 @@
     </Compile>
     <Compile Include="Data\Implementations\YoutubeWatchesProcessor.cs" />
     <Compile Include="Data\Implementations\DvdWatchesProcessor.cs" />
-    <Compile Include="Data\FFProbe.cs" />
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
     <Compile Include="Data\Implementations\FilesSerializer.cs" />
     <Compile Include="Data\IFilesSerializer.cs" />
-    <Compile Include="Data\Implementations\MediaInfo2XmlConverter.cs" />
     <Compile Include="YoutubeLink\Implementations\YoutubeFileManager.cs" />
     <Compile Include="YoutubeLink\YoutubeApiConstants.cs" />
     <Compile Include="YoutubeLink\Implementations\YoutubeManager.cs" />
-    <Compile Include="Data\VideoInfo.cs">
-      <DependentUpon>VideoInfo.xsd</DependentUpon>
-    </Compile>
     <Compile Include="Data\Implementations\VideoInfoAdder.cs" />
-    <Compile Include="Data\Implementations\VideoReader.cs" />
     <Compile Include="YoutubeLink\IYoutubeManager.cs" />
     <Compile Include="YoutubeLink\YoutubeApi\YoutubeApi.cs" />
     <Compile Include="YoutubeLink\YoutubeUrlException.cs" />
-    <Compile Include="Data\YoutubeVideoInfo.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Ignore\IIgnoreModel.cs" />
     <Compile Include="Ignore\IIgnoreViewModel.cs" />
@@ -115,7 +107,6 @@
     <Compile Include="Implementations\SortColumn.cs" />
     <Compile Include="Implementations\ViewModelHelper.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Main\Implementations\DvdWatches.cs" />
     <Compile Include="Main\Implementations\EpisodeTitleProcessor.cs" />
     <Compile Include="Main\Implementations\EpisodeTitle.cs" />
     <Compile Include="Main\Implementations\CollectionProcessor.cs" />
@@ -222,7 +213,6 @@
     <None Include="Data\Files.v2_2.xsd" />
     <None Include="Data\Files.v2_1.xsd" />
     <None Include="Data\Files.v2_0.xsd" />
-    <None Include="Data\VideoInfo.xsd" />
     <None Include="DJDSOFT.ICO">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -243,6 +233,10 @@
       <Project>{2e90cc6f-892e-45b3-8812-ee52ffa3b222}</Project>
       <Name>DVDProfilerXML</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\MediaInfoHelper\MediaInfoHelper\MediaInfoHelper.csproj">
+      <Project>{b6f830c3-6f73-4096-aebe-07814018814b}</Project>
+      <Name>MediaInfoHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ToolBox\ToolBox\ToolBox.csproj">
       <Project>{4782e10e-b5cc-4c2d-9d7f-d132cb5a50a0}</Project>
       <Name>ToolBox</Name>
@@ -251,7 +245,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"%25ProgramFiles%25\Inno Setup 5\iscc.exe"  ..\..\..\..\WatchHistorySetup\setup.iss</PostBuildEvent>
+    <PostBuildEvent>rem "%25ProgramFiles%25\Inno Setup 5\iscc.exe"  ..\..\..\..\WatchHistorySetup\setup.iss</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

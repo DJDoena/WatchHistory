@@ -2,6 +2,7 @@
 {
     using System;
     using System.Xml.Serialization;
+    using MediaInfoHelper;
 
     public partial class FileEntry
     {
@@ -16,7 +17,7 @@
             {
                 key = string.Empty;
             }
-            else if (fullName.EndsWith(Constants.YoutubeFileExtension))
+            else if (fullName.EndsWith(MediaInfoHelper.Constants.YoutubeFileExtension))
             {
                 var parts = fullName.Split('\\');
 
@@ -49,7 +50,7 @@
         {
             if (VideoLengthSpecified == false)
             {
-                VideoLength = dataManager.GetVideoLength(this);
+                dataManager.DetermineVideoLength(this);
             }
 
             return VideoLength;

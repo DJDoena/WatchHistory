@@ -30,9 +30,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WatchHistory\WatchHistory\Data\DateTimeConformer.cs">
-      <Link>Data\DateTimeConformer.cs</Link>
-    </Compile>
     <Compile Include="..\WatchHistory\WatchHistory\Data\Files.v2_2.cs">
       <Link>Data\Files.v2_2.cs</Link>
     </Compile>
@@ -55,6 +52,10 @@
     <ProjectReference Include="..\AbstractionLayer\AbstractionLayer\AbstractionLayer.csproj">
       <Project>{491b235a-1d56-4732-b491-338a3dd2246d}</Project>
       <Name>AbstractionLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MediaInfoHelper\MediaInfoHelper\MediaInfoHelper.csproj">
+      <Project>{b6f830c3-6f73-4096-aebe-07814018814b}</Project>
+      <Name>MediaInfoHelper</Name>
     </ProjectReference>
     <ProjectReference Include="..\ToolBox\ToolBox\ToolBox.csproj">
       <Project>{4782e10e-b5cc-4c2d-9d7f-d132cb5a50a0}</Project>

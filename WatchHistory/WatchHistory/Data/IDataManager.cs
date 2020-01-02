@@ -45,7 +45,7 @@
 
         DateTime GetCreationTime(FileEntry fileEntry);
 
-        uint GetVideoLength(FileEntry fileEntry);
+        void DetermineVideoLength(FileEntry fileEntry);
 
         FileEntry TryCreateEntry(FileEntry fileEntry);
     }

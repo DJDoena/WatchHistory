@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AbstractionLayer.IOServices;
+    using DoenaSoft.MediaInfoHelper;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
 
@@ -237,21 +238,26 @@
             return creationTime;
         }
 
-        public UInt32 GetVideoLength(FileEntry fileEntry)
+        public void DetermineVideoLength(FileEntry fileEntry)
         {
             try
             {
-                var videoReader = new VideoReader(_ioServices, fileEntry);
+                var mediaFileData = new MediaFileData(fileEntry.FullName, fileEntry.CreationTime, fileEntry.VideoLength);
 
-                var videoLength = videoReader.GetLength();
+                var hasChanged = (new VideoReader(mediaFileData, false)).DetermineLength();
 
-                return videoLength;
+                if (hasChanged)
+                {
+                    fileEntry.VideoLength = mediaFileData.VideoLength;
+                    fileEntry.CreationTime = mediaFileData.CreationTime;
+                }
             }
             catch
             {
-                return 0;
+                fileEntry.VideoLength = 0;
             }
         }
+
         public void SaveSettingsFile()
         {
             var defaultValues = new DefaultValues()

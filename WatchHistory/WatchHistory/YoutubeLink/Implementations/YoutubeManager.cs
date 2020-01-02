@@ -1,12 +1,12 @@
 ﻿namespace DoenaSoft.WatchHistory.YoutubeLink.Implementations
 {
+    using DoenaSoft.MediaInfoHelper.Youtube;
+    using Newtonsoft.Json;
     using System;
     using System.Linq;
     using System.Net.Http;
     using System.Text.RegularExpressions;
     using System.Web;
-    using Newtonsoft.Json;
-    using WatchHistory.Data;
 
     internal class YoutubeManager : IYoutubeManager
     {
@@ -46,25 +46,6 @@
             };
 
             return info;
-
-            //var service = GetYoutubeService();
-
-            //var request = service.Videos.List("contentDetails,snippet");
-
-            //request.Id = id;
-
-            //var response = request.Execute();
-
-            //var responseItem = response?.Items.FirstOrDefault();
-
-            //var info = new YoutubeVideoInfo()
-            //{
-            //    Id = id,
-            //    Title = responseItem?.Snippet?.Title ?? string.Empty,
-            //    RunningTime = GetRunningTime(responseItem?.ContentDetails?.Duration),
-            //};
-
-            //return info;
         }
 
         private static string GetYoutubeId(string youtubeUrl)

@@ -1,6 +1,8 @@
 ﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
     using AbstractionLayer.IOServices;
+    using MediaInfoHelper;
+    using MediaInfoHelper.Youtube;
     using WatchHistory.Implementations;
 
     internal sealed class YoutubeWatchesProcessor

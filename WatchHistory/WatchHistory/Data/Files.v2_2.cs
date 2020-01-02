@@ -4,7 +4,7 @@
     using System.Diagnostics;
     using System.Xml;
     using System.Xml.Serialization;
-    using ToolBox.Extensions;
+    using MediaInfoHelper;
 
     [XmlRoot]
     public sealed class Files
@@ -84,7 +84,7 @@
 
         [XmlIgnore]
         public Boolean TitleSpecified
-            => Title.IsNotEmpty();
+            => !string.IsNullOrWhiteSpace(Title);
 
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
@@ -175,7 +175,7 @@
 
         [XmlIgnore]
         public Boolean SourceSpecified
-            => Source.IsNotEmpty();
+            => !string.IsNullOrWhiteSpace(Source);
 
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;

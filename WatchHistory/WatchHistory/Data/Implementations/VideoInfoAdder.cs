@@ -3,6 +3,7 @@
     using System;
     using System.Text;
     using AbstractionLayer.IOServices;
+    using DoenaSoft.MediaInfoHelper;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
 

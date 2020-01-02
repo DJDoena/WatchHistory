@@ -3,10 +3,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using AbstractionLayer.IOServices;
+    using MediaInfoHelper;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
     using WatchHistory.Main.Implementations;
-    using Version400 = DVDProfiler.DVDProfilerXML.Version400;
+    using DVDP = DVDProfiler.DVDProfilerXML.Version400;
+    using MIH = MediaInfoHelper.DVDProfiler;
 
     internal sealed class DvdWatchesProcessor
     {
@@ -21,13 +23,13 @@
 
         internal void Update(FileEntry entry)
         {
-            DvdWatches watches = null;
+            MIH.DvdWatches watches = null;
 
             if (_IOServices.File.Exists(entry.FullName))
             {
                 try
                 {
-                    watches = SerializerHelper.Deserialize<DvdWatches>(_IOServices, entry.FullName);
+                    watches = SerializerHelper.Deserialize<MIH.DvdWatches>(_IOServices, entry.FullName);
                 }
                 catch
                 { }
@@ -41,11 +43,11 @@
             }
         }
 
-        private void UpdateFromDvdWatches(FileEntry entry, DvdWatches watches)
+        private void UpdateFromDvdWatches(FileEntry entry, MIH.DvdWatches watches)
         {
             ExistingWatches = new Dictionary<User, HashSet<Watch>>();
 
-            List<User> entryUsers = entry.Users.EnsureNotNull().ToList();
+            var entryUsers = entry.Users.EnsureNotNull().ToList();
 
             entryUsers.ForEach(AddExistingWatches);
 
@@ -79,11 +81,11 @@
             return (entryUser);
         }
 
-        private void UpdateFromDvdWatch(Version400.Event dvdWatch)
+        private void UpdateFromDvdWatch(MIH.Event dvdWatch)
         {
-            User user = new User()
+            var user = new User()
             {
-                UserName = CollectionProcessor.GetUserName(dvdWatch)
+                UserName = string.Join(" ", dvdWatch.User?.FirstName, dvdWatch.User?.LastName).Trim(),
             };
 
             if (ExistingWatches.TryGetValue(user, out HashSet<Watch> entryWatches) == false)
@@ -96,15 +98,15 @@
             Watch entryWatch = new Watch()
             {
                 Value = dvdWatch.Timestamp.Conform(),
-                Source = Constants.DvdProfilerSource
+                Source = WatchHistory.Constants.DvdProfilerSource
             };
 
             entryWatches.Add(entryWatch);
         }
 
-        private void AddExistingWatches(User user)
+        private void AddExistingWatches(Data.User user)
         {
-            IEnumerable<Watch> watches = user.Watches.EnsureNotNull().Where(w => w.Source != Constants.DvdProfilerSource);
+            IEnumerable<Watch> watches = user.Watches.EnsureNotNull().Where(w => w.Source != WatchHistory.Constants.DvdProfilerSource);
 
             if (watches.HasItems())
             {
@@ -112,8 +114,7 @@
             }
         }
 
-        private void AddExistingWatches(User user
-            , IEnumerable<Watch> watches)
+        private void AddExistingWatches(Data.User user, IEnumerable<Watch> watches)
         {
             HashSet<Watch> hashed = new HashSet<Watch>();
 

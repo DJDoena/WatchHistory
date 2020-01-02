@@ -18,7 +18,7 @@
         private readonly IUIServices _uiServices;
 
         private Boolean _ignoreWatched;
-        
+
         public MainModel(IDataManager dataManager
             , IIOServices ioServices
             , IUIServices uiServices
@@ -93,7 +93,7 @@
         }
 
         public Boolean CanPlayFile(FileEntry fileEntry)
-            => fileEntry.FullName.EndsWith(Constants.DvdProfilerFileExtension) == false;
+            => fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.DvdProfilerFileExtension) == false;
 
         public void OpenFileLocation(FileEntry fileEntry)
         {

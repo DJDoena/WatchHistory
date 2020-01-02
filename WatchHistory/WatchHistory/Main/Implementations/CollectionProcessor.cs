@@ -1,34 +1,32 @@
 ﻿namespace DoenaSoft.WatchHistory.Main.Implementations
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using AbstractionLayer.IOServices;
     using Data;
-    using DVDProfiler.DVDProfilerXML.Version400;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
+    using DVDP = DVDProfiler.DVDProfilerXML.Version400;
+    using MIH = DoenaSoft.MediaInfoHelper.DVDProfiler;
 
     internal sealed class CollectionProcessor
     {
-        private readonly Collection _Collection;
+        private readonly DVDP.Collection _collection;
 
-        private readonly IDataManager _DataManager;
+        private readonly IDataManager _dataManager;
 
-        private readonly IIOServices _IOServices;
+        private readonly IIOServices _ioServices;
 
-        public CollectionProcessor(Collection collection
-            , IDataManager dataManager
-            , IIOServices ioServices)
+        public CollectionProcessor(DVDP.Collection collection, IDataManager dataManager, IIOServices ioServices)
         {
-            _Collection = collection;
-            _DataManager = dataManager;
-            _IOServices = ioServices;
+            _collection = collection;
+            _dataManager = dataManager;
+            _ioServices = ioServices;
         }
 
         public void Process()
         {
-            _DataManager.Suspend();
+            _dataManager.Suspend();
 
             try
             {
@@ -36,77 +34,76 @@
             }
             finally
             {
-                _DataManager.Resume();
+                _dataManager.Resume();
             }
         }
 
         private void TryProcess()
         {
-            String folder = _IOServices.Path.Combine(WatchHistory.Environment.AppDataFolder, "DVDProfiler");
+            var folder = _ioServices.Path.Combine(WatchHistory.Environment.AppDataFolder, "DVDProfiler");
 
-            if (_IOServices.Folder.Exists(folder) == false)
+            if (_ioServices.Folder.Exists(folder) == false)
             {
-                _IOServices.Folder.CreateFolder(folder);
+                _ioServices.Folder.CreateFolder(folder);
             }
 
-            _DataManager.Users = GetUsers().Union(_DataManager.Users);
+            _dataManager.Users = GetUsers().Union(_dataManager.Users);
 
-            _DataManager.RootFolders = folder.Enumerate().Union(_DataManager.RootFolders);
+            _dataManager.RootFolders = folder.Enumerate().Union(_dataManager.RootFolders);
 
-            _DataManager.FileExtensions = Constants.DvdProfilerFileExtensionName.Enumerate().Union(_DataManager.FileExtensions);
+            _dataManager.FileExtensions = MediaInfoHelper.Constants.DvdProfilerFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
 
             CreateCollectionFiles(folder);
         }
 
-        private IEnumerable<String> GetUsers()
+        private IEnumerable<string> GetUsers()
         {
-            IEnumerable<DVD> dvds = _Collection.DVDList.EnsureNotNull();
+            var dvds = _collection.DVDList.EnsureNotNull();
 
-            IEnumerable<IEnumerable<String>> usersByDvd = dvds.Select(GetUsers);
+            var usersByDvd = dvds.Select(GetUsers);
 
-            IEnumerable<String> users = usersByDvd.SelectMany(user => user);
+            var users = usersByDvd.SelectMany(user => user);
 
             return (users);
         }
 
-        private IEnumerable<String> GetUsers(DVD dvd)
+        private IEnumerable<string> GetUsers(DVDP.DVD dvd)
         {
-            IEnumerable<Event> watches = GetWatches(dvd);
+            var watches = GetWatches(dvd);
 
-            IEnumerable<String> users = watches.Select(GetUserName);
+            var users = watches.Select(GetUserName);
 
-            return (users);
+            return users;
         }
 
-        internal static IEnumerable<Event> GetWatches(DVD dvd)
-            => dvd.EventList.EnsureNotNull().Where(e => e.Type == EventType.Watched);
+        internal static IEnumerable<DVDP.Event> GetWatches(DVDP.DVD dvd)
+            => dvd.EventList.EnsureNotNull().Where(e => e.Type == DVDP.EventType.Watched);
 
-        internal static String GetUserName(Event watch)
-            => String.Join(" ", watch.User?.FirstName, watch.User?.LastName).Trim();
+        internal static string GetUserName(DVDP.Event watch)
+            => string.Join(" ", watch.User?.FirstName, watch.User?.LastName).Trim();
 
-        private void CreateCollectionFiles(String folder)
+        private void CreateCollectionFiles(string folder)
         {
-            IEnumerable<EpisodeTitle> titles = (new EpisodeTitleProcessor(_Collection, _IOServices)).GetEpisodeTitles();
+            var titles = (new EpisodeTitleProcessor(_collection, _ioServices)).GetEpisodeTitles();
 
             titles = new HashSet<EpisodeTitle>(titles);
 
             titles.ForEach(title => CreateCollectionFile(folder, title));
         }
 
-        private void CreateCollectionFile(String folder
-            , EpisodeTitle title)
+        private void CreateCollectionFile(string folder, EpisodeTitle title)
         {
-            var fileName = _IOServices.Path.Combine(folder, title.FileName + Constants.DvdProfilerFileExtension);
+            var fileName = _ioServices.Path.Combine(folder, title.FileName + MediaInfoHelper.Constants.DvdProfilerFileExtension);
 
-            var watches = new DvdWatches()
+            var watches = new MIH.DvdWatches()
             {
                 Title = title.Title,
-                Watches = title.Watches?.ToArray()
+                Watches = title.Watches?.Select(ToDvdWatch).ToArray()
             };
 
-            SerializerHelper.Serialize(_IOServices, fileName, watches);
+            SerializerHelper.Serialize(_ioServices, fileName, watches);
 
-            var fi = _IOServices.GetFileInfo(fileName);
+            var fi = _ioServices.GetFileInfo(fileName);
 
             fi.CreationTime = title.PurchaseDate;
 
@@ -116,7 +113,26 @@
                 Title = title.Title,
             };
 
-            _DataManager.TryCreateEntry(fileEntry);
+            _dataManager.TryCreateEntry(fileEntry);
+        }
+
+        private static MIH.Event ToDvdWatch(DVDP.Event source)
+        {
+            var target = new MIH.Event()
+            {
+                Note = source.Note,
+                Timestamp = source.Timestamp,
+                Type = (MIH.EventType)source.Type,
+                User = new MIH.User()
+                {
+                    EmailAddress = source.User?.EmailAddress,
+                    FirstName = source.User?.FirstName,
+                    LastName = source.User?.LastName,
+                    PhoneNumber = source.User?.PhoneNumber,
+                },
+            };
+
+            return target;
         }
     }
 }

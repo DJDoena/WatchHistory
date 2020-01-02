@@ -5,6 +5,7 @@
     using System.Windows.Input;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
+    using DoenaSoft.MediaInfoHelper.Youtube;
     using ToolBox.Commands;
     using WatchHistory.Data;
     using WatchHistory.Implementations;

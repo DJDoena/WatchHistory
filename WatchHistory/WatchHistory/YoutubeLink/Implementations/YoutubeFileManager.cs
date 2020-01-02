@@ -3,6 +3,8 @@
     using System;
     using System.Linq;
     using AbstractionLayer.IOServices;
+    using MediaInfoHelper;
+    using MediaInfoHelper.Youtube;
     using ToolBox.Extensions;
     using WatchHistory.Data;
     using WatchHistory.Implementations;
@@ -60,7 +62,7 @@
 
             _ioServices.Path.GetInvalidFileNameChars().ForEach(c => fileName.Replace(c, '_'));
 
-            fileName = _ioServices.Path.Combine(folder, fileName + Constants.YoutubeFileExtension);
+            fileName = _ioServices.Path.Combine(folder, fileName + MediaInfoHelper.Constants.YoutubeFileExtension);
 
             SerializerHelper.Serialize(_ioServices, fileName, info);
 
