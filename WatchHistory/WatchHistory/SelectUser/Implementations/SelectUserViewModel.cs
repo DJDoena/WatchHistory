@@ -10,19 +10,19 @@
 
     internal sealed class SelectUserViewModel : ISelectUserViewModel
     {
-        private readonly IDataManager _DataManager;
+        private readonly IDataManager _dataManager;
 
-        private readonly IWindowFactory _WindowFactory;
+        private readonly IWindowFactory _windowFactory;
 
-        private String _SelectedUser;
+        private string _selectedUser;
 
         public SelectUserViewModel(IDataManager dataManager
             , IWindowFactory windowFactory)
         {
-            _DataManager = dataManager;
-            _WindowFactory = windowFactory;
+            _dataManager = dataManager;
+            _windowFactory = windowFactory;
 
-            _SelectedUser = _DataManager.Users.First();
+            _selectedUser = _dataManager.Users.First();
 
             SelectCommand = new RelayCommand(Select);
         }
@@ -35,17 +35,17 @@
 
         #region ISelectUserViewModel
 
-        public IEnumerable<String> Users
-            => (_DataManager.Users);
+        public IEnumerable<string> Users
+            => (_dataManager.Users);
 
-        public String SelectedUser
+        public string SelectedUser
         {
-            get => _SelectedUser;
+            get => _selectedUser;
             set
             {
-                if (value != _SelectedUser)
+                if (value != _selectedUser)
                 {
-                    _SelectedUser = value;
+                    _selectedUser = value;
 
                     RaisePropertyChanged(nameof(SelectedUser));
                 }
@@ -60,12 +60,12 @@
 
         private void Select()
         {
-            _WindowFactory.OpenMainWindow(SelectedUser);
+            _windowFactory.OpenMainWindow(SelectedUser);
 
             Closing?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RaisePropertyChanged(String attribute)
+        private void RaisePropertyChanged(string attribute)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

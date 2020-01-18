@@ -1,28 +1,22 @@
 ﻿namespace DoenaSoft.WatchHistory.Main.Implementations
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using AbstractionLayer.IOServices;
     using DVDProfiler.DVDProfilerXML.Version400;
     using ToolBox.Extensions;
 
     internal sealed class EpisodeTitleProcessor
     {
-        private readonly Collection _Collection;
+        private readonly Collection _collection;
 
-        private readonly IIOServices _IOServices;
-
-        public EpisodeTitleProcessor(Collection collection
-            , IIOServices ioServices)
+        public EpisodeTitleProcessor(Collection collection)
         {
-            _Collection = collection;
-            _IOServices = ioServices;
+            _collection = collection;
         }
 
         internal IEnumerable<EpisodeTitle> GetEpisodeTitles()
         {
-            IEnumerable<DVD> dvds = _Collection.DVDList.EnsureNotNull();
+            IEnumerable<DVD> dvds = _collection.DVDList.EnsureNotNull();
 
             IEnumerable<IEnumerable<EpisodeTitle>> castTitles = dvds.Select(dvd => GetEpisodeTitles(dvd, dvd.CastList));
 
@@ -36,15 +30,15 @@
         }
 
         private IEnumerable<EpisodeTitle> GetEpisodeTitles(DVD dvd
-            , IEnumerable<Object> castOrCrew)
+            , IEnumerable<object> castOrCrew)
         {
             IEnumerable<Divider> dividers = castOrCrew.EnsureNotNull().OfType<Divider>();
 
             IEnumerable<Divider> episodeDividers = dividers.Where(div => div?.Type == DividerType.Episode);
 
-            IEnumerable<String> captions = episodeDividers.Select(divider => divider.Caption);
+            IEnumerable<string> captions = episodeDividers.Select(divider => divider.Caption);
 
-            IEnumerable<EpisodeTitle> titles = captions.Select(caption => new EpisodeTitle(dvd, caption, _IOServices));
+            IEnumerable<EpisodeTitle> titles = captions.Select(caption => new EpisodeTitle(dvd, caption));
 
             return (titles);
         }

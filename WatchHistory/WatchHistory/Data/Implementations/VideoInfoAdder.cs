@@ -1,30 +1,29 @@
 ﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
-    using System;
     using System.Text;
     using AbstractionLayer.IOServices;
-    using DoenaSoft.MediaInfoHelper;
+    using MediaInfoHelper;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
 
     internal sealed class VideoInfoAdder
     {
-        private readonly IIOServices _IOServices;
+        private readonly IIOServices _ioServices;
 
-        private readonly FileEntry _FileEntry;
+        private readonly FileEntry _fileEntry;
 
         public VideoInfoAdder(IIOServices ioServices
             , FileEntry fileEntry)
         {
-            _IOServices = ioServices;
-            _FileEntry = fileEntry;
+            _ioServices = ioServices;
+            _fileEntry = fileEntry;
         }
 
         internal void Add()
         {
-            String xmlFile = _FileEntry.FullName + ".xml";
+            var xmlFile = _fileEntry.FullName + ".xml";
 
-            if (_IOServices.File.Exists(xmlFile))
+            if (_ioServices.File.Exists(xmlFile))
             {
                 try
                 {
@@ -35,18 +34,18 @@
             }
         }
 
-        private void TryAddVideoInfo(String xmlFile)
+        private void TryAddVideoInfo(string xmlFile)
         {
-            var info = SerializerHelper.Deserialize<Doc>(_IOServices, xmlFile);
+            var info = SerializerHelper.Deserialize<Doc>(_ioServices, xmlFile);
 
-            _FileEntry.VideoLength = info.VideoInfo.Duration;
+            _fileEntry.VideoLength = info.VideoInfo.Duration;
 
-            _FileEntry.Title = BuildTitle(info.VideoInfo.Episode);
+            _fileEntry.Title = BuildTitle(info.VideoInfo.Episode);
         }
 
-        private static String BuildTitle(Episode episode)
+        private static string BuildTitle(Episode episode)
         {
-            StringBuilder title = new StringBuilder();
+            var title = new StringBuilder();
 
             if (episode != null)
             {
@@ -59,7 +58,7 @@
         }
 
         private static void AddTitlePart(StringBuilder title
-            , String part)
+            , string part)
         {
             if (part.IsNotEmpty())
             {

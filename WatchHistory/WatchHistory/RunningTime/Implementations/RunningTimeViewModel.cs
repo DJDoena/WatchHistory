@@ -9,24 +9,24 @@
 
     internal sealed class RunningTimeViewModel : IRunningTimeViewModel
     {
-        private Byte _Hours;
+        private byte _hours;
 
-        private Byte _Minutes;
+        private byte _minutes;
 
-        private Byte _Seconds;
+        private byte _seconds;
 
-        public RunningTimeViewModel(UInt32 seconds)
+        public RunningTimeViewModel(uint seconds)
         {
             AcceptCommand = new RelayCommand(Accept);
             CancelCommand = new RelayCommand(Cancel);
 
-            _Hours = (Byte)(seconds / 3600);
+            _hours = (byte)(seconds / 3600);
 
-            UInt32 modulo = seconds % 3600;
+            var modulo = seconds % 3600;
 
-            _Minutes = (Byte)(modulo / 60);
+            _minutes = (byte)(modulo / 60);
 
-            _Seconds = (Byte)(modulo % 60);
+            _seconds = (byte)(modulo % 60);
         }
 
         #region IRunningTimeViewModel
@@ -35,50 +35,50 @@
 
         public ICommand CancelCommand { get; }
 
-        public Byte Hours
+        public byte Hours
         {
-            get => _Hours;
+            get => _hours;
             set
             {
-                if (_Hours != value)
+                if (_hours != value)
                 {
-                    _Hours = value;
+                    _hours = value;
 
                     RaisePropertyChanged(nameof(Hours));
                 }
             }
         }
 
-        public Byte Minutes
+        public byte Minutes
         {
-            get => _Minutes;
+            get => _minutes;
             set
             {
-                if (_Minutes != value)
+                if (_minutes != value)
                 {
-                    _Minutes = value;
+                    _minutes = value;
 
                     RaisePropertyChanged(nameof(Minutes));
                 }
             }
         }
 
-        public Byte Seconds
+        public byte Seconds
         {
-            get => _Seconds;
+            get => _seconds;
             set
             {
-                if (_Seconds != value)
+                if (_seconds != value)
                 {
-                    _Seconds = value;
+                    _seconds = value;
 
                     RaisePropertyChanged(nameof(Seconds));
                 }
             }
         }
 
-        public UInt32 RunningTime
-            => (UInt32)(Hours * 3600 + Minutes * 60 + Seconds);
+        public uint RunningTime
+            => (uint)(Hours * 3600 + Minutes * 60 + Seconds);
 
         public event EventHandler<CloseEventArgs> Closing;
 
@@ -96,7 +96,7 @@
         private void Cancel()
             => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
 
-        private void RaisePropertyChanged(String attribute)
+        private void RaisePropertyChanged(string attribute)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

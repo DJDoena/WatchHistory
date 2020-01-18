@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using AbstractionLayer.IOServices;
-    using DoenaSoft.MediaInfoHelper;
+    using MediaInfoHelper;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
 
@@ -37,7 +37,9 @@
 
         private bool IsSuspended { get; set; }
 
-        private event EventHandler _FilesChanged;
+#pragma warning disable IDE1006 // Naming Styles
+        private event EventHandler _filesChanged;
+#pragma warning restore IDE1006 // Naming Styles
 
         static DataManager()
         {
@@ -135,19 +137,19 @@
         {
             add
             {
-                if (_FilesChanged == null)
+                if (_filesChanged == null)
                 {
                     _fileObserver.Created += OnFileCreated;
                     _fileObserver.Deleted += OnFileDeleted;
                 }
 
-                _FilesChanged += value;
+                _filesChanged += value;
             }
             remove
             {
-                _FilesChanged -= value;
+                _filesChanged -= value;
 
-                if (_FilesChanged == null)
+                if (_filesChanged == null)
                 {
                     _fileObserver.Created -= OnFileCreated;
                     _fileObserver.Deleted -= OnFileDeleted;
@@ -563,7 +565,7 @@
         }
 
         private void RaiseFilesChanged()
-            => _FilesChanged?.Invoke(this, EventArgs.Empty);
+            => _filesChanged?.Invoke(this, EventArgs.Empty);
 
         private void MergeEntry(FileEntry existingEntry, FileEntry newEntry)
         {

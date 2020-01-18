@@ -1,6 +1,5 @@
 ﻿namespace DoenaSoft.WatchHistory.Ignore
 {
-    using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Windows.Input;
@@ -8,9 +7,9 @@
 
     internal interface IIgnoreViewModel : INotifyPropertyChanged
     {
-        String Filter { get; set; }
+        string Filter { get; set; }
 
-        Boolean SearchInPath { get; set; }
+        bool SearchInPath { get; set; }
 
         ObservableCollection<IFileEntryViewModel> Entries { get; }
 

@@ -1,22 +1,21 @@
 ﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
-    using System;
     using System.Text;
     using AbstractionLayer.IOServices;
     using WatchHistory.Implementations;
 
     internal sealed class FilesSerializer : IFilesSerializer
     {
-        private readonly IIOServices _IOServices;
+        private readonly IIOServices _ioServices;
 
         public FilesSerializer(IIOServices ioServices)
         {
-            _IOServices = ioServices;
+            _ioServices = ioServices;
         }
 
         #region IFilesSerializer
 
-        public Files LoadData(String fileName)
+        public Files LoadData(string fileName)
         {
             Files files;
             try
@@ -31,44 +30,44 @@
             return (files);
         }
 
-        public void SaveFile(String fileName
+        public void SaveFile(string fileName
             , Files files)
-            => SerializerHelper.Serialize(_IOServices, fileName, files);
+            => SerializerHelper.Serialize(_ioServices, fileName, files);
 
-        public void CreateBackup(String fileName)
+        public void CreateBackup(string fileName)
         {
-            Int32 lastIndexOf = fileName.LastIndexOf(".");
+            int lastIndexOf = fileName.LastIndexOf(".");
 
-            String extension = fileName.Substring(lastIndexOf);
+            string extension = fileName.Substring(lastIndexOf);
 
-            String fileBaseName = fileName.Substring(0, lastIndexOf);
+            string fileBaseName = fileName.Substring(0, lastIndexOf);
 
             try
             {
-                const Int32 MaximumBackups = 9;
+                const int MaximumBackups = 9;
 
-                String newFileName = fileBaseName + "." + MaximumBackups.ToString() + extension;
+                string newFileName = fileBaseName + "." + MaximumBackups.ToString() + extension;
 
-                if (_IOServices.File.Exists(newFileName))
+                if (_ioServices.File.Exists(newFileName))
                 {
-                    _IOServices.File.Delete(newFileName);
+                    _ioServices.File.Delete(newFileName);
                 }
 
-                for (Int32 backupIndex = MaximumBackups - 1; backupIndex > 0; backupIndex--)
+                for (int backupIndex = MaximumBackups - 1; backupIndex > 0; backupIndex--)
                 {
-                    String oldFileName = fileBaseName + "." + backupIndex.ToString() + extension;
+                    string oldFileName = fileBaseName + "." + backupIndex.ToString() + extension;
 
-                    if (_IOServices.File.Exists(oldFileName))
+                    if (_ioServices.File.Exists(oldFileName))
                     {
-                        _IOServices.File.Move(oldFileName, newFileName);
+                        _ioServices.File.Move(oldFileName, newFileName);
                     }
 
                     newFileName = oldFileName;
                 }
 
-                if (_IOServices.File.Exists(fileName))
+                if (_ioServices.File.Exists(fileName))
                 {
-                    _IOServices.File.Copy(fileName, newFileName);
+                    _ioServices.File.Copy(fileName, newFileName);
                 }
             }
             catch (System.IO.IOException)
@@ -77,18 +76,18 @@
 
         #endregion
 
-        private Files ReadXml(String fileName)
+        private Files ReadXml(string fileName)
             => (IsVersion2File(fileName)) ? ReadVersion2File(fileName) : ReadVersion1File(fileName);
 
-        private Boolean IsVersion2File(String fileName)
+        private bool IsVersion2File(string fileName)
         {
-            using (System.IO.Stream fs = _IOServices.GetFileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
+            using (System.IO.Stream fs = _ioServices.GetFileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
             {
                 using (System.IO.StreamReader sr = new System.IO.StreamReader(fs, Encoding.UTF8))
                 {
-                    Int32 lineNumber = 1;
+                    int lineNumber = 1;
 
-                    String line = String.Empty;
+                    string line = string.Empty;
 
                     while ((sr.EndOfStream == false) && (lineNumber < 3))
                     {
@@ -102,12 +101,12 @@
             }
         }
 
-        private Files ReadVersion2File(String fileName)
-            => SerializerHelper.Deserialize<Files>(_IOServices, fileName);
+        private Files ReadVersion2File(string fileName)
+            => SerializerHelper.Deserialize<Files>(_ioServices, fileName);
 
-        private Files ReadVersion1File(String fileName)
+        private Files ReadVersion1File(string fileName)
         {
-            v1_0.Files oldFiles = SerializerHelper.Deserialize<v1_0.Files>(_IOServices, fileName);
+            v1_0.Files oldFiles = SerializerHelper.Deserialize<v1_0.Files>(_ioServices, fileName);
 
             Files newFiles = FilesModelConverter.Convert(oldFiles);
 

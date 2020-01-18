@@ -8,46 +8,48 @@
 
     internal abstract class ModelBase
     {
-        protected readonly IDataManager _DataManager;
+        protected readonly IDataManager _dataManager;
 
-        protected readonly String _UserName;
+        protected readonly string _userName;
 
-        private String _Filter;
+        private string _filter;
 
-        private Boolean _SearchInPath;
+        private bool _searchInPath;
 
-        private event EventHandler _FilesChanged;
+#pragma warning disable IDE1006 // Naming Styles
+        private event EventHandler _filesChanged;
+#pragma warning restore IDE1006 // Naming Styles
 
         protected ModelBase(IDataManager dataManager
-            , String userName)
+            , string userName)
         {
-            _DataManager = dataManager;
-            _UserName = userName;
-            _SearchInPath = false;
+            _dataManager = dataManager;
+            _userName = userName;
+            _searchInPath = false;
         }
 
-        public String Filter
+        public string Filter
         {
-            get => _Filter ?? String.Empty;
+            get => _filter ?? string.Empty;
             set
             {
-                if (value != _Filter)
+                if (value != _filter)
                 {
-                    _Filter = value;
+                    _filter = value;
 
                     RaiseFilesChanged(EventArgs.Empty);
                 }
             }
         }
 
-        public Boolean SearchInPath
+        public bool SearchInPath
         {
-            get => _SearchInPath;
+            get => _searchInPath;
             set
             {
-                if (value != _SearchInPath)
+                if (value != _searchInPath)
                 {
-                    _SearchInPath = value;
+                    _searchInPath = value;
 
                     RaiseFilesChanged(EventArgs.Empty);
                 }
@@ -58,48 +60,48 @@
         {
             add
             {
-                if (_FilesChanged == null)
+                if (_filesChanged == null)
                 {
-                    _DataManager.FilesChanged += OnDataManagerFilesChanged;
+                    _dataManager.FilesChanged += OnDataManagerFilesChanged;
                 }
 
-                _FilesChanged += value;
+                _filesChanged += value;
             }
             remove
             {
-                _FilesChanged -= value;
+                _filesChanged -= value;
 
-                if (_FilesChanged == null)
+                if (_filesChanged == null)
                 {
-                    _DataManager.FilesChanged -= OnDataManagerFilesChanged;
+                    _dataManager.FilesChanged -= OnDataManagerFilesChanged;
                 }
             }
         }
 
         #region UserIgnores
 
-        protected Boolean UserIgnores(FileEntry file)
+        protected bool UserIgnores(FileEntry file)
             => file.Users?.HasItemsWhere(UserIgnores) == true;
 
-        private Boolean UserIgnores(User user)
+        private bool UserIgnores(User user)
             => (IsUser(user)) && (user.Ignore);
 
         #endregion
 
-        protected Boolean IsUser(Data.User user)
-            => user.UserName == _UserName;
+        protected bool IsUser(Data.User user)
+            => user.UserName == _userName;
 
         #region ContainsFilter
 
-        protected Boolean ContainsFilter(FileEntry file)
+        protected bool ContainsFilter(FileEntry file)
             => ContainsFilter(file, Filter.Trim().Split(' '));
 
-        private Boolean ContainsFilter(FileEntry file
-           , IEnumerable<String> filters)
+        private bool ContainsFilter(FileEntry file
+           , IEnumerable<string> filters)
             => filters.All(filter => ContainsFilter(file, filter));
 
-        private Boolean ContainsFilter(FileEntry file
-            , String filter)
+        private bool ContainsFilter(FileEntry file
+            , string filter)
         {
             bool contains = file.TitleSpecified
                   ? ContainsFilter(file.Title, filter)
@@ -113,32 +115,32 @@
             return contains;
         }
 
-        private Boolean ContainsFilterInFileName(FileEntry file, String filter)
+        private bool ContainsFilterInFileName(FileEntry file, string filter)
         {
-            String fileName = CutRootFolders(file.FullName);
+            string fileName = CutRootFolders(file.FullName);
 
-            Boolean contains = ContainsFilter(fileName, filter);
+            bool contains = ContainsFilter(fileName, filter);
 
             return (contains);
         }
 
-        private static Boolean ContainsFilter(String text, String filter)
+        private static bool ContainsFilter(string text, string filter)
             => text.IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1;
 
-        private String CutRootFolders(String fullName)
+        private string CutRootFolders(string fullName)
         {
-            _DataManager.RootFolders.ForEach(folder => fullName = fullName.Replace(folder, String.Empty));
+            _dataManager.RootFolders.ForEach(folder => fullName = fullName.Replace(folder, string.Empty));
 
             return (fullName);
         }
 
         #endregion
 
-        private void OnDataManagerFilesChanged(Object sender
+        private void OnDataManagerFilesChanged(object sender
             , EventArgs e)
             => RaiseFilesChanged(e);
 
         protected void RaiseFilesChanged(EventArgs e)
-            => _FilesChanged?.Invoke(this, e);
+            => _filesChanged?.Invoke(this, e);
     }
 }

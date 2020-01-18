@@ -1,6 +1,5 @@
 ﻿namespace DoenaSoft.WatchHistory.WatchedOn.Implementations
 {
-    using System;
     using System.Windows;
     using AbstractionLayer.UIServices;
     using WatchHistory.Implementations;
@@ -12,7 +11,7 @@
             InitializeComponent();
         }
 
-        private void OnLoaded(Object sender
+        private void OnLoaded(object sender
             , RoutedEventArgs e)
         {
             IWatchedOnViewModel viewModel = (IWatchedOnViewModel)DataContext;
@@ -20,7 +19,7 @@
             viewModel.Closing += OnClosing;
         }
 
-        private void OnClosing(Object sender
+        private void OnClosing(object sender
             , CloseEventArgs e)
         {
             IWatchedOnViewModel viewModel = (IWatchedOnViewModel)DataContext;

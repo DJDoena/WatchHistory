@@ -6,19 +6,16 @@
 
     internal sealed class WatchesViewModel : IWatchesViewModel
     {
-        private readonly IEnumerable<IWatchViewModel> _Watches;
-
         public WatchesViewModel(IEnumerable<Watch> watches)
         {
             IEnumerable<Watch> ordered = watches.OrderByDescending(w => w.Value);
 
-            _Watches = ordered.Select(GetWatchViewModel);
+            Watches = ordered.Select(GetWatchViewModel);
         }
 
         #region IWatchesViewModel
 
-        public IEnumerable<IWatchViewModel> Watches
-            => _Watches;
+        public IEnumerable<IWatchViewModel> Watches { get; }
 
         #endregion
 

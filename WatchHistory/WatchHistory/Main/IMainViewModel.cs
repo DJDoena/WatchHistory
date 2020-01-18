@@ -1,6 +1,5 @@
 ﻿namespace DoenaSoft.WatchHistory.Main
 {
-    using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Windows.Input;
@@ -8,13 +7,13 @@
 
     internal interface IMainViewModel : INotifyPropertyChanged
     {
-        String Title { get; }
+        string Title { get; }
 
-        String Filter { get; set; }
+        string Filter { get; set; }
 
-        Boolean IgnoreWatched { get; set; }
+        bool IgnoreWatched { get; set; }
 
-        Boolean SearchInPath { get; set; }
+        bool SearchInPath { get; set; }
 
         ObservableCollection<IFileEntryViewModel> Entries { get; }
 

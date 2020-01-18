@@ -10,27 +10,29 @@
 
     internal sealed class FileEntryViewModel : IFileEntryViewModel
     {
-        private readonly String _UserName;
+        private readonly string _userName;
 
-        private readonly IDataManager _DataManager;
+        private readonly IDataManager _dataManager;
 
-        private readonly IIOServices _IOServices;
+        private readonly IIOServices _ioServices;
 
-        private User _User;
+        private User _user;
 
-        private event PropertyChangedEventHandler _PropertyChanged;
+#pragma warning disable IDE1006 // Naming Styles
+        private event PropertyChangedEventHandler _propertyChanged;
+#pragma warning restore IDE1006 // Naming Styles
 
         public FileEntryViewModel(FileEntry entry
-            , String userName
+            , string userName
             , IDataManager dataManager
             , IIOServices ioServices)
         {
             FileEntry = entry;
-            _UserName = userName;
-            _DataManager = dataManager;
-            _IOServices = ioServices;
+            _userName = userName;
+            _dataManager = dataManager;
+            _ioServices = ioServices;
 
-            _User = TryGetUser();
+            _user = TryGetUser();
         }
 
         #region INotifyPropertyChanged
@@ -39,11 +41,11 @@
         {
             add
             {
-                if (_PropertyChanged == null)
+                if (_propertyChanged == null)
                 {
-                    if (_User != null)
+                    if (_user != null)
                     {
-                        _User.WatchesChanged += OnWatchesChanged;
+                        _user.WatchesChanged += OnWatchesChanged;
                     }
                     else
                     {
@@ -53,19 +55,19 @@
                     FileEntry.VideoLengthChanged += OnVideoLengthChanged;
                 }
 
-                _PropertyChanged += value;
+                _propertyChanged += value;
             }
             remove
             {
-                _PropertyChanged -= value;
+                _propertyChanged -= value;
 
-                if (_PropertyChanged == null)
+                if (_propertyChanged == null)
                 {
                     FileEntry.VideoLengthChanged -= OnVideoLengthChanged;
 
-                    if (_User != null)
+                    if (_user != null)
                     {
-                        _User.WatchesChanged -= OnWatchesChanged;
+                        _user.WatchesChanged -= OnWatchesChanged;
                     }
                     else
                     {
@@ -81,7 +83,7 @@
 
         public FileEntry FileEntry { get; private set; }
 
-        public String Name
+        public string Name
         {
             get
             {
@@ -90,9 +92,9 @@
                     return (FileEntry.Title);
                 }
 
-                String name = FileEntry.FullName;
+                string name = FileEntry.FullName;
 
-                _DataManager.RootFolders.ForEach(folder => name = name.Replace(folder, String.Empty));
+                _dataManager.RootFolders.ForEach(folder => name = name.Replace(folder, string.Empty));
 
                 name = name.Trim('\\', '/');
 
@@ -104,13 +106,13 @@
             }
         }
 
-        public String LastWatched
+        public string LastWatched
         {
             get
             {
-                DateTime lastWatched = _DataManager.GetLastWatched(FileEntry, _UserName);
+                DateTime lastWatched = _dataManager.GetLastWatched(FileEntry, _userName);
 
-                String text = String.Empty;
+                string text = string.Empty;
 
                 if (lastWatched.Ticks != 0)
                 {
@@ -121,13 +123,13 @@
             }
         }
 
-        public String CreationTime
+        public string CreationTime
         {
             get
             {
-                DateTime creationTime = FileEntry.GetCreationTime(_DataManager);
+                DateTime creationTime = FileEntry.GetCreationTime(_dataManager);
 
-                String text = String.Empty;
+                string text = string.Empty;
 
                 if (creationTime.Ticks != 0)
                 {
@@ -138,13 +140,13 @@
             }
         }
 
-        public String RunningTime
+        public string RunningTime
         {
             get
             {
-                UInt32 runningTime = FileEntry.GetVideoLength(_DataManager);
+                uint runningTime = FileEntry.GetVideoLength(_dataManager);
 
-                String text = String.Empty;
+                string text = string.Empty;
 
                 if (runningTime > 0)
                 {
@@ -156,37 +158,37 @@
         }
 
         public Brush Color
-            => _IOServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red;
+            => _ioServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red;
 
         #endregion
 
         private User TryGetUser()
-            => FileEntry.Users?.Where(item => item.UserName == _UserName).FirstOrDefault();
+            => FileEntry.Users?.Where(item => item.UserName == _userName).FirstOrDefault();
 
-        private void OnUsersChanged(Object sender
+        private void OnUsersChanged(object sender
             , EventArgs e)
         {
-            _User = TryGetUser();
+            _user = TryGetUser();
 
-            if (_User != null)
+            if (_user != null)
             {
-                if (_PropertyChanged != null)
+                if (_propertyChanged != null)
                 {
                     FileEntry.UsersChanged -= OnUsersChanged;
 
-                    _User.WatchesChanged += OnWatchesChanged;
+                    _user.WatchesChanged += OnWatchesChanged;
                 }
             }
         }
 
-        private void OnWatchesChanged(Object sender
+        private void OnWatchesChanged(object sender
             , EventArgs e)
             => RaisePropertyChanged(nameof(LastWatched));
 
         private void OnVideoLengthChanged(object sender, EventArgs e)
             => RaisePropertyChanged(nameof(RunningTime));
 
-        private void RaisePropertyChanged(String attribute)
-            => _PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+        private void RaisePropertyChanged(string attribute)
+            => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

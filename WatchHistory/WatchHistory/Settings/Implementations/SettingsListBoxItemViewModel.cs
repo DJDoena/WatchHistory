@@ -1,25 +1,24 @@
 ﻿namespace DoenaSoft.WatchHistory.Settings.Implementations
 {
-    using System;
     using System.ComponentModel;
 
     internal sealed class SettingsListBoxItemViewModel : ISettingsListBoxItemViewModel
     {
-        private String _Value;
+        private string _value;
 
-        public SettingsListBoxItemViewModel(String value)
+        public SettingsListBoxItemViewModel(string value)
         {
-            _Value = value;
+            _value = value;
         }
 
-        public String Value
+        public string Value
         {
-            get => _Value;
+            get => _value;
             set
             {
-                if (value != _Value)
+                if (value != _value)
                 {
-                    _Value = value;
+                    _value = value;
 
                     RaisePropertyChanged(nameof(Value));
                 }
@@ -32,7 +31,7 @@
 
         #endregion
 
-        private void RaisePropertyChanged(String attribute)
+        private void RaisePropertyChanged(string attribute)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
         }

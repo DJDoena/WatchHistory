@@ -6,30 +6,28 @@
     using MediaInfoHelper;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
-    using WatchHistory.Main.Implementations;
-    using DVDP = DVDProfiler.DVDProfilerXML.Version400;
     using MIH = MediaInfoHelper.DVDProfiler;
 
     internal sealed class DvdWatchesProcessor
     {
-        private readonly IIOServices _IOServices;
+        private readonly IIOServices _ioServices;
 
         private Dictionary<User, HashSet<Watch>> ExistingWatches { get; set; }
 
         public DvdWatchesProcessor(IIOServices ioServices)
         {
-            _IOServices = ioServices;
+            _ioServices = ioServices;
         }
 
         internal void Update(FileEntry entry)
         {
             MIH.DvdWatches watches = null;
 
-            if (_IOServices.File.Exists(entry.FullName))
+            if (_ioServices.File.Exists(entry.FullName))
             {
                 try
                 {
-                    watches = SerializerHelper.Deserialize<MIH.DvdWatches>(_IOServices, entry.FullName);
+                    watches = SerializerHelper.Deserialize<MIH.DvdWatches>(_ioServices, entry.FullName);
                 }
                 catch
                 { }

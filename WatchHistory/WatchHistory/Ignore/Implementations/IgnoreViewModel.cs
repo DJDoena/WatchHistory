@@ -21,22 +21,20 @@
 
         private readonly IIOServices _ioServices;
 
-        private readonly IWindowFactory _windowFactory;
+        private readonly string _userName;
 
-        private readonly String _userName;
-
+#pragma warning disable IDE1006 // Naming Styles
         private event PropertyChangedEventHandler _propertyChanged;
+#pragma warning restore IDE1006 // Naming Styles
 
         public IgnoreViewModel(IIgnoreModel model
             , IDataManager dataManager
             , IIOServices ioServices
-            , IWindowFactory windowFactory
-            , String userName)
+            , string userName)
         {
             _model = model;
             _dataManager = dataManager;
             _ioServices = ioServices;
-            _windowFactory = windowFactory;
             _userName = userName;
 
             UndoIgnoreCommand = new ParameterizedRelayCommand(UndoIgnore);
@@ -70,7 +68,7 @@
 
         #region IIgnoreViewModel
 
-        public String Filter
+        public string Filter
         {
             get => _model.Filter;
             set
@@ -114,7 +112,7 @@
 
         #endregion
 
-        private void UndoIgnore(Object parameter)
+        private void UndoIgnore(object parameter)
         {
             IEnumerable<IFileEntryViewModel> entries = ((IList)parameter).Cast<IFileEntryViewModel>().ToList();
 
@@ -123,11 +121,11 @@
             _dataManager.SaveDataFile();
         }
 
-        private void OnModelFilesChanged(Object sender
+        private void OnModelFilesChanged(object sender
             , EventArgs e)
             => RaisePropertyChanged(nameof(Entries));
 
-        private void RaisePropertyChanged(String attribute)
+        private void RaisePropertyChanged(string attribute)
             => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

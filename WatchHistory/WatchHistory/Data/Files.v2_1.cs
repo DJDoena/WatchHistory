@@ -15,7 +15,7 @@
         public FileEntry[] Entries;
 
         [XmlAttribute]
-        public Decimal Version;
+        public decimal Version;
 
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
@@ -32,42 +32,42 @@
     [DebuggerDisplay("File: {FullName}")]
     public sealed partial class FileEntry
     {
-        private User[] m_Users;
+        private User[] _users;
 
-        private Nullable<DateTime> m_CreationTime;
+        private DateTime? _creationTime;
 
         [XmlElement]
-        public String FullName;
+        public string FullName;
 
         [XmlIgnore]
-        public String Key
-            => FullName?.ToLower() ?? String.Empty;
+        public string Key
+            => FullName?.ToLower() ?? string.Empty;
 
         [XmlAttribute]
         public DateTime CreationTime
         {
-            get => m_CreationTime ?? new DateTime(0, DateTimeKind.Utc);
-            set => m_CreationTime = value.Conform();
+            get => _creationTime ?? new DateTime(0, DateTimeKind.Utc);
+            set => _creationTime = value.Conform();
         }
 
         [XmlArray("Users")]
         [XmlArrayItem("User")]
         public User[] Users
         {
-            get => m_Users;
+            get => _users;
             set
             {
-                m_Users = value;
+                _users = value;
 
                 UsersChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
         [XmlAttribute]
-        public UInt32 VideoLength;
+        public uint VideoLength;
 
         [XmlIgnore]
-        public Boolean VideoLengthSpecified;
+        public bool VideoLengthSpecified;
 
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
@@ -81,16 +81,16 @@
     [DebuggerDisplay("User: {UserName}")]
     public sealed class User : IEquatable<User>
     {
-        private Watch[] m_Watches;
+        private Watch[] _watches;
 
         [XmlAttribute]
-        public String UserName;
+        public string UserName;
 
         [XmlAttribute]
-        public Boolean Ignore;
+        public bool Ignore;
 
         [XmlIgnore]
-        public Boolean IgnoreSpecified
+        public bool IgnoreSpecified
             => Ignore;
 
         [XmlArray("Watches")]
@@ -99,16 +99,16 @@
         {
             get
             {
-                if ((m_Watches == null) || (m_Watches.Length == 0))
+                if ((_watches == null) || (_watches.Length == 0))
                 {
                     return (null);
                 }
 
-                return (m_Watches);
+                return (_watches);
             }
             set
             {
-                m_Watches = value;
+                _watches = value;
 
                 WatchesChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -122,13 +122,13 @@
 
         public event EventHandler WatchesChanged;
 
-        public override Int32 GetHashCode()
+        public override int GetHashCode()
             => UserName?.GetHashCode() ?? 0;
 
-        public override Boolean Equals(Object obj)
+        public override bool Equals(object obj)
             => Equals(obj as User);
 
-        public Boolean Equals(User other)
+        public bool Equals(User other)
         {
             if (other == null)
             {
@@ -142,20 +142,20 @@
     [DebuggerDisplay("Watched: {Value}")]
     public sealed class Watch : IEquatable<Watch>
     {
-        private DateTime m_Watched;
+        private DateTime _watched;
 
         [XmlAttribute]
         public DateTime Value
         {
-            get => m_Watched;
-            set => m_Watched = value.Conform();
+            get => _watched;
+            set => _watched = value.Conform();
         }
 
         [XmlAttribute]
-        public String Source;
+        public string Source;
 
         [XmlIgnore]
-        public Boolean SourceSpecified
+        public bool SourceSpecified
             => Source.IsNotEmpty();
 
         [XmlAnyAttribute]
@@ -164,13 +164,13 @@
         [XmlAnyElement]
         public XmlElement[] AnyElements;
 
-        public override Int32 GetHashCode()
+        public override int GetHashCode()
             => Value.GetHashCode();
 
-        public override Boolean Equals(Object obj)
+        public override bool Equals(object obj)
             => (Equals(obj as Watch));
 
-        public Boolean Equals(Watch other)
+        public bool Equals(Watch other)
         {
             if (other == null)
             {

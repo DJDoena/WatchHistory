@@ -6,11 +6,11 @@
 
     internal interface IMainModel
     {
-        String Filter { get; set; }
+        string Filter { get; set; }
 
-        Boolean IgnoreWatched { get; set; }
+        bool IgnoreWatched { get; set; }
 
-        Boolean SearchInPath { get; set; }
+        bool SearchInPath { get; set; }
 
         event EventHandler FilesChanged;
 
@@ -20,7 +20,7 @@
 
         void PlayFile(FileEntry fileEntry);
 
-        Boolean CanPlayFile(FileEntry fileEntry);
+        bool CanPlayFile(FileEntry fileEntry);
 
         void OpenFileLocation(FileEntry fileEntry);
 

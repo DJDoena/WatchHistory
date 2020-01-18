@@ -1,6 +1,5 @@
 ﻿namespace DoenaSoft.WatchHistory.Data
 {
-    using System;
     using System.Collections.Generic;
 
 
@@ -12,8 +11,8 @@
 
         event System.IO.RenamedEventHandler Renamed;
 
-        void Observe(IEnumerable<String> rootFolders
-            , IEnumerable<String> fileExtensions);
+        void Observe(IEnumerable<string> rootFolders
+            , IEnumerable<string> fileExtensions);
 
         void Suspend();
     }

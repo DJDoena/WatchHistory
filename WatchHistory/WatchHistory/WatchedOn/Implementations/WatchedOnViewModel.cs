@@ -9,24 +9,24 @@
 
     internal sealed class WatchedOnViewModel : IWatchedOnViewModel
     {
-        private DateTime _Date;
+        private DateTime _date;
 
-        private Byte _Hour;
+        private byte _hour;
 
-        private Byte _Minute;
+        private byte _minute;
 
         public WatchedOnViewModel()
         {
             AcceptCommand = new RelayCommand(Accept);
             CancelCommand = new RelayCommand(Cancel);
 
-            DateTime now = DateTime.Now;
+            var now = DateTime.Now;
 
-            _Date = now.Date;
+            _date = now.Date;
 
-            _Hour = (Byte)(now.Hour);
+            _hour = (byte)(now.Hour);
 
-            _Minute = (Byte)(now.Minute);
+            _minute = (byte)(now.Minute);
         }
 
         #region IWatchedOnViewModel
@@ -37,40 +37,40 @@
 
         public DateTime Date
         {
-            get => _Date;
+            get => _date;
             set
             {
-                if (_Date != value)
+                if (_date != value)
                 {
-                    _Date = value;
+                    _date = value;
 
                     RaisePropertyChanged(nameof(Date));
                 }
             }
         }
 
-        public Byte Hour
+        public byte Hour
         {
-            get => _Hour;
+            get => _hour;
             set
             {
-                if (_Hour != value)
+                if (_hour != value)
                 {
-                    _Hour = value;
+                    _hour = value;
 
                     RaisePropertyChanged(nameof(Hour));
                 }
             }
         }
 
-        public Byte Minute
+        public byte Minute
         {
-            get => _Minute;
+            get => _minute;
             set
             {
-                if (_Minute != value)
+                if (_minute != value)
                 {
-                    _Minute = value;
+                    _minute = value;
 
                     RaisePropertyChanged(nameof(Minute));
                 }
@@ -96,7 +96,7 @@
         private void Cancel()
             => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
 
-        private void RaisePropertyChanged(String attribute)
+        private void RaisePropertyChanged(string attribute)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

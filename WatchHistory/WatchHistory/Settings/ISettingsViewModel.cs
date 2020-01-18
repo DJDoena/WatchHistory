@@ -15,9 +15,9 @@
 
         ICommand RemoveUserCommand { get; }
 
-        ObservableCollection<String> RootFolders { get; }
+        ObservableCollection<string> RootFolders { get; }
 
-        String SelectedRootFolder { get; set; }
+        string SelectedRootFolder { get; set; }
 
         ICommand AddRootFolderCommand { get; }
 

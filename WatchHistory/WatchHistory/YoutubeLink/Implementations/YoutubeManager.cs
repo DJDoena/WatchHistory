@@ -1,12 +1,12 @@
 ﻿namespace DoenaSoft.WatchHistory.YoutubeLink.Implementations
 {
-    using DoenaSoft.MediaInfoHelper.Youtube;
-    using Newtonsoft.Json;
     using System;
     using System.Linq;
     using System.Net.Http;
     using System.Text.RegularExpressions;
     using System.Web;
+    using MediaInfoHelper.Youtube;
+    using Newtonsoft.Json;
 
     internal class YoutubeManager : IYoutubeManager
     {
@@ -14,7 +14,7 @@
 
         private static readonly Regex _runningTimeRegex;
 
-        private static HttpClient _httpClient;
+        private static readonly HttpClient _httpClient;
 
         static YoutubeManager()
         {
@@ -96,33 +96,6 @@
 
             return responseItem;
         }
-
-        //private YouTubeService GetYoutubeService()
-        //{
-        //    var secrets = new ClientSecrets()
-        //    {
-        //        ClientId = YoutubeApiConstants.ClientId,
-        //        ClientSecret = YoutubeApiConstants.ClientSecret
-        //    };
-
-        //    var scopes = new[] { YouTubeService.Scope.YoutubeReadonly };
-
-        //    const string AppName = "WatchHistory";
-
-        //    var dataStorage = new FileDataStore(AppName);
-
-        //    var credentials = GoogleWebAuthorizationBroker.AuthorizeAsync(secrets, scopes, "user", CancellationToken.None, dataStorage).Result;
-
-        //    var initializer = new BaseClientService.Initializer()
-        //    {
-        //        HttpClientInitializer = credentials,
-        //        ApplicationName = AppName,
-        //    };
-
-        //    var service = new YouTubeService(initializer);
-
-        //    return service;
-        //}
 
         private uint GetRunningTime(string duration)
         {

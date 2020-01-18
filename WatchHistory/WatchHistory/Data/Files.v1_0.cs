@@ -20,23 +20,23 @@
 
     public sealed partial class FileEntry
     {
-        private User[] m_Users;
+        private User[] _users;
 
-        private Nullable<DateTime> m_CreationTime;
+        private DateTime? _creationTime;
 
         [XmlElement]
-        public String FullName { get; set; }
+        public string FullName { get; set; }
 
         [XmlElement]
         public DateTime CreationTime
         {
             get
             {
-                return ((m_CreationTime ?? new DateTime(0)).ToUniversalTime());
+                return ((_creationTime ?? new DateTime(0)).ToUniversalTime());
             }
             set
             {
-                m_CreationTime = value;
+                _creationTime = value;
             }
         }
 
@@ -46,11 +46,11 @@
         {
             get
             {
-                return (m_Users);
+                return (_users);
             }
             set
             {
-                m_Users = value;
+                _users = value;
 
                 UsersChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -67,16 +67,16 @@
 
     public sealed class User
     {
-        private DateTime[] m_Watches;
+        private DateTime[] _watches;
 
         [XmlAttribute]
-        public String UserName { get; set; }
+        public string UserName { get; set; }
 
         [XmlAttribute]
-        public Boolean Ignore { get; set; }
+        public bool Ignore { get; set; }
 
         [XmlIgnore]
-        public Boolean IgnoreSpecified { get; set; }
+        public bool IgnoreSpecified { get; set; }
 
         [XmlArray("Watches")]
         [XmlArrayItem("Watched")]
@@ -84,21 +84,21 @@
         {
             get
             {
-                if ((m_Watches == null) || (m_Watches.Length == 0))
+                if ((_watches == null) || (_watches.Length == 0))
                 {
                     return (null);
                 }
 
-                for (Int32 i = 0; i < m_Watches.Length; i++)
+                for (int i = 0; i < _watches.Length; i++)
                 {
-                    m_Watches[i] = m_Watches[i].ToUniversalTime();
+                    _watches[i] = _watches[i].ToUniversalTime();
                 }
 
-                return (m_Watches);
+                return (_watches);
             }
             set
             {
-                m_Watches = value;
+                _watches = value;
 
                 WatchesChanged?.Invoke(this, EventArgs.Empty);
             }

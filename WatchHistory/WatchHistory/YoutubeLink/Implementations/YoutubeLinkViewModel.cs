@@ -5,7 +5,7 @@
     using System.Windows.Input;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
-    using DoenaSoft.MediaInfoHelper.Youtube;
+    using MediaInfoHelper.Youtube;
     using ToolBox.Commands;
     using WatchHistory.Data;
     using WatchHistory.Implementations;
@@ -18,42 +18,43 @@
 
         private readonly IUIServices _uiServices;
 
-        private readonly string _userName;
+        private readonly IClipboardServices _clipboardServices;
 
-        private string _YoutubeLink;
+        private string _youtubeLink;
 
-        private string _YoutubeTitle;
+        private string _youtubeTitle;
 
-        private DateTime _Date;
+        private DateTime _date;
 
-        private byte _Hour;
+        private byte _hour;
 
-        private byte _Minute;
+        private byte _minute;
 
         private YoutubeVideoInfo _videoInfo;
 
         public YoutubeLinkViewModel(IDataManager dataManager
             , IIOServices ioServices
             , IUIServices uiServices
+            , IClipboardServices clipboardServices
             , IYoutubeManager youtubeManager
             , string userName)
         {
             _youtubeManager = youtubeManager;
             _uiServices = uiServices;
-            _userName = userName;
+            _clipboardServices = clipboardServices;
 
             _youtubeFileManager = new YoutubeFileManager(dataManager, ioServices, userName);
             AcceptCommand = new RelayCommand(Accept);
             CancelCommand = new RelayCommand(Cancel);
             ScanCommand = new RelayCommand(Scan);
 
-            DateTime now = DateTime.Now;
+            var now = DateTime.Now;
 
-            _Date = now.Date;
+            _date = now.Date;
 
-            _Hour = (byte)(now.Hour);
+            _hour = (byte)(now.Hour);
 
-            _Minute = (byte)(now.Minute);
+            _minute = (byte)(now.Minute);
         }
 
         #region IYoutubeLinkViewModel
@@ -66,12 +67,12 @@
 
         public string YoutubeLink
         {
-            get => _YoutubeLink;
+            get => _youtubeLink;
             set
             {
-                if (_YoutubeLink != value)
+                if (_youtubeLink != value)
                 {
-                    _YoutubeLink = value;
+                    _youtubeLink = value;
 
                     RaisePropertyChanged(nameof(YoutubeLink));
                 }
@@ -80,12 +81,12 @@
 
         public string YoutubeTitle
         {
-            get => _YoutubeTitle;
+            get => _youtubeTitle;
             set
             {
-                if (_YoutubeTitle != value)
+                if (_youtubeTitle != value)
                 {
-                    _YoutubeTitle = value;
+                    _youtubeTitle = value;
 
                     RaisePropertyChanged(nameof(YoutubeTitle));
                 }
@@ -94,12 +95,12 @@
 
         public DateTime Date
         {
-            get => _Date;
+            get => _date;
             set
             {
-                if (_Date != value)
+                if (_date != value)
                 {
-                    _Date = value;
+                    _date = value;
 
                     RaisePropertyChanged(nameof(Date));
                 }
@@ -108,12 +109,12 @@
 
         public byte Hour
         {
-            get => _Hour;
+            get => _hour;
             set
             {
-                if (_Hour != value)
+                if (_hour != value)
                 {
-                    _Hour = value;
+                    _hour = value;
 
                     RaisePropertyChanged(nameof(Hour));
                 }
@@ -122,12 +123,12 @@
 
         public byte Minute
         {
-            get => _Minute;
+            get => _minute;
             set
             {
-                if (_Minute != value)
+                if (_minute != value)
                 {
-                    _Minute = value;
+                    _minute = value;
 
                     RaisePropertyChanged(nameof(Minute));
                 }
@@ -191,6 +192,11 @@
         {
             _videoInfo = null;
 
+            if (string.IsNullOrEmpty(YoutubeLink) && _clipboardServices.ContainsText)
+            {
+                TryGetLinkFromClipboard();
+            }
+
             if (string.IsNullOrEmpty(YoutubeLink))
             {
                 _uiServices.ShowMessageBox("You need to enter a valid Youtube URL", "Missing URL", Buttons.OK, Icon.Warning);
@@ -210,6 +216,16 @@
             }
 
             return _videoInfo != null;
+        }
+
+        private void TryGetLinkFromClipboard()
+        {
+            try
+            {
+                YoutubeLink = _clipboardServices.GetText();
+            }
+            catch
+            { }
         }
     }
 }

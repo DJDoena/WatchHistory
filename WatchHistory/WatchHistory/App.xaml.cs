@@ -26,6 +26,8 @@
 
             UIServices = new WindowUIServices();
 
+            var clipboardServices = new WindowClipboardServices();
+
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
             Environment.Init(IOServices);
@@ -34,7 +36,7 @@
 
             var youtubeManager = new YoutubeManager();
 
-            IWindowFactory windowFactory = new WindowFactory(IOServices, UIServices, DataManager, youtubeManager);
+            IWindowFactory windowFactory = new WindowFactory(IOServices, UIServices, clipboardServices, DataManager, youtubeManager);
 
             windowFactory.OpenSelectUserWindow();
         }
@@ -45,24 +47,22 @@
             DataManager.SaveDataFile();
         }
 
-        private void OnUnhandledException(Object sender
+        private void OnUnhandledException(object sender
             , UnhandledExceptionEventArgs e)
         {
-            Exception ex = e.ExceptionObject as Exception;
-
-            if (ex != null)
+            if (e.ExceptionObject is Exception ex)
             {
                 ExceptionXml exceptionXml = new ExceptionXml(ex);
 
-                String fileName = IOServices.Path.Combine(Environment.AppDataFolder, "Crash.xml");
+                string fileName = IOServices.Path.Combine(Environment.AppDataFolder, "Crash.xml");
 
                 SerializerHelper.Serialize(IOServices, fileName, exceptionXml);
 
-                UIServices.ShowMessageBox(ex.Message, String.Empty, Buttons.OK, Icon.Error);
+                UIServices.ShowMessageBox(ex.Message, string.Empty, Buttons.OK, Icon.Error);
             }
             else
             {
-                UIServices.ShowMessageBox(e.ExceptionObject?.ToString() ?? "Error", String.Empty, Buttons.OK, Icon.Error);
+                UIServices.ShowMessageBox(e.ExceptionObject?.ToString() ?? "Error", string.Empty, Buttons.OK, Icon.Error);
             }
         }
     }

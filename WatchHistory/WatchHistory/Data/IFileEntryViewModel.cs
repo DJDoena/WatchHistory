@@ -1,6 +1,5 @@
 ﻿namespace DoenaSoft.WatchHistory.Data
 {
-    using System;
     using System.ComponentModel;
     using System.Windows.Media;
 
@@ -8,13 +7,13 @@
     {
         FileEntry FileEntry { get; }
 
-        String Name { get; }
+        string Name { get; }
 
-        String LastWatched { get; }
+        string LastWatched { get; }
 
-        String CreationTime { get; }
+        string CreationTime { get; }
 
-        String RunningTime { get; }
+        string RunningTime { get; }
 
         Brush Color { get; }
     }

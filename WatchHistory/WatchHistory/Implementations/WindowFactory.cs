@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
     using Data;
@@ -23,19 +22,21 @@
 
         private readonly IUIServices _uiServices;
 
+        private readonly IClipboardServices _clipboardServices;
+
         private readonly IDataManager _dataManager;
 
         private readonly IYoutubeManager _youtubeManager;
 
-        private Window WaitWindow { get; set; }
-
         public WindowFactory(IIOServices ioServices
             , IUIServices uiServices
+            , IClipboardServices clipboardServices
             , IDataManager dataManager
             , IYoutubeManager youtubeManager)
         {
             _ioServices = ioServices;
             _uiServices = uiServices;
+            _clipboardServices = clipboardServices;
             _dataManager = dataManager;
             _youtubeManager = youtubeManager;
         }
@@ -95,7 +96,7 @@
         {
             var model = new IgnoreModel(_dataManager, userName);
 
-            var viewModel = new IgnoreViewModel(model, _dataManager, _ioServices, this, userName)
+            var viewModel = new IgnoreViewModel(model, _dataManager, _ioServices, userName)
             {
                 Filter = filter,
             };
@@ -108,7 +109,7 @@
             window.ShowDialog();
         }
 
-        public Nullable<DateTime> OpenWatchedOnWindow()
+        public DateTime? OpenWatchedOnWindow()
         {
             var viewModel = new WatchedOnViewModel();
 
@@ -156,7 +157,7 @@
 
         public void OpenAddYoutubeLinkVideo(string userName)
         {
-            var viewModel = new YoutubeLinkViewModel(_dataManager, _ioServices, _uiServices, _youtubeManager, userName);
+            var viewModel = new YoutubeLinkViewModel(_dataManager, _ioServices, _uiServices, _clipboardServices, _youtubeManager, userName);
 
             var window = new YoutubeLinkWindow()
             {

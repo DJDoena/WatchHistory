@@ -10,7 +10,7 @@
             InitializeComponent();
         }
 
-        private void OnLoaded(Object sender
+        private void OnLoaded(object sender
             , RoutedEventArgs e)
         {
             ISettingsViewModel viewModel = (ISettingsViewModel)DataContext;
@@ -18,7 +18,7 @@
             viewModel.Closing += OnClosing;
         }
 
-        private void OnClosing(Object sender
+        private void OnClosing(object sender
             , EventArgs e)
         {
             ISettingsViewModel viewModel = (ISettingsViewModel)DataContext;

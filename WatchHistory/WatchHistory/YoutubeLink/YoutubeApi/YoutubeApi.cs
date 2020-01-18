@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace DoenaSoft.WatchHistory.YoutubeLink.YoutubeApi
 {
+
+#pragma warning disable IDE1006 // Naming Styles
+
     public class PageInfo
     {
         public int totalResults { get; set; }
@@ -100,4 +103,7 @@ namespace DoenaSoft.WatchHistory.YoutubeLink.YoutubeApi
         public PageInfo pageInfo { get; set; }
         public List<Item> items { get; set; }
     }
+
+#pragma warning restore IDE1006 // Naming Styles
+
 }

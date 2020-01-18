@@ -26,7 +26,9 @@
 
         private readonly string _userName;
 
+#pragma warning disable IDE1006 // Naming Styles
         private event PropertyChangedEventHandler _propertyChanged;
+#pragma warning restore IDE1006 // Naming Styles
 
         private SortColumn _sortColumn;
 
@@ -201,7 +203,7 @@
 
         #endregion
 
-        private void AddWatched(Object parameter)
+        private void AddWatched(object parameter)
         {
             SuspendEvents = true;
 
@@ -224,10 +226,10 @@
             }
         }
 
-        private static IEnumerable<FileEntry> GetEntries(Object parameter)
+        private static IEnumerable<FileEntry> GetEntries(object parameter)
             => ((IList)parameter).Cast<IFileEntryViewModel>().Select(entry => entry.FileEntry).ToList();
 
-        private void Ignore(Object parameter)
+        private void Ignore(object parameter)
         {
             SuspendEvents = true;
 
@@ -244,14 +246,14 @@
         private void UndoIgnore()
             => _windowFactory.OpenIgnoreWindow(_userName, Filter);
 
-        private void PlayFile(Object parameter)
+        private void PlayFile(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
 
             _model.PlayFile(fileEntry);
         }
 
-        private bool CanPlayFile(Object parameter)
+        private bool CanPlayFile(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
 
@@ -260,7 +262,7 @@
             return canPlay;
         }
 
-        private void PlayFileAndAddWatched(Object parameter)
+        private void PlayFileAndAddWatched(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
 
@@ -271,17 +273,17 @@
             _dataManager.SaveDataFile();
         }
 
-        private static FileEntry GetFileEntry(Object parameter)
+        private static FileEntry GetFileEntry(object parameter)
             => ((IFileEntryViewModel)parameter)?.FileEntry;
 
-        private void OpenFileLocation(Object parameter)
+        private void OpenFileLocation(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
 
             _model.OpenFileLocation(fileEntry);
         }
 
-        private void Sort(Object parameter)
+        private void Sort(object parameter)
             => SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (string)parameter));
 
         private bool CanImportCollection()
@@ -299,7 +301,7 @@
             ResumeEvents();
         }
 
-        private void OnModelFilesChanged(Object sender
+        private void OnModelFilesChanged(object sender
             , EventArgs e)
         {
             if (SuspendEvents == false)
@@ -315,13 +317,13 @@
         private void RaisePropertyChanged(string attribute)
             => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
 
-        private void OnDataManagerIsSynchronizingChanged(Object sender
+        private void OnDataManagerIsSynchronizingChanged(object sender
             , EventArgs e)
         {
             RaisePropertyChanged(nameof(ImportCollectionCommand));
         }
 
-        private void AddWatchedOn(Object parameter)
+        private void AddWatchedOn(object parameter)
         {
             var watchedOn = _windowFactory.OpenWatchedOnWindow();
 
@@ -344,7 +346,7 @@
             OnlineAccess.CheckForNewVersion("http://doena-soft.de/dvdprofiler/3.9.0/versions.xml", new WindowHandle(), "Watch History", GetType().Assembly);
         }
 
-        private void ShowHistory(Object parameter)
+        private void ShowHistory(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
 
@@ -353,7 +355,7 @@
             _windowFactory.OpenWatchesWindow(watches);
         }
 
-        private void EditRunningTime(Object parameter)
+        private void EditRunningTime(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
 

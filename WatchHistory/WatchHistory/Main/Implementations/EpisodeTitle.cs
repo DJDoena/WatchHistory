@@ -2,33 +2,31 @@
 {
     using System;
     using System.Collections.Generic;
-    using AbstractionLayer.IOServices;
     using DVDProfiler.DVDProfilerXML.Version400;
     using ToolBox.Extensions;
 
     internal sealed class EpisodeTitle : IEquatable<EpisodeTitle>
     {
-        private readonly DVD _Dvd;
+        private readonly DVD _dvd;
 
-        internal String ID
-            => _Dvd.ID;
+        internal string ID
+            => _dvd.ID;
 
-        internal String FileName
+        internal string FileName
             => $"{ID}  {Title.ReplaceInvalidFileNameChars('_')}";
 
-        internal String Title { get; }
+        internal string Title { get; }
 
         internal DateTime PurchaseDate
-            => _Dvd.PurchaseInfo?.Date ?? new DateTime(0);
+            => _dvd.PurchaseInfo?.Date ?? new DateTime(0);
 
         internal IEnumerable<Event> Watches
-            => CollectionProcessor.GetWatches(_Dvd);
+            => CollectionProcessor.GetWatches(_dvd);
 
         public EpisodeTitle(DVD dvd
-            , String caption
-            , IIOServices ioServices)
+            , string caption)
         {
-            _Dvd = dvd;
+            _dvd = dvd;
 
             Title = $"{dvd.Title}: {caption}";
 
@@ -40,14 +38,14 @@
 
         #region IEquatable<DvdTitle>
 
-        public Boolean Equals(EpisodeTitle other)
+        public bool Equals(EpisodeTitle other)
         {
             if (other == null)
             {
                 return (false);
             }
 
-            Boolean equals = ID == other.ID;
+            bool equals = ID == other.ID;
 
             if (equals)
             {
@@ -59,10 +57,10 @@
 
         #endregion
 
-        public override Int32 GetHashCode()
+        public override int GetHashCode()
             => ((ID.GetHashCode() / 2) + (Title.GetHashCode() / 2));
 
-        public override Boolean Equals(Object obj)
+        public override bool Equals(object obj)
             => (Equals(obj as EpisodeTitle));
     }
 }

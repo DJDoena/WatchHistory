@@ -38,12 +38,12 @@
 
         internal DateTime GetCreationTime(IDataManager dataManager)
         {
-            if ((m_CreationTime.HasValue == false) || (m_CreationTime.Value.Ticks == 0))
+            if ((_creationTime.HasValue == false) || (_creationTime.Value.Ticks == 0))
             {
-                m_CreationTime = dataManager.GetCreationTime(this).Conform();
+                _creationTime = dataManager.GetCreationTime(this).Conform();
             }
 
-            return m_CreationTime.Value.ToLocalTime();
+            return _creationTime.Value.ToLocalTime();
         }
 
         internal uint GetVideoLength(IDataManager dataManager)

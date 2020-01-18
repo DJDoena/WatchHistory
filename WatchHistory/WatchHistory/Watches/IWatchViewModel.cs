@@ -1,11 +1,9 @@
 ﻿namespace DoenaSoft.WatchHistory.Watches
 {
-    using System;
-
     internal interface IWatchViewModel
     {
-        String Source { get; }
+        string Source { get; }
 
-        String Watched { get; }
+        string Watched { get; }
     }
 }

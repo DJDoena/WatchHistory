@@ -11,7 +11,7 @@
             InitializeComponent();
         }
 
-        private void OnLoaded(Object sender
+        private void OnLoaded(object sender
             , RoutedEventArgs e)
         {
             ISelectUserViewModel viewModel = (ISelectUserViewModel)DataContext;
@@ -19,7 +19,7 @@
             viewModel.Closing += OnViewModelClosing;
         }
 
-        private void OnViewModelClosing(Object sender
+        private void OnViewModelClosing(object sender
             , EventArgs e)
         {
             ISelectUserViewModel viewModel = (ISelectUserViewModel)DataContext;

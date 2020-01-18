@@ -7,7 +7,7 @@
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
     using DVDP = DVDProfiler.DVDProfilerXML.Version400;
-    using MIH = DoenaSoft.MediaInfoHelper.DVDProfiler;
+    using MIH = MediaInfoHelper.DVDProfiler;
 
     internal sealed class CollectionProcessor
     {
@@ -84,7 +84,7 @@
 
         private void CreateCollectionFiles(string folder)
         {
-            var titles = (new EpisodeTitleProcessor(_collection, _ioServices)).GetEpisodeTitles();
+            var titles = (new EpisodeTitleProcessor(_collection)).GetEpisodeTitles();
 
             titles = new HashSet<EpisodeTitle>(titles);
 

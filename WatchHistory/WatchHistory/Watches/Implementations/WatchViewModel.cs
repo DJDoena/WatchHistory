@@ -1,25 +1,24 @@
 ﻿namespace DoenaSoft.WatchHistory.Watches.Implementations
 {
-    using System;
     using Data;
     using WatchHistory.Implementations;
 
     internal class WatchViewModel : IWatchViewModel
     {
-        private readonly Watch _Watch;
+        private readonly Watch _watch;
 
         public WatchViewModel(Watch watch)
         {
-            _Watch = watch;
+            _watch = watch;
         }
 
         #region  IWatchViewModel
 
-        public String Source
-            => _Watch.SourceSpecified ? _Watch.Source : "Watch History";
+        public string Source
+            => _watch.SourceSpecified ? _watch.Source : "Watch History";
 
-        public String Watched
-            => ViewModelHelper.GetFormattedDateTime(_Watch.Value.ToLocalTime());
+        public string Watched
+            => ViewModelHelper.GetFormattedDateTime(_watch.Value.ToLocalTime());
 
         #endregion
     }

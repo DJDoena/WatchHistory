@@ -1,13 +1,12 @@
 ﻿namespace DoenaSoft.WatchHistory.Implementations
 {
-    using System;
     using AbstractionLayer.IOServices;
     using ToolBox.Generics;
 
     internal static class SerializerHelper
     {
         internal static T Deserialize<T>(IIOServices ioServices
-            , String fileName)
+            , string fileName)
             where T : class, new()
         {
             using (System.IO.Stream fs = ioServices.GetFileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
@@ -17,7 +16,7 @@
         }
 
         internal static void Serialize<T>(IIOServices ioServices
-            , String fileName
+            , string fileName
             , T instance)
             where T : class, new()
         {

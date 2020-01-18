@@ -11,13 +11,13 @@
 
         ICommand CancelCommand { get; }
 
-        Byte Hours { get; set; }
+        byte Hours { get; set; }
 
-        Byte Minutes { get; set; }
+        byte Minutes { get; set; }
 
-        Byte Seconds { get; set; }
+        byte Seconds { get; set; }
 
-        UInt32 RunningTime { get; }
+        uint RunningTime { get; }
 
         event EventHandler<CloseEventArgs> Closing;
     }

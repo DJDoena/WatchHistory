@@ -11,11 +11,11 @@
     internal static class ViewModelHelper
     {
         internal static ObservableCollection<IFileEntryViewModel> GetSortedEntries(IEnumerable<FileEntry> modelEntries
-            , String userName
+            , string userName
             , IDataManager dataManager
             , IIOServices ioServices
             , SortColumn sortColumn
-            , Boolean ascending)
+            , bool ascending)
         {
             List<FileEntryViewModel> viewModelEntries = modelEntries.Select(item => new FileEntryViewModel(item, userName, dataManager, ioServices)).ToList();
 
@@ -24,17 +24,17 @@
             return (new ObservableCollection<IFileEntryViewModel>(viewModelEntries));
         }
 
-        internal static String GetFormattedDateTime(DateTime dateTime)
+        internal static string GetFormattedDateTime(DateTime dateTime)
             => $"{dateTime.ToShortDateString()} {dateTime.ToShortTimeString()}";
 
-        private static Int32 Compare(FileEntryViewModel left
+        private static int Compare(FileEntryViewModel left
             , FileEntryViewModel right
             , SortColumn sortColumn
-            , Boolean ascending
-            , String userName
+            , bool ascending
+            , string userName
             , IDataManager dataManager)
         {
-            Int32 compare = 0;
+            int compare = 0;
 
             switch (sortColumn)
             {
@@ -64,9 +64,9 @@
             return (compare);
         }
 
-        private static Int32 CompareLastWatched(FileEntryViewModel left
+        private static int CompareLastWatched(FileEntryViewModel left
             , FileEntryViewModel right
-            , String userName
+            , string userName
             , IDataManager dataManager)
         {
             DateTime leftLastWatched = dataManager.GetLastWatched(left.FileEntry, userName);
@@ -76,7 +76,7 @@
             return (leftLastWatched.CompareTo(rightLastWatched));
         }
 
-        private static Int32 CompareCreationTime(FileEntryViewModel left
+        private static int CompareCreationTime(FileEntryViewModel left
             , FileEntryViewModel right
             , IDataManager dataManager)
         {
@@ -87,45 +87,45 @@
             return (leftCreationTime.CompareTo(rightCreationTime));
         }
 
-        private static Int32 CompareName(FileEntryViewModel left
+        private static int CompareName(FileEntryViewModel left
             , FileEntryViewModel right)
         {
-            String leftName = PadName(left.Name);
+            string leftName = PadName(left.Name);
 
             ReplaceArticles(ref leftName);
 
-            String rightName = PadName(right.Name);
+            string rightName = PadName(right.Name);
 
             ReplaceArticles(ref rightName);
 
             return (leftName.CompareTo(rightName));
         }
 
-        private static String PadName(String name)
+        private static string PadName(string name)
         {
-            String[] parts = name.Split(' ', '\\', '.', ',');
+            string[] parts = name.Split(' ', '\\', '.', ',');
 
-            for (Int32 i = 0; i < parts.Length; i++)
+            for (int i = 0; i < parts.Length; i++)
             {
                 TryPadName(ref parts[i]);
             }
 
-            name = String.Join(" ", parts);
+            name = string.Join(" ", parts);
 
             return (name);
         }
 
-        internal static string GetFormattedRunningTime(UInt32 runningTime)
+        internal static string GetFormattedRunningTime(uint runningTime)
         {
-            UInt32 hours = runningTime / 3600;
+            uint hours = runningTime / 3600;
 
-            UInt32 modulo = runningTime % 3600;
+            uint modulo = runningTime % 3600;
 
-            UInt32 minutes = modulo / 60;
+            uint minutes = modulo / 60;
 
-            UInt32 seconds = modulo % 60;
+            uint seconds = modulo % 60;
 
-            String text = $"{minutes:D2}:{seconds:D2}";
+            string text = $"{minutes:D2}:{seconds:D2}";
 
             if (hours > 0)
             {
@@ -135,15 +135,15 @@
             return text;
         }
 
-        private static void TryPadName(ref String part)
+        private static void TryPadName(ref string part)
         {
-            if (UInt32.TryParse(part, out uint number))
+            if (uint.TryParse(part, out uint number))
             {
                 part = number.ToString("D10");
             }
         }
 
-        private static void ReplaceArticles(ref String name)
+        private static void ReplaceArticles(ref string name)
         {
             if (name.StartsWith("the ", StringComparison.InvariantCultureIgnoreCase))
             {

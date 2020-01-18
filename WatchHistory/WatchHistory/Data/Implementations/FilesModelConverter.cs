@@ -21,7 +21,7 @@
         {
             newFiles.Entries = new FileEntry[oldFiles.Entries.Length];
 
-            for (Int32 entryIndex = 0; entryIndex < oldFiles.Entries.Length; entryIndex++)
+            for (int entryIndex = 0; entryIndex < oldFiles.Entries.Length; entryIndex++)
             {
                 CopyEntry(oldFiles, newFiles, entryIndex);
             }
@@ -29,7 +29,7 @@
 
         private static void CopyEntry(v1_0.Files oldFiles
              , Files newFiles
-             , Int32 entryIndex)
+             , int entryIndex)
         {
             v1_0.FileEntry oldEntry = oldFiles.Entries[entryIndex];
 
@@ -60,7 +60,7 @@
         {
             newEntry.Users = new User[oldEntry.Users.Length];
 
-            for (Int32 userIndex = 0; userIndex < oldEntry.Users.Length; userIndex++)
+            for (int userIndex = 0; userIndex < oldEntry.Users.Length; userIndex++)
             {
                 CopyUser(oldEntry, newEntry, userIndex);
             }
@@ -68,7 +68,7 @@
 
         private static void CopyUser(v1_0.FileEntry oldEntry
             , FileEntry newEntry
-            , Int32 userIndex)
+            , int userIndex)
         {
             v1_0.User oldUser = oldEntry.Users[userIndex];
 
@@ -103,7 +103,7 @@
         {
             newUser.Watches = new Watch[oldUser.Watches.Length];
 
-            for (Int32 watchIndex = 0; watchIndex < oldUser.Watches.Length; watchIndex++)
+            for (int watchIndex = 0; watchIndex < oldUser.Watches.Length; watchIndex++)
             {
                 DateTime oldWatch = oldUser.Watches[watchIndex];
 

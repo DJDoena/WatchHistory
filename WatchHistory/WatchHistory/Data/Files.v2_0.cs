@@ -14,7 +14,7 @@
         public FileEntry[] Entries { get; set; }
 
         [XmlAttribute]
-        public Decimal Version { get; set; }
+        public decimal Version { get; set; }
 
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes { get; set; }
@@ -31,23 +31,23 @@
     [DebuggerDisplay("File: {FullName}")]
     public sealed partial class FileEntry
     {
-        private User[] m_Users;
+        private User[] _users;
 
-        private Nullable<DateTime> m_CreationTime;
+        private DateTime? _creationTime;
 
         [XmlElement]
-        public String FullName { get; set; }
+        public string FullName { get; set; }
 
         [XmlAttribute]
         public DateTime CreationTime
         {
             get
             {
-                return (m_CreationTime ?? new DateTime(0, DateTimeKind.Utc));
+                return (_creationTime ?? new DateTime(0, DateTimeKind.Utc));
             }
             set
             {
-                m_CreationTime = value.Conform();
+                _creationTime = value.Conform();
             }
         }
 
@@ -57,21 +57,21 @@
         {
             get
             {
-                return (m_Users);
+                return (_users);
             }
             set
             {
-                m_Users = value;
+                _users = value;
 
                 UsersChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
         [XmlAttribute]
-        public Int32 VideoLength { get; set; }
+        public int VideoLength { get; set; }
 
         [XmlIgnore]
-        public Boolean VideoLengthSpecified { get; set; }
+        public bool VideoLengthSpecified { get; set; }
 
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes { get; set; }
@@ -85,16 +85,16 @@
     [DebuggerDisplay("User: {UserName}")]
     public sealed class User
     {
-        private Watch[] m_Watches;
+        private Watch[] _watches;
 
         [XmlAttribute]
-        public String UserName { get; set; }
+        public string UserName { get; set; }
 
         [XmlAttribute]
-        public Boolean Ignore { get; set; }
+        public bool Ignore { get; set; }
 
         [XmlIgnore]
-        public Boolean IgnoreSpecified { get; set; }
+        public bool IgnoreSpecified { get; set; }
 
         [XmlArray("Watches")]
         [XmlArrayItem("Watched")]
@@ -102,16 +102,16 @@
         {
             get
             {
-                if ((m_Watches == null) || (m_Watches.Length == 0))
+                if ((_watches == null) || (_watches.Length == 0))
                 {
                     return (null);
                 }
 
-                return (m_Watches);
+                return (_watches);
             }
             set
             {
-                m_Watches = value;
+                _watches = value;
 
                 WatchesChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -129,18 +129,18 @@
     [DebuggerDisplay("Watched: {Value}")]
     public sealed class Watch
     {
-        private DateTime m_Watched;
+        private DateTime _watched;
 
         [XmlAttribute]
         public DateTime Value
         {
             get
             {
-                return m_Watched;
+                return _watched;
             }
             set
             {
-                m_Watched = value.Conform();
+                _watched = value.Conform();
             }
         }
 

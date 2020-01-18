@@ -12,49 +12,35 @@
 
     internal sealed class SettingsViewModel : ISettingsViewModel
     {
-        private readonly IDataManager _DataManager;
+        private readonly IDataManager _dataManager;
 
-        private readonly IUIServices _UIServices;
+        private readonly IUIServices _uiServices;
 
-        private readonly ICommand _AddUserCommand;
+        private ISettingsListBoxItemViewModel _selectedUser;
 
-        private readonly ICommand _RemoveUserCommand;
+        private string _selectedRootFolder;
 
-        private readonly ICommand _AddRootFolderCommand;
-
-        private readonly ICommand _RemoveRootFolderCommand;
-
-        private readonly ICommand _AddFileExtensionCommand;
-
-        private readonly ICommand _RemoveFileExtensionCommand;
-
-        private readonly ICommand _AcceptCommand;
-
-        private ISettingsListBoxItemViewModel _SelectedUser;
-
-        private String _SelectedRootFolder;
-
-        private ISettingsListBoxItemViewModel _SelectedFileExtension;
+        private ISettingsListBoxItemViewModel _selectedFileExtension;
 
         public SettingsViewModel(IDataManager dataManager
             , IUIServices uiServices)
         {
-            _DataManager = dataManager;
-            _UIServices = uiServices;
+            _dataManager = dataManager;
+            _uiServices = uiServices;
 
-            Users = new ObservableCollection<ISettingsListBoxItemViewModel>(_DataManager.Users.Select(item => new SettingsListBoxItemViewModel(item)));
+            Users = new ObservableCollection<ISettingsListBoxItemViewModel>(_dataManager.Users.Select(item => new SettingsListBoxItemViewModel(item)));
 
-            RootFolders = new ObservableCollection<String>(_DataManager.RootFolders);
+            RootFolders = new ObservableCollection<string>(_dataManager.RootFolders);
 
-            FileExtensions = new ObservableCollection<ISettingsListBoxItemViewModel>(_DataManager.FileExtensions.Select(item => new SettingsListBoxItemViewModel(item)));
+            FileExtensions = new ObservableCollection<ISettingsListBoxItemViewModel>(_dataManager.FileExtensions.Select(item => new SettingsListBoxItemViewModel(item)));
 
-            _AddUserCommand = new RelayCommand(AddUser);
-            _RemoveUserCommand = new RelayCommand(RemoveUser, CanRemoveUser);
-            _AddRootFolderCommand = new RelayCommand(AddRootFolder);
-            _RemoveRootFolderCommand = new RelayCommand(RemoveRootFolder, CanRemoveRootFolder);
-            _AddFileExtensionCommand = new RelayCommand(AddFileExtension);
-            _RemoveFileExtensionCommand = new RelayCommand(RemoveFileExtension, CanRemoveFileExtension);
-            _AcceptCommand = new RelayCommand(Accept);
+            AddUserCommand = new RelayCommand(AddUser);
+            RemoveUserCommand = new RelayCommand(RemoveUser, CanRemoveUser);
+            AddRootFolderCommand = new RelayCommand(AddRootFolder);
+            RemoveRootFolderCommand = new RelayCommand(RemoveRootFolder, CanRemoveRootFolder);
+            AddFileExtensionCommand = new RelayCommand(AddFileExtension);
+            RemoveFileExtensionCommand = new RelayCommand(RemoveFileExtension, CanRemoveFileExtension);
+            AcceptCommand = new RelayCommand(Accept);
         }
 
         #region INotifyPropertyChanged
@@ -69,79 +55,72 @@
 
         public ISettingsListBoxItemViewModel SelectedUser
         {
-            get => _SelectedUser;
+            get => _selectedUser;
             set
             {
-                if (value != _SelectedUser)
+                if (value != _selectedUser)
                 {
-                    _SelectedUser = value;
+                    _selectedUser = value;
 
                     RaisePropertyChanged(nameof(SelectedUser));
                 }
             }
         }
 
-        public ICommand AddUserCommand
-            => _AddUserCommand;
+        public ICommand AddUserCommand { get; }
 
-        public ICommand RemoveUserCommand
-            => _RemoveUserCommand;
+        public ICommand RemoveUserCommand { get; }
 
-        public ObservableCollection<String> RootFolders { get; private set; }
+        public ObservableCollection<string> RootFolders { get; private set; }
 
-        public String SelectedRootFolder
+        public string SelectedRootFolder
         {
-            get => _SelectedRootFolder;
+            get => _selectedRootFolder;
             set
             {
-                if (value != _SelectedRootFolder)
+                if (value != _selectedRootFolder)
                 {
-                    _SelectedRootFolder = value;
+                    _selectedRootFolder = value;
 
                     RaisePropertyChanged(nameof(SelectedRootFolder));
                 }
             }
         }
 
-        public ICommand AddRootFolderCommand
-            => _AddRootFolderCommand;
+        public ICommand AddRootFolderCommand { get; }
 
-        public ICommand RemoveRootFolderCommand
-            => _RemoveRootFolderCommand;
+        public ICommand RemoveRootFolderCommand { get; }
 
         public ObservableCollection<ISettingsListBoxItemViewModel> FileExtensions { get; private set; }
 
         public ISettingsListBoxItemViewModel SelectedFileExtension
         {
-            get => _SelectedFileExtension;
+            get => _selectedFileExtension;
             set
             {
-                if (value != _SelectedFileExtension)
+                if (value != _selectedFileExtension)
                 {
-                    _SelectedFileExtension = value;
+                    _selectedFileExtension = value;
 
                     RaisePropertyChanged(nameof(SelectedFileExtension));
                 }
             }
         }
 
-        public ICommand AddFileExtensionCommand
-            => _AddFileExtensionCommand;
+        public ICommand AddFileExtensionCommand { get; }
 
-        public ICommand RemoveFileExtensionCommand
-            => _RemoveFileExtensionCommand;
+        public ICommand RemoveFileExtensionCommand { get; }
 
-        public ICommand AcceptCommand
-            => _AcceptCommand;
+        public ICommand AcceptCommand { get; }
 
         public event EventHandler Closing;
 
         #endregion
 
         private void AddUser()
-            => Users.Add(new SettingsListBoxItemViewModel(String.Empty));
+            => Users.Add(new SettingsListBoxItemViewModel(string.Empty));
 
-        private Boolean CanRemoveUser()
+        private bool CanRemoveUser()
             => SelectedUser != null;
 
         private void RemoveUser()
@@ -149,22 +128,22 @@
 
         private void AddRootFolder()
         {
-            if (_UIServices.ShowFolderBrowserDialog(new FolderBrowserDialogOptions(), out string rootFolder))
+            if (_uiServices.ShowFolderBrowserDialog(new FolderBrowserDialogOptions(), out string rootFolder))
             {
                 RootFolders.Add(rootFolder);
             }
         }
 
-        private Boolean CanRemoveRootFolder()
+        private bool CanRemoveRootFolder()
             => SelectedRootFolder != null;
 
         private void RemoveRootFolder()
             => RootFolders.Remove(SelectedRootFolder);
 
         private void AddFileExtension()
-            => FileExtensions.Add(new SettingsListBoxItemViewModel(String.Empty));
+            => FileExtensions.Add(new SettingsListBoxItemViewModel(string.Empty));
 
-        private Boolean CanRemoveFileExtension()
+        private bool CanRemoveFileExtension()
             => SelectedFileExtension != null;
 
         private void RemoveFileExtension()
@@ -172,22 +151,22 @@
 
         private void Accept()
         {
-            HashSet<String> users = new HashSet<String>(Users.Select(item => item.Value));
+            HashSet<string> users = new HashSet<string>(Users.Select(item => item.Value));
 
-            _DataManager.Users = users.Where(item => String.IsNullOrEmpty(item) == false);
+            _dataManager.Users = users.Where(item => string.IsNullOrEmpty(item) == false);
 
-            HashSet<String> rootFolders = new HashSet<String>(RootFolders);
+            HashSet<string> rootFolders = new HashSet<string>(RootFolders);
 
-            _DataManager.RootFolders = rootFolders.Where(item => String.IsNullOrEmpty(item) == false);
+            _dataManager.RootFolders = rootFolders.Where(item => string.IsNullOrEmpty(item) == false);
 
-            HashSet<String> fileExtensions = new HashSet<String>(FileExtensions.Select(item => item.Value));
+            HashSet<string> fileExtensions = new HashSet<string>(FileExtensions.Select(item => item.Value));
 
-            _DataManager.FileExtensions = fileExtensions.Where(item => String.IsNullOrEmpty(item) == false);
+            _dataManager.FileExtensions = fileExtensions.Where(item => string.IsNullOrEmpty(item) == false);
 
             Closing?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RaisePropertyChanged(String attribute)
+        private void RaisePropertyChanged(string attribute)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

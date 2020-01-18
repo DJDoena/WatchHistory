@@ -13,9 +13,9 @@
 
         DateTime Date { get; set; }
 
-        Byte Hour { get; set; }
+        byte Hour { get; set; }
 
-        Byte Minute { get; set; }
+        byte Minute { get; set; }
 
         DateTime WatchedOn { get; }
 

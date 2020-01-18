@@ -1,14 +1,12 @@
 ﻿namespace DoenaSoft.WatchHistory.Data
 {
-    using System;
-
     internal interface IFilesSerializer
     {
-        void CreateBackup(String fileName);
+        void CreateBackup(string fileName);
 
-        Files LoadData(String fileName);
+        Files LoadData(string fileName);
 
-        void SaveFile(String fileName
+        void SaveFile(string fileName
             , Files files);
     }
 }

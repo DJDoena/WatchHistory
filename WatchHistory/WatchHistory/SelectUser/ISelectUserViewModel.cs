@@ -7,9 +7,9 @@
 
     internal interface ISelectUserViewModel : INotifyPropertyChanged
     {
-        IEnumerable<String> Users { get; }
+        IEnumerable<string> Users { get; }
 
-        String SelectedUser { get; set; }
+        string SelectedUser { get; set; }
 
         ICommand SelectCommand { get; }
 

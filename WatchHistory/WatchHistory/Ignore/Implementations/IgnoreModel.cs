@@ -1,6 +1,5 @@
 ﻿namespace DoenaSoft.WatchHistory.Ignore.Implementations
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Data;
@@ -9,7 +8,7 @@
     internal sealed class IgnoreModel : ModelBase, IIgnoreModel
     {
         public IgnoreModel(IDataManager dataManager
-            , String userName)
+            , string userName)
             : base(dataManager, userName)
         { }
 
@@ -17,7 +16,7 @@
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            var allFiles = _DataManager.GetFiles();
+            var allFiles = _dataManager.GetFiles();
 
             var ignoredFiles = allFiles.Where(UserIgnores);
 

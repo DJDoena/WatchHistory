@@ -8,6 +8,7 @@
     using AbstractionLayer.UIServices;
     using Data;
     using DVDProfiler.DVDProfilerXML.Version400;
+    using MediaInfoHelper.Youtube;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
 
@@ -17,12 +18,12 @@
 
         private readonly IUIServices _uiServices;
 
-        private Boolean _ignoreWatched;
+        private bool _ignoreWatched;
 
         public MainModel(IDataManager dataManager
             , IIOServices ioServices
             , IUIServices uiServices
-            , String userName)
+            , string userName)
             : base(dataManager, userName)
         {
             _ioServices = ioServices;
@@ -32,7 +33,7 @@
 
         #region IMainModel
 
-        public Boolean IgnoreWatched
+        public bool IgnoreWatched
         {
             get => _ignoreWatched;
             set
@@ -48,7 +49,7 @@
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            var allFiles = _DataManager.GetFiles();
+            var allFiles = _dataManager.GetFiles();
 
             var notIgnoredFiles = allFiles.Except(allFiles.Where(UserIgnores));
 
@@ -65,19 +66,19 @@
         {
             OpenFileDialogOptions options = GetImportCollectionFileDialogOptions();
 
-            if (_uiServices.ShowOpenFileDialog(options, out String fileName))
+            if (_uiServices.ShowOpenFileDialog(options, out string fileName))
             {
                 try
                 {
                     Collection collection = SerializerHelper.Deserialize<Collection>(_ioServices, fileName);
 
-                    CollectionProcessor processor = new CollectionProcessor(collection, _DataManager, _ioServices);
+                    CollectionProcessor processor = new CollectionProcessor(collection, _dataManager, _ioServices);
 
                     processor.Process();
                 }
                 catch
                 {
-                    _uiServices.ShowMessageBox("Collection file could not be read", String.Empty, Buttons.OK, Icon.Warning);
+                    _uiServices.ShowMessageBox("Collection file could not be read", string.Empty, Buttons.OK, Icon.Warning);
                 }
             }
 
@@ -86,14 +87,23 @@
 
         public void PlayFile(FileEntry fileEntry)
         {
-            if (_ioServices.GetFileInfo(fileEntry.FullName).Exists)
+            if (fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.YoutubeFileExtension))
+            {
+                var info = SerializerHelper.Deserialize<YoutubeVideoInfo>(_ioServices, fileEntry.FullName);
+
+                var url = $"https://www.youtube.com/watch?v={info.Id}";
+
+                Process.Start(url);
+            }
+            else
             {
                 Process.Start(fileEntry.FullName);
             }
+
         }
 
-        public Boolean CanPlayFile(FileEntry fileEntry)
-            => fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.DvdProfilerFileExtension) == false;
+        public bool CanPlayFile(FileEntry fileEntry)
+            => _ioServices.GetFileInfo(fileEntry.FullName).Exists && fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.DvdProfilerFileExtension) == false;
 
         public void OpenFileLocation(FileEntry fileEntry)
         {
@@ -110,10 +120,10 @@
 
         #region UserHasWatched
 
-        private Boolean UserHasWatched(FileEntry file)
+        private bool UserHasWatched(FileEntry file)
             => file.Users?.HasItemsWhere(UserHasWatched) == true;
 
-        private Boolean UserHasWatched(Data.User user)
+        private bool UserHasWatched(Data.User user)
             => (IsUser(user)) && (user.Watches?.HasItems() == true);
 
         #endregion

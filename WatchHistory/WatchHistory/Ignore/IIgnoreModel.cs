@@ -6,9 +6,9 @@
 
     internal interface IIgnoreModel
     {
-        String Filter { get; set; }
+        string Filter { get; set; }
 
-        Boolean SearchInPath { get; set; }
+        bool SearchInPath { get; set; }
 
         event EventHandler FilesChanged;
 

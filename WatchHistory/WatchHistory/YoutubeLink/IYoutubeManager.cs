@@ -1,7 +1,6 @@
 ﻿namespace DoenaSoft.WatchHistory.YoutubeLink
 {
-    using DoenaSoft.MediaInfoHelper.Youtube;
-    using WatchHistory.Data;
+    using MediaInfoHelper.Youtube;
 
     internal interface IYoutubeManager
     {
