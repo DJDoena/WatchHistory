@@ -48,10 +48,7 @@
 
         internal uint GetVideoLength(IDataManager dataManager)
         {
-            if (VideoLengthSpecified == false)
-            {
-                dataManager.DetermineVideoLength(this);
-            }
+            dataManager.DetermineVideoLength(this);
 
             return VideoLength;
         }
