@@ -84,6 +84,11 @@
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
     <Compile Include="Data\Implementations\FilesSerializer.cs" />
     <Compile Include="Data\IFilesSerializer.cs" />
+    <Compile Include="Manual\Implementations\ManualViewModel.cs" />
+    <Compile Include="Manual\Implementations\ManualWindow.xaml.cs">
+      <DependentUpon>ManualWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Manual\IManualViewModel.cs" />
     <Compile Include="YoutubeLink\Implementations\YoutubeFileManager.cs" />
     <Compile Include="YoutubeLink\YoutubeApiConstants.cs" />
     <Compile Include="YoutubeLink\Implementations\YoutubeManager.cs" />
@@ -141,7 +146,7 @@
     <Compile Include="YoutubeLink\Implementations\YoutubeLinkWindow.xaml.cs">
       <DependentUpon>YoutubeLinkWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="YoutubeLink\IYoutubeLinkModel.cs" />
+    <Compile Include="YoutubeLink\IYoutubeLinkViewModel.cs" />
     <Page Include="Ignore\Implementations\IgnoreWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -192,6 +197,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Watches\Implementations\WatchesWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Manual\Implementations\ManualWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -79,9 +79,11 @@
             OpenFileLocationCommand = new ParameterizedRelayCommand(OpenFileLocation);
             AddWatchedOnCommand = new ParameterizedRelayCommand(AddWatchedOn);
             CheckForUpdateCommand = new RelayCommand(CheckForUpdate);
+            AboutCommand = new RelayCommand(ShowAbout);
             ShowHistoryCommand = new ParameterizedRelayCommand(ShowHistory);
             EditRunningTimeCommand = new ParameterizedRelayCommand(EditRunningTime);
             AddYoutubeLinkCommand = new RelayCommand(AddYoutubeLink, CanAddYoutubeLink);
+            AddManualEntryCommand = new RelayCommand(AddAddManualEntry, CanAddManualEntry);
         }
 
         #region INotifyPropertyChanged
@@ -195,11 +197,15 @@
 
         public ICommand CheckForUpdateCommand { get; }
 
+        public ICommand AboutCommand { get; }
+
         public ICommand ShowHistoryCommand { get; }
 
         public ICommand EditRunningTimeCommand { get; }
 
         public ICommand AddYoutubeLinkCommand { get; }
+
+        public ICommand AddManualEntryCommand { get; }
 
         #endregion
 
@@ -346,6 +352,14 @@
             OnlineAccess.CheckForNewVersion("http://doena-soft.de/dvdprofiler/3.9.0/versions.xml", new WindowHandle(), "Watch History", GetType().Assembly);
         }
 
+        private void ShowAbout()
+        {
+            using (var form = new AboutBox(GetType().Assembly))
+            {
+                form.ShowDialog();
+            }
+        }
+
         private void ShowHistory(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
@@ -376,7 +390,17 @@
 
         private void AddYoutubeLink()
         {
-            _windowFactory.OpenAddYoutubeLinkVideo(_userName);
+            _windowFactory.OpenAddYoutubeLinkWindow(_userName);
+
+            _dataManager.SaveDataFile();
+        }
+
+        private bool CanAddManualEntry()
+            => IsNotSynchronizing;
+
+        private void AddAddManualEntry()
+        {
+            _windowFactory.OpenAddManualEntryWindow(_userName);
 
             _dataManager.SaveDataFile();
         }

@@ -12,6 +12,7 @@
     using Settings.Implementations;
     using WatchedOn.Implementations;
     using Watches.Implementations;
+    using WatchHistory.Manual.Implementations;
     using WatchHistory.RunningTime.Implementations;
     using WatchHistory.YoutubeLink;
     using WatchHistory.YoutubeLink.Implementations;
@@ -155,11 +156,23 @@
             window.ShowDialog();
         }
 
-        public void OpenAddYoutubeLinkVideo(string userName)
+        public void OpenAddYoutubeLinkWindow(string userName)
         {
             var viewModel = new YoutubeLinkViewModel(_dataManager, _ioServices, _uiServices, _clipboardServices, _youtubeManager, userName);
 
             var window = new YoutubeLinkWindow()
+            {
+                DataContext = viewModel,
+            };
+
+            window.ShowDialog();
+        }
+
+        public void OpenAddManualEntryWindow(string userName)
+        {
+            var viewModel = new ManualViewModel(_dataManager, _ioServices, _uiServices, userName);
+
+            var window = new ManualWindow()
             {
                 DataContext = viewModel,
             };

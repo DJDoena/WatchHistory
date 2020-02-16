@@ -20,6 +20,8 @@
 
         void OpenWatchesWindow(IEnumerable<Watch> watches);
 
-        void OpenAddYoutubeLinkVideo(string userName);
+        void OpenAddYoutubeLinkWindow(string userName);
+
+        void OpenAddManualEntryWindow(string userName);
     }
 }

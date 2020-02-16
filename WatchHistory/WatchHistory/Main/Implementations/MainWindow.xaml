@@ -9,10 +9,16 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Settings" Command="{Binding OpenSettingsCommand}" />
-            <MenuItem Header="Import DVD Profiler Collection" Command="{Binding ImportCollectionCommand}" />
-            <MenuItem Header="Add Youtube Link" Command="{Binding AddYoutubeLinkCommand}" />
+            <MenuItem Header="Add Entries">
+                <MenuItem Header="Import DVD Profiler Collection" Command="{Binding ImportCollectionCommand}" />
+                <MenuItem Header="Add Youtube Link" Command="{Binding AddYoutubeLinkCommand}" />
+                <MenuItem Header="Add Manual Entry" Command="{Binding AddManualEntryCommand}" />
+            </MenuItem>            
             <MenuItem Header="Undo Hide" Command="{Binding UndoIgnoreCommand}" />
-            <MenuItem Header="Check for Update" Command="{Binding CheckForUpdateCommand}" />
+            <MenuItem Header="Help">
+                <MenuItem Header="Check for Update" Command="{Binding CheckForUpdateCommand}" />
+                <MenuItem Header="About" Command="{Binding AboutCommand}" />
+            </MenuItem>
         </Menu>
 
         <Grid DockPanel.Dock="Bottom">

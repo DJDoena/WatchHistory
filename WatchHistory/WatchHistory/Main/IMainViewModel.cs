@@ -39,10 +39,14 @@
 
         ICommand CheckForUpdateCommand { get; }
 
+        ICommand AboutCommand { get; }
+
         ICommand ShowHistoryCommand { get; }
 
         ICommand EditRunningTimeCommand { get; }
 
         ICommand AddYoutubeLinkCommand { get; }
+
+        ICommand AddManualEntryCommand { get; }
     }
 }

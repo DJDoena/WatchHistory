@@ -14,7 +14,7 @@
         private void OnLoaded(object sender
             , RoutedEventArgs e)
         {
-            IYoutubeLinkViewModel viewModel = (IYoutubeLinkViewModel)DataContext;
+            var viewModel = (IYoutubeLinkViewModel)DataContext;
 
             viewModel.Closing += OnClosing;
         }
@@ -22,7 +22,7 @@
         private void OnClosing(object sender
             , CloseEventArgs e)
         {
-            IYoutubeLinkViewModel viewModel = (IYoutubeLinkViewModel)DataContext;
+            var viewModel = (IYoutubeLinkViewModel)DataContext;
 
             viewModel.Closing -= OnClosing;
 
