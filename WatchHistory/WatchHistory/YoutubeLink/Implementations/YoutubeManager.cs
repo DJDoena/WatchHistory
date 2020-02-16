@@ -117,12 +117,12 @@
 
             var seconds = TryGetNumber(match.Groups["Seconds"]);
 
-            var runningTime = hours * 3600 + minutes * 60 + seconds;
+            var runningTime = (uint)(new TimeSpan(hours, minutes, seconds)).TotalSeconds;
 
             return runningTime;
         }
 
-        private uint TryGetNumber(Group group)
+        private int TryGetNumber(Group group)
         {
             var value = group?.Value;
 
@@ -131,7 +131,7 @@
                 return 0;
             }
 
-            var number = uint.Parse(value);
+            var number = int.Parse(value);
 
             return number;
         }

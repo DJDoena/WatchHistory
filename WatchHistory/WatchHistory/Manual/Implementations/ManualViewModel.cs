@@ -181,11 +181,7 @@
                 return;
             }
 
-            var tempPath = _ioService.Path.GetTempPath();
-
-            var guid = Guid.NewGuid().ToString();
-
-            var fileName = _ioService.Path.Combine(tempPath, $"{guid}.man");
+            var fileName = _ioService.Path.Combine(_ioService.Path.GetTempPath(), $"{Guid.NewGuid()}.man");
 
             var length = (uint)(new TimeSpan(LengthHours, LengthMinutes, LengthSeconds)).TotalSeconds;
 

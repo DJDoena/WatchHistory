@@ -78,7 +78,7 @@
         }
 
         public uint RunningTime
-            => (uint)(Hours * 3600 + Minutes * 60 + Seconds);
+            => (uint)(new TimeSpan(Hours, Minutes, Seconds)).TotalSeconds;
 
         public event EventHandler<CloseEventArgs> Closing;
 
