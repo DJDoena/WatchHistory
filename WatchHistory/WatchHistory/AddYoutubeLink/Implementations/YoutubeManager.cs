@@ -35,7 +35,7 @@
         {
             var id = GetYoutubeId(youtubeUrl);
 
-            string url = GetUrl(id);
+            var url = GetUrl(id);
 
             var responseItem = GetResponse(url);
 

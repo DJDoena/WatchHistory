@@ -31,9 +31,6 @@
 
         #endregion
 
-        private void RaisePropertyChanged(string attribute)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
-        }
+        private void RaisePropertyChanged(string attribute) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

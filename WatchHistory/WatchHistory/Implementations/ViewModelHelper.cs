@@ -10,35 +10,24 @@
 
     internal static class ViewModelHelper
     {
-        internal static ObservableCollection<IFileEntryViewModel> GetSortedEntries(IEnumerable<FileEntry> modelEntries
-            , string userName
-            , IDataManager dataManager
-            , IIOServices ioServices
-            , SortColumn sortColumn
-            , bool ascending)
+        internal static ObservableCollection<IFileEntryViewModel> GetSortedEntries(IEnumerable<FileEntry> modelEntries, string userName, IDataManager dataManager, IIOServices ioServices, SortColumn sortColumn, bool ascending)
         {
-            List<FileEntryViewModel> viewModelEntries = modelEntries.Select(item => new FileEntryViewModel(item, userName, dataManager, ioServices)).ToList();
+            var viewModelEntries = modelEntries.Select(item => new FileEntryViewModel(item, userName, dataManager, ioServices)).ToList();
 
             viewModelEntries.Sort((left, right) => Compare(left, right, sortColumn, ascending, userName, dataManager));
 
-            return (new ObservableCollection<IFileEntryViewModel>(viewModelEntries));
+            return new ObservableCollection<IFileEntryViewModel>(viewModelEntries);
         }
 
-        internal static string GetFormattedDateTime(DateTime dateTime)
-            => $"{dateTime.ToShortDateString()} {dateTime.ToShortTimeString()}";
+        internal static string GetFormattedDateTime(DateTime dateTime) => $"{dateTime.ToShortDateString()} {dateTime.ToShortTimeString()}";
 
-        private static int Compare(FileEntryViewModel left
-            , FileEntryViewModel right
-            , SortColumn sortColumn
-            , bool ascending
-            , string userName
-            , IDataManager dataManager)
+        private static int Compare(FileEntryViewModel left, FileEntryViewModel right, SortColumn sortColumn, bool ascending, string userName, IDataManager dataManager)
         {
-            int compare = 0;
+            var compare = 0;
 
             switch (sortColumn)
             {
-                case (SortColumn.LastWatched):
+                case SortColumn.LastWatched:
                     {
                         compare = ascending
                             ? CompareLastWatched(left, right, userName, dataManager)
@@ -46,7 +35,7 @@
 
                         break;
                     }
-                case (SortColumn.CreationTime):
+                case SortColumn.CreationTime:
                     {
                         compare = ascending
                             ? CompareCreationTime(left, right, dataManager)
@@ -61,71 +50,65 @@
                 compare = ascending ? CompareName(left, right) : CompareName(right, left);
             }
 
-            return (compare);
+            return compare;
         }
 
-        private static int CompareLastWatched(FileEntryViewModel left
-            , FileEntryViewModel right
-            , string userName
-            , IDataManager dataManager)
+        private static int CompareLastWatched(FileEntryViewModel left, FileEntryViewModel right, string userName, IDataManager dataManager)
         {
-            DateTime leftLastWatched = dataManager.GetLastWatched(left.FileEntry, userName);
+            var leftLastWatched = dataManager.GetLastWatched(left.FileEntry, userName);
 
-            DateTime rightLastWatched = dataManager.GetLastWatched(right.FileEntry, userName);
+            var rightLastWatched = dataManager.GetLastWatched(right.FileEntry, userName);
 
-            return (leftLastWatched.CompareTo(rightLastWatched));
+            return leftLastWatched.CompareTo(rightLastWatched);
         }
 
-        private static int CompareCreationTime(FileEntryViewModel left
-            , FileEntryViewModel right
-            , IDataManager dataManager)
+        private static int CompareCreationTime(FileEntryViewModel left, FileEntryViewModel right, IDataManager dataManager)
         {
-            DateTime leftCreationTime = left.FileEntry.GetCreationTime(dataManager);
+            var leftCreationTime = left.FileEntry.GetCreationTime(dataManager);
 
-            DateTime rightCreationTime = right.FileEntry.GetCreationTime(dataManager);
+            var rightCreationTime = right.FileEntry.GetCreationTime(dataManager);
 
-            return (leftCreationTime.CompareTo(rightCreationTime));
+            return leftCreationTime.CompareTo(rightCreationTime);
         }
 
-        private static int CompareName(FileEntryViewModel left
-            , FileEntryViewModel right)
+        private static int CompareName(FileEntryViewModel left, FileEntryViewModel right)
         {
-            string leftName = PadName(left.Name);
+            var leftName = PadName(left.Name);
 
             ReplaceArticles(ref leftName);
 
-            string rightName = PadName(right.Name);
+            var rightName = PadName(right.Name);
 
             ReplaceArticles(ref rightName);
 
-            return (leftName.CompareTo(rightName));
+            return leftName.CompareTo(rightName);
         }
 
         private static string PadName(string name)
         {
-            string[] parts = name.Split(' ', '\\', '.', ',');
+            var parts = name.Split(' ', '\\', '.', ',');
 
-            for (int i = 0; i < parts.Length; i++)
+            for (var i = 0; i < parts.Length; i++)
             {
                 TryPadName(ref parts[i]);
             }
 
             name = string.Join(" ", parts);
 
-            return (name);
+            return name;
         }
 
         internal static string GetFormattedRunningTime(uint runningTime)
         {
-            uint hours = runningTime / 3600;
+            var hours = runningTime / 3600;
 
-            uint modulo = runningTime % 3600;
+            var modulo = runningTime % 3600;
 
-            uint minutes = modulo / 60;
+            var minutes = modulo / 60;
 
-            uint seconds = modulo % 60;
+            var seconds = modulo % 60;
 
-            string text = $"{minutes:D2}:{seconds:D2}";
+            var text = $"{minutes:D2}:{seconds:D2}";
 
             if (hours > 0)
             {

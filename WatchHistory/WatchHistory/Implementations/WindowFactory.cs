@@ -20,11 +20,7 @@
 
         private readonly AddYoutubeLink.IYoutubeManager _youtubeManager;
 
-        public WindowFactory(IIOServices ioServices
-            , IUIServices uiServices
-            , IClipboardServices clipboardServices
-            , IDataManager dataManager
-            , AddYoutubeLink.IYoutubeManager youtubeManager)
+        public WindowFactory(IIOServices ioServices, IUIServices uiServices, IClipboardServices clipboardServices, IDataManager dataManager, AddYoutubeLink.IYoutubeManager youtubeManager)
         {
             _ioServices = ioServices;
             _uiServices = uiServices;

@@ -16,31 +16,30 @@
 
         internal IEnumerable<EpisodeTitle> GetEpisodeTitles()
         {
-            IEnumerable<DVD> dvds = _collection.DVDList.EnsureNotNull();
+            var dvds = _collection.DVDList.EnsureNotNull();
 
-            IEnumerable<IEnumerable<EpisodeTitle>> castTitles = dvds.Select(dvd => GetEpisodeTitles(dvd, dvd.CastList));
+            var castTitles = dvds.Select(dvd => GetEpisodeTitles(dvd, dvd.CastList));
 
-            IEnumerable<IEnumerable<EpisodeTitle>> crewTitles = dvds.Select(dvd => GetEpisodeTitles(dvd, dvd.CrewList));
+            var crewTitles = dvds.Select(dvd => GetEpisodeTitles(dvd, dvd.CrewList));
 
-            IEnumerable<IEnumerable<EpisodeTitle>> castAndCrewTitles = castTitles.Union(crewTitles);
+            var castAndCrewTitles = castTitles.Union(crewTitles);
 
-            IEnumerable<EpisodeTitle> titles = castAndCrewTitles.SelectMany(title => title);
+            var titles = castAndCrewTitles.SelectMany(title => title);
 
-            return (titles);
+            return titles;
         }
 
-        private IEnumerable<EpisodeTitle> GetEpisodeTitles(DVD dvd
-            , IEnumerable<object> castOrCrew)
+        private IEnumerable<EpisodeTitle> GetEpisodeTitles(DVD dvd, IEnumerable<object> castOrCrew)
         {
-            IEnumerable<Divider> dividers = castOrCrew.EnsureNotNull().OfType<Divider>();
+            var dividers = castOrCrew.EnsureNotNull().OfType<Divider>();
 
-            IEnumerable<Divider> episodeDividers = dividers.Where(div => div?.Type == DividerType.Episode);
+            var episodeDividers = dividers.Where(div => div?.Type == DividerType.Episode);
 
-            IEnumerable<string> captions = episodeDividers.Select(divider => divider.Caption);
+            var captions = episodeDividers.Select(divider => divider.Caption);
 
-            IEnumerable<EpisodeTitle> titles = captions.Select(caption => new EpisodeTitle(dvd, caption));
+            var titles = captions.Select(caption => new EpisodeTitle(dvd, caption));
 
-            return (titles);
+            return titles;
         }
     }
 }

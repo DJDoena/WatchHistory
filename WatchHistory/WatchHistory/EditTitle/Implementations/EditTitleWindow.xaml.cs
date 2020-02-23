@@ -11,22 +11,20 @@
             InitializeComponent();
         }
 
-        private void OnLoaded(object sender
-            , RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
             var viewModel = (IEditTitleViewModel)DataContext;
 
             viewModel.Closing += OnClosing;
         }
 
-        private void OnClosing(object sender
-            , CloseEventArgs e)
+        private void OnClosing(object sender, CloseEventArgs e)
         {
             var viewModel = (IEditTitleViewModel)DataContext;
 
             viewModel.Closing -= OnClosing;
 
-            DialogResult = (e.Result == Result.OK) ? true : false;
+            DialogResult = e.Result == Result.OK ? true : false;
 
             Close();
         }

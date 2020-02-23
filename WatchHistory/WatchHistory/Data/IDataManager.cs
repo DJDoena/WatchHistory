@@ -19,21 +19,15 @@
 
         IEnumerable<FileEntry> GetFiles();
 
-        void AddWatched(FileEntry entry
-            , string userName);
+        void AddWatched(FileEntry entry, string userName);
 
-        void AddWatched(FileEntry entry
-            , string userName
-            , DateTime watchedOn);
+        void AddWatched(FileEntry entry, string userName, DateTime watchedOn);
 
-        void AddIgnore(FileEntry entry
-            , string userName);
+        void AddIgnore(FileEntry entry, string userName);
 
-        void UndoIgnore(FileEntry entry
-            , string userName);
+        void UndoIgnore(FileEntry entry, string userName);
 
-        DateTime GetLastWatched(FileEntry entry
-            , string userName);
+        DateTime GetLastWatched(FileEntry entry, string userName);
 
         void SaveSettingsFile();
 

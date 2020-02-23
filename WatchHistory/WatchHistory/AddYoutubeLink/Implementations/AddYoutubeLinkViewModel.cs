@@ -32,12 +32,7 @@
 
         private YoutubeVideoInfo _videoInfo;
 
-        public AddYoutubeLinkViewModel(IDataManager dataManager
-            , IIOServices ioServices
-            , IUIServices uiServices
-            , IClipboardServices clipboardServices
-            , IYoutubeManager youtubeManager
-            , string userName)
+        public AddYoutubeLinkViewModel(IDataManager dataManager, IIOServices ioServices, IUIServices uiServices, IClipboardServices clipboardServices, IYoutubeManager youtubeManager, string userName)
         {
             _youtubeManager = youtubeManager;
             _uiServices = uiServices;
@@ -145,8 +140,7 @@
 
         #endregion
 
-        private DateTime WatchedOn
-            => new DateTime(Date.Year, Date.Month, Date.Day, Hour, Minute, 0);
+        private DateTime WatchedOn => new DateTime(Date.Year, Date.Month, Date.Day, Hour, Minute, 0);
 
         private void Accept()
         {
@@ -172,11 +166,9 @@
             Closing?.Invoke(this, new CloseEventArgs(Result.OK));
         }
 
-        private void Cancel()
-            => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
+        private void Cancel() => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
 
-        private void RaisePropertyChanged(string attribute)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+        private void RaisePropertyChanged(string attribute) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
 
         private void Scan()
         {

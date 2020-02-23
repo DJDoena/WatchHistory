@@ -46,14 +46,13 @@
             DataManager.SaveDataFile();
         }
 
-        private void OnUnhandledException(object sender
-            , UnhandledExceptionEventArgs e)
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             if (e.ExceptionObject is Exception ex)
             {
-                ExceptionXml exceptionXml = new ExceptionXml(ex);
+                var exceptionXml = new ExceptionXml(ex);
 
-                string fileName = IOServices.Path.Combine(Environment.AppDataFolder, "Crash.xml");
+                var fileName = IOServices.Path.Combine(Environment.AppDataFolder, "Crash.xml");
 
                 SerializerHelper.Serialize(IOServices, fileName, exceptionXml);
 

@@ -16,8 +16,7 @@
 
         private string _selectedUser;
 
-        public SelectUserViewModel(IDataManager dataManager
-            , IWindowFactory windowFactory)
+        public SelectUserViewModel(IDataManager dataManager, IWindowFactory windowFactory)
         {
             _dataManager = dataManager;
             _windowFactory = windowFactory;
@@ -35,8 +34,7 @@
 
         #region ISelectUserViewModel
 
-        public IEnumerable<string> Users
-            => (_dataManager.Users);
+        public IEnumerable<string> Users => _dataManager.Users;
 
         public string SelectedUser
         {
@@ -65,7 +63,6 @@
             Closing?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RaisePropertyChanged(string attribute)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+        private void RaisePropertyChanged(string attribute) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

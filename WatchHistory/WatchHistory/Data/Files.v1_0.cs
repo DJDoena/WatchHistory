@@ -32,7 +32,7 @@
         {
             get
             {
-                return ((_creationTime ?? new DateTime(0)).ToUniversalTime());
+                return (_creationTime ?? new DateTime(0)).ToUniversalTime();
             }
             set
             {
@@ -46,7 +46,7 @@
         {
             get
             {
-                return (_users);
+                return _users;
             }
             set
             {
@@ -86,7 +86,7 @@
             {
                 if ((_watches == null) || (_watches.Length == 0))
                 {
-                    return (null);
+                    return null;
                 }
 
                 for (int i = 0; i < _watches.Length; i++)
@@ -94,7 +94,7 @@
                     _watches[i] = _watches[i].ToUniversalTime();
                 }
 
-                return (_watches);
+                return _watches;
             }
             set
             {

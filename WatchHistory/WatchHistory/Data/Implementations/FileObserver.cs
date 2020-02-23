@@ -138,7 +138,7 @@
 
             fileExtensions.ForEach(ext => AddWatcher(watchers, rootFolder, ext));
 
-            return (watchers);
+            return watchers;
         }
 
         private void AddWatcher(Dictionary<string, IFileSystemWatcher> watchers, string rootFolder, string fileExtension)
@@ -148,8 +148,7 @@
             watchers.Add(fileExtension, fsw);
         }
 
-        private IFileSystemWatcher CreateWatcher(string rootFolder
-            , string fileExtension)
+        private IFileSystemWatcher CreateWatcher(string rootFolder, string fileExtension)
         {
             var fsw = _ioServices.GetFileSystemWatcher(rootFolder, "*." + fileExtension);
 
@@ -171,11 +170,10 @@
             fsw.EnableRaisingEvents = (IsSuspended == false);
             fsw.IncludeSubFolders = true;
 
-            return (fsw);
+            return fsw;
         }
 
-        private void DisposeFileSystemWatchers()
-            => GetFileSystemWatchers().ForEach(DisposeFileSystemWatcher);
+        private void DisposeFileSystemWatchers() => GetFileSystemWatchers().ForEach(DisposeFileSystemWatcher);
 
         private void DisposeFileSystemWatcher(IFileSystemWatcher fsw)
         {
@@ -197,19 +195,12 @@
             fsw.EnableRaisingEvents = false;
         }
 
-        private IEnumerable<IFileSystemWatcher> GetFileSystemWatchers()
-            => _fileSystemWatchers?.Values.SelectMany(kvp => kvp.Values) ?? Enumerable.Empty<IFileSystemWatcher>();
+        private IEnumerable<IFileSystemWatcher> GetFileSystemWatchers() => _fileSystemWatchers?.Values.SelectMany(kvp => kvp.Values) ?? Enumerable.Empty<IFileSystemWatcher>();
 
-        private void OnFileRenamed(object sender
-            , System.IO.RenamedEventArgs e)
-            => _renamed?.Invoke(this, e);
+        private void OnFileRenamed(object sender, System.IO.RenamedEventArgs e) => _renamed?.Invoke(this, e);
 
-        private void OnFileDeleted(object sender
-            , System.IO.FileSystemEventArgs e)
-            => _deleted?.Invoke(this, e);
+        private void OnFileDeleted(object sender, System.IO.FileSystemEventArgs e) => _deleted?.Invoke(this, e);
 
-        private void OnFileCreated(object sender
-            , System.IO.FileSystemEventArgs e)
-            => _created?.Invoke(this, e);
+        private void OnFileCreated(object sender, System.IO.FileSystemEventArgs e) => _created?.Invoke(this, e);
     }
 }

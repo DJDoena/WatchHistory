@@ -21,7 +21,7 @@
 
         private static string GetAppDataFolder(IIOServices ioServices)
         {
-            string appDataFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+            var appDataFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
 
             appDataFolder = ioServices.Path.Combine(appDataFolder, "Doena Soft.", "WatchHistory");
 

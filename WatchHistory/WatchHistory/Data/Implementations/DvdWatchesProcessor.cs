@@ -21,27 +21,40 @@
 
         internal void Update(FileEntry entry)
         {
-            MIH.DvdWatches watches = null;
+            var fi = _ioServices.GetFileInfo(entry.FullName);
 
-            if (_ioServices.File.Exists(entry.FullName))
+            if (!fi.Exists)
             {
-                try
-                {
-                    watches = SerializerHelper.Deserialize<MIH.DvdWatches>(_ioServices, entry.FullName);
-                }
-                catch
-                { }
+                return;
             }
 
-            entry.Title = watches?.Title;
+            entry.CreationTime = fi.CreationTime.Conform();
 
-            if (watches?.Watches?.Length > 0)
+            MIH.DvdWatches watches = null;
+            try
             {
-                UpdateFromDvdWatches(entry, watches);
+                watches = SerializerHelper.Deserialize<MIH.DvdWatches>(_ioServices, entry.FullName);
+            }
+            catch
+            { }
+
+            if (watches == null)
+            {
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(entry.Title))
+            {
+                entry.Title = watches.Title;
+            }
+
+            if (watches.Watches?.Length > 0)
+            {
+                UpdateFromDvdWatches(entry, watches.Watches);
             }
         }
 
-        private void UpdateFromDvdWatches(FileEntry entry, MIH.DvdWatches watches)
+        private void UpdateFromDvdWatches(FileEntry entry, IEnumerable<MIH.Event> dvdWatches)
         {
             ExistingWatches = new Dictionary<User, HashSet<Watch>>();
 
@@ -49,25 +62,29 @@
 
             entryUsers.ForEach(AddExistingWatches);
 
-            watches.Watches.EnsureNotNull().ForEach(UpdateFromDvdWatch);
+            dvdWatches.ForEach(UpdateFromDvdWatch);
 
             ExistingWatches.ForEach(kvp => UpdateEntryWatches(entryUsers, kvp.Key, kvp.Value));
 
-            entry.Users = (entryUsers.Count > 0) ? entryUsers.ToArray() : null;
+            entry.Users = entryUsers.Count > 0
+                ? entryUsers.ToArray()
+                : null;
         }
 
         private static void UpdateEntryWatches(List<User> entryUsers, User hashedUser, IEnumerable<Watch> hashedWatches)
         {
-            User entryUser = EnsureEntryUser(entryUsers, hashedUser);
+            var entryUser = EnsureEntryUser(entryUsers, hashedUser);
 
-            Watch[] entryWatches = hashedWatches.ToArray();
+            var entryWatches = hashedWatches.ToArray();
 
-            entryUser.Watches = (entryWatches.Length > 0) ? entryWatches : null;
+            entryUser.Watches = entryWatches.Length > 0
+                ? entryWatches
+                : null;
         }
 
         private static User EnsureEntryUser(List<User> entryUsers, User hashedUser)
         {
-            User entryUser = entryUsers.Find(user => user.Equals(hashedUser));
+            var entryUser = entryUsers.Find(user => user.Equals(hashedUser));
 
             if (entryUser == null)
             {
@@ -76,7 +93,7 @@
                 entryUsers.Add(entryUser);
             }
 
-            return (entryUser);
+            return entryUser;
         }
 
         private void UpdateFromDvdWatch(MIH.Event dvdWatch)
@@ -93,7 +110,7 @@
                 ExistingWatches.Add(user, entryWatches);
             }
 
-            Watch entryWatch = new Watch()
+            var entryWatch = new Watch()
             {
                 Value = dvdWatch.Timestamp.Conform(),
                 Source = WatchHistory.Constants.DvdProfilerSource
@@ -102,9 +119,9 @@
             entryWatches.Add(entryWatch);
         }
 
-        private void AddExistingWatches(Data.User user)
+        private void AddExistingWatches(User user)
         {
-            IEnumerable<Watch> watches = user.Watches.EnsureNotNull().Where(w => w.Source != WatchHistory.Constants.DvdProfilerSource);
+            var watches = user.Watches.EnsureNotNull().Where(w => w.Source != WatchHistory.Constants.DvdProfilerSource);
 
             if (watches.HasItems())
             {
@@ -112,9 +129,9 @@
             }
         }
 
-        private void AddExistingWatches(Data.User user, IEnumerable<Watch> watches)
+        private void AddExistingWatches(User user, IEnumerable<Watch> watches)
         {
-            HashSet<Watch> hashed = new HashSet<Watch>();
+            var hashed = new HashSet<Watch>();
 
             ExistingWatches.Add(user, hashed);
 

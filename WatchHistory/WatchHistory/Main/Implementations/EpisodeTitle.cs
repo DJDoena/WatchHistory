@@ -9,22 +9,17 @@
     {
         private readonly DVD _dvd;
 
-        internal string ID
-            => _dvd.ID;
+        internal string ID => _dvd.ID;
 
-        internal string FileName
-            => $"{ID}  {Title.ReplaceInvalidFileNameChars('_')}";
+        internal string FileName => $"{ID}  {Title.ReplaceInvalidFileNameChars('_')}";
 
         internal string Title { get; }
 
-        internal DateTime PurchaseDate
-            => _dvd.PurchaseInfo?.Date ?? new DateTime(0);
+        internal DateTime PurchaseDate => _dvd.PurchaseInfo?.Date ?? new DateTime(0);
 
-        internal IEnumerable<Event> Watches
-            => CollectionProcessor.GetWatches(_dvd);
+        internal IEnumerable<Event> Watches => CollectionProcessor.GetWatches(_dvd);
 
-        public EpisodeTitle(DVD dvd
-            , string caption)
+        public EpisodeTitle(DVD dvd, string caption)
         {
             _dvd = dvd;
 
@@ -42,7 +37,7 @@
         {
             if (other == null)
             {
-                return (false);
+                return false;
             }
 
             bool equals = ID == other.ID;
@@ -52,15 +47,13 @@
                 equals = Title == other.Title;
             }
 
-            return (equals);
+            return equals;
         }
 
         #endregion
 
-        public override int GetHashCode()
-            => ((ID.GetHashCode() / 2) + (Title.GetHashCode() / 2));
+        public override int GetHashCode() => ID.GetHashCode() ^ Title.GetHashCode();
 
-        public override bool Equals(object obj)
-            => (Equals(obj as EpisodeTitle));
+        public override bool Equals(object obj) => Equals(obj as EpisodeTitle);
     }
 }

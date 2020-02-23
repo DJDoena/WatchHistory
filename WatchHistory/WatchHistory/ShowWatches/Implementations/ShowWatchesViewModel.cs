@@ -8,7 +8,7 @@
     {
         public ShowWatchesViewModel(IEnumerable<Watch> watches)
         {
-            IEnumerable<Watch> ordered = watches.OrderByDescending(w => w.Value);
+            var ordered = watches.OrderByDescending(w => w.Value);
 
             Watches = ordered.Select(GetWatchViewModel);
         }
@@ -19,7 +19,6 @@
 
         #endregion
 
-        private IWatchViewModel GetWatchViewModel(Watch watch)
-            => new WatchViewModel(watch);
+        private IWatchViewModel GetWatchViewModel(Watch watch) => new WatchViewModel(watch);
     }
 }

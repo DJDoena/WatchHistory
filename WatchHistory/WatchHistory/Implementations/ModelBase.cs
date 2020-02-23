@@ -80,30 +80,23 @@
 
         #region UserIgnores
 
-        protected bool UserIgnores(FileEntry file)
-            => file.Users?.HasItemsWhere(UserIgnores) == true;
+        protected bool UserIgnores(FileEntry file) => file.Users?.HasItemsWhere(UserIgnores) == true;
 
-        private bool UserIgnores(User user)
-            => (IsUser(user)) && (user.Ignore);
+        private bool UserIgnores(User user) => IsUser(user) && user.Ignore;
 
         #endregion
 
-        protected bool IsUser(Data.User user)
-            => user.UserName == _userName;
+        protected bool IsUser(Data.User user) => user.UserName == _userName;
 
         #region ContainsFilter
 
-        protected bool ContainsFilter(FileEntry file)
-            => ContainsFilter(file, Filter.Trim().Split(' '));
+        protected bool ContainsFilter(FileEntry file) => ContainsFilter(file, Filter.Trim().Split(' '));
 
-        private bool ContainsFilter(FileEntry file
-           , IEnumerable<string> filters)
-            => filters.All(filter => ContainsFilter(file, filter));
+        private bool ContainsFilter(FileEntry file, IEnumerable<string> filters) => filters.All(filter => ContainsFilter(file, filter));
 
-        private bool ContainsFilter(FileEntry file
-            , string filter)
+        private bool ContainsFilter(FileEntry file, string filter)
         {
-            bool contains = file.TitleSpecified
+            var contains = file.TitleSpecified
                   ? ContainsFilter(file.Title, filter)
                   : ContainsFilterInFileName(file, filter);
 
@@ -117,30 +110,26 @@
 
         private bool ContainsFilterInFileName(FileEntry file, string filter)
         {
-            string fileName = CutRootFolders(file.FullName);
+            var fileName = CutRootFolders(file.FullName);
 
-            bool contains = ContainsFilter(fileName, filter);
+            var contains = ContainsFilter(fileName, filter);
 
-            return (contains);
+            return contains;
         }
 
-        private static bool ContainsFilter(string text, string filter)
-            => text.IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1;
+        private static bool ContainsFilter(string text, string filter) => text.IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) != -1;
 
         private string CutRootFolders(string fullName)
         {
             _dataManager.RootFolders.ForEach(folder => fullName = fullName.Replace(folder, string.Empty));
 
-            return (fullName);
+            return fullName;
         }
 
         #endregion
 
-        private void OnDataManagerFilesChanged(object sender
-            , EventArgs e)
-            => RaiseFilesChanged(e);
+        private void OnDataManagerFilesChanged(object sender, EventArgs e) => RaiseFilesChanged(e);
 
-        protected void RaiseFilesChanged(EventArgs e)
-            => _filesChanged?.Invoke(this, e);
+        protected void RaiseFilesChanged(EventArgs e) => _filesChanged?.Invoke(this, e);
     }
 }

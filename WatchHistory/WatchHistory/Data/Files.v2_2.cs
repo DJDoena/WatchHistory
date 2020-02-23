@@ -76,15 +76,13 @@
         }
 
         [XmlIgnore]
-        public bool VideoLengthSpecified
-            => VideoLength > 0;
+        public bool VideoLengthSpecified => VideoLength > 0;
 
         [XmlAttribute]
         public string Title;
 
         [XmlIgnore]
-        public bool TitleSpecified
-            => !string.IsNullOrWhiteSpace(Title);
+        public bool TitleSpecified => !string.IsNullOrWhiteSpace(Title);
 
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
@@ -109,8 +107,7 @@
         public bool Ignore;
 
         [XmlIgnore]
-        public bool IgnoreSpecified
-            => Ignore;
+        public bool IgnoreSpecified => Ignore;
 
         [XmlArray("Watches")]
         [XmlArrayItem("Watched")]
@@ -120,10 +117,10 @@
             {
                 if ((_watches == null) || (_watches.Length == 0))
                 {
-                    return (null);
+                    return null;
                 }
 
-                return (_watches);
+                return _watches;
             }
             set
             {
@@ -141,21 +138,11 @@
 
         public event EventHandler WatchesChanged;
 
-        public override int GetHashCode()
-            => UserName?.GetHashCode() ?? 0;
+        public override int GetHashCode() => UserName?.GetHashCode() ?? 0;
 
-        public override bool Equals(object obj)
-            => Equals(obj as User);
+        public override bool Equals(object obj) => Equals(obj as User);
 
-        public bool Equals(User other)
-        {
-            if (other == null)
-            {
-                return (false);
-            }
-
-            return (UserName == other.UserName);
-        }
+        public bool Equals(User other) => other != null ? UserName == other.UserName : false;
     }
 
     [DebuggerDisplay("Watched: {Value}")]
@@ -174,8 +161,7 @@
         public string Source;
 
         [XmlIgnore]
-        public bool SourceSpecified
-            => !string.IsNullOrWhiteSpace(Source);
+        public bool SourceSpecified => !string.IsNullOrWhiteSpace(Source);
 
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
@@ -183,20 +169,10 @@
         [XmlAnyElement]
         public XmlElement[] AnyElements;
 
-        public override int GetHashCode()
-            => Value.GetHashCode();
+        public override int GetHashCode() => Value.GetHashCode();
 
-        public override bool Equals(object obj)
-            => (Equals(obj as Watch));
+        public override bool Equals(object obj) => (Equals(obj as Watch));
 
-        public bool Equals(Watch other)
-        {
-            if (other == null)
-            {
-                return (false);
-            }
-
-            return ((Value == other.Value) && (Source == other.Source));
-        }
+        public bool Equals(Watch other) => other != null ? Value == other.Value && Source == other.Source : false;
     }
 }

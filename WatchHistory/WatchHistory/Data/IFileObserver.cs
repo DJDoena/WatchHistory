@@ -11,8 +11,7 @@
 
         event System.IO.RenamedEventHandler Renamed;
 
-        void Observe(IEnumerable<string> rootFolders
-            , IEnumerable<string> fileExtensions);
+        void Observe(IEnumerable<string> rootFolders, IEnumerable<string> fileExtensions);
 
         void Suspend();
     }

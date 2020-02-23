@@ -7,9 +7,7 @@
 
     internal sealed class IgnoreEntryModel : ModelBase, IIgnoreEntryModel
     {
-        public IgnoreEntryModel(IDataManager dataManager
-            , string userName)
-            : base(dataManager, userName)
+        public IgnoreEntryModel(IDataManager dataManager, string userName) : base(dataManager, userName)
         { }
 
         #region IIgnoreEntryModel

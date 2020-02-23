@@ -40,8 +40,7 @@
         public string FullName;
 
         [XmlIgnore]
-        public string Key
-            => FullName?.ToLower() ?? string.Empty;
+        public string Key => FullName?.ToLower() ?? string.Empty;
 
         [XmlAttribute]
         public DateTime CreationTime
@@ -101,10 +100,10 @@
             {
                 if ((_watches == null) || (_watches.Length == 0))
                 {
-                    return (null);
+                    return null;
                 }
 
-                return (_watches);
+                return _watches;
             }
             set
             {
@@ -122,11 +121,9 @@
 
         public event EventHandler WatchesChanged;
 
-        public override int GetHashCode()
-            => UserName?.GetHashCode() ?? 0;
+        public override int GetHashCode() => UserName?.GetHashCode() ?? 0;
 
-        public override bool Equals(object obj)
-            => Equals(obj as User);
+        public override bool Equals(object obj) => Equals(obj as User);
 
         public bool Equals(User other)
         {
@@ -135,7 +132,7 @@
                 return (false);
             }
 
-            return (UserName == other.UserName);
+            return UserName == other.UserName;
         }
     }
 
@@ -155,8 +152,7 @@
         public string Source;
 
         [XmlIgnore]
-        public bool SourceSpecified
-            => Source.IsNotEmpty();
+        public bool SourceSpecified => Source.IsNotEmpty();
 
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
@@ -164,20 +160,18 @@
         [XmlAnyElement]
         public XmlElement[] AnyElements;
 
-        public override int GetHashCode()
-            => Value.GetHashCode();
+        public override int GetHashCode() => Value.GetHashCode();
 
-        public override bool Equals(object obj)
-            => (Equals(obj as Watch));
+        public override bool Equals(object obj) => (Equals(obj as Watch));
 
         public bool Equals(Watch other)
         {
             if (other == null)
             {
-                return (false);
+                return false;
             }
 
-            return ((Value == other.Value) && (Source == other.Source));
+            return (Value == other.Value) && (Source == other.Source);
         }
     }
 }

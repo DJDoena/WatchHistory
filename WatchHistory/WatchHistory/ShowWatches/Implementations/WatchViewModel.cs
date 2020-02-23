@@ -14,11 +14,9 @@
 
         #region  IWatchViewModel
 
-        public string Source
-            => _watch.SourceSpecified ? _watch.Source : "Watch History";
+        public string Source => _watch.SourceSpecified ? _watch.Source : "Watch History";
 
-        public string Watched
-            => ViewModelHelper.GetFormattedDateTime(_watch.Value.ToLocalTime());
+        public string Watched => ViewModelHelper.GetFormattedDateTime(_watch.Value.ToLocalTime());
 
         #endregion
     }

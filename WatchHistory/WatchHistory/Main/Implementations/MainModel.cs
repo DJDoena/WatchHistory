@@ -20,11 +20,7 @@
 
         private bool _ignoreWatched;
 
-        public MainModel(IDataManager dataManager
-            , IIOServices ioServices
-            , IUIServices uiServices
-            , string userName)
-            : base(dataManager, userName)
+        public MainModel(IDataManager dataManager, IIOServices ioServices, IUIServices uiServices, string userName) : base(dataManager, userName)
         {
             _ioServices = ioServices;
             _uiServices = uiServices;
@@ -64,15 +60,15 @@
 
         public void ImportCollection()
         {
-            OpenFileDialogOptions options = GetImportCollectionFileDialogOptions();
+            var options = GetImportCollectionFileDialogOptions();
 
             if (_uiServices.ShowOpenFileDialog(options, out string fileName))
             {
                 try
                 {
-                    Collection collection = SerializerHelper.Deserialize<Collection>(_ioServices, fileName);
+                    var collection = SerializerHelper.Deserialize<Collection>(_ioServices, fileName);
 
-                    CollectionProcessor processor = new CollectionProcessor(collection, _dataManager, _ioServices);
+                    var processor = new CollectionProcessor(collection, _dataManager, _ioServices);
 
                     processor.Process();
                 }
@@ -102,8 +98,7 @@
 
         }
 
-        public bool CanPlayFile(FileEntry fileEntry)
-            => _ioServices.GetFileInfo(fileEntry.FullName).Exists && fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.DvdProfilerFileExtension) == false;
+        public bool CanPlayFile(FileEntry fileEntry) => _ioServices.GetFileInfo(fileEntry.FullName).Exists && fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.DvdProfilerFileExtension) == false;
 
         public void OpenFileLocation(FileEntry fileEntry)
         {
@@ -113,24 +108,21 @@
             }
         }
 
-        public IEnumerable<Watch> GetWatches(FileEntry fileEntry)
-            => fileEntry.Users?.FirstOrDefault(IsUser)?.Watches?.ToList() ?? Enumerable.Empty<Watch>();
+        public IEnumerable<Watch> GetWatches(FileEntry fileEntry) => fileEntry.Users?.FirstOrDefault(IsUser)?.Watches?.ToList() ?? Enumerable.Empty<Watch>();
 
         #endregion
 
         #region UserHasWatched
 
-        private bool UserHasWatched(FileEntry file)
-            => file.Users?.HasItemsWhere(UserHasWatched) == true;
+        private bool UserHasWatched(FileEntry file) => file.Users?.HasItemsWhere(UserHasWatched) == true;
 
-        private bool UserHasWatched(Data.User user)
-            => (IsUser(user)) && (user.Watches?.HasItems() == true);
+        private bool UserHasWatched(Data.User user) => (IsUser(user)) && (user.Watches?.HasItems() == true);
 
         #endregion
 
         private static OpenFileDialogOptions GetImportCollectionFileDialogOptions()
         {
-            OpenFileDialogOptions options = new OpenFileDialogOptions()
+            var options = new OpenFileDialogOptions()
             {
                 CheckFileExists = true,
                 FileName = "Collection.xml",
@@ -139,7 +131,7 @@
                 Title = "Please select a DVD Profiler Collection Export file"
             };
 
-            return (options);
+            return options;
         }
     }
 }

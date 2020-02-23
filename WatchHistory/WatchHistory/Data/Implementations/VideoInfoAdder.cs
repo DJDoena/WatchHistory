@@ -12,8 +12,7 @@
 
         private readonly FileEntry _fileEntry;
 
-        public VideoInfoAdder(IIOServices ioServices
-            , FileEntry fileEntry)
+        public VideoInfoAdder(IIOServices ioServices, FileEntry fileEntry)
         {
             _ioServices = ioServices;
             _fileEntry = fileEntry;
@@ -57,8 +56,7 @@
             return (title.ToString().TrimEnd());
         }
 
-        private static void AddTitlePart(StringBuilder title
-            , string part)
+        private static void AddTitlePart(StringBuilder title, string part)
         {
             if (part.IsNotEmpty())
             {

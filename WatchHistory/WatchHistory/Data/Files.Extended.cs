@@ -7,8 +7,7 @@
     public partial class FileEntry
     {
         [XmlIgnore]
-        public string Key
-            => GetKey(FullName);
+        public string Key => GetKey(FullName);
 
         public static string GetKey(string fullName)
         {
@@ -17,7 +16,7 @@
             {
                 key = string.Empty;
             }
-            else if (fullName.EndsWith(MediaInfoHelper.Constants.YoutubeFileExtension))
+            else if (fullName.EndsWith(Constants.YoutubeFileExtension))
             {
                 var parts = fullName.Split('\\');
 

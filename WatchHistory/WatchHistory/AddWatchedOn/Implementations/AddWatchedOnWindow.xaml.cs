@@ -11,8 +11,7 @@
             InitializeComponent();
         }
 
-        private void OnLoaded(object sender
-            , RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
             var viewModel = (IAddWatchedOnViewModel)DataContext;
 
@@ -26,7 +25,7 @@
 
             viewModel.Closing -= OnClosing;
 
-            DialogResult = (e.Result == Result.OK) ? true : false;
+            DialogResult = e.Result == Result.OK ? true : false;
 
             Close();
         }

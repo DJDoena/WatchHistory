@@ -49,13 +49,10 @@
 
         #endregion
 
-        private void Accept()
-            => Closing?.Invoke(this, new CloseEventArgs(Result.OK));
+        private void Accept() => Closing?.Invoke(this, new CloseEventArgs(Result.OK));
 
-        private void Cancel()
-            => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
+        private void Cancel() => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
 
-        private void RaisePropertyChanged(string attribute)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+        private void RaisePropertyChanged(string attribute) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

@@ -1,23 +1,20 @@
 ﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
-    using System;
-
     internal static class FilesModelConverter
     {
         internal static Files Convert(v1_0.Files oldFiles)
         {
-            Files newFiles = new Files();
+            var newFiles = new Files();
 
             if (oldFiles.Entries?.Length > 0)
             {
                 CopyEntries(oldFiles, newFiles);
             }
 
-            return (newFiles);
+            return newFiles;
         }
 
-        private static void CopyEntries(v1_0.Files oldFiles
-            , Files newFiles)
+        private static void CopyEntries(v1_0.Files oldFiles, Files newFiles)
         {
             newFiles.Entries = new FileEntry[oldFiles.Entries.Length];
 
@@ -27,15 +24,13 @@
             }
         }
 
-        private static void CopyEntry(v1_0.Files oldFiles
-             , Files newFiles
-             , int entryIndex)
+        private static void CopyEntry(v1_0.Files oldFiles, Files newFiles, int entryIndex)
         {
-            v1_0.FileEntry oldEntry = oldFiles.Entries[entryIndex];
+            var oldEntry = oldFiles.Entries[entryIndex];
 
             if (oldEntry != null)
             {
-                FileEntry newEntry = new FileEntry();
+                var newEntry = new FileEntry();
 
                 CopyEntry(oldEntry, newEntry);
 
@@ -43,8 +38,7 @@
             }
         }
 
-        private static void CopyEntry(v1_0.FileEntry oldEntry
-            , FileEntry newEntry)
+        private static void CopyEntry(v1_0.FileEntry oldEntry, FileEntry newEntry)
         {
             newEntry.CreationTime = oldEntry.CreationTime;
             newEntry.FullName = oldEntry.FullName;
@@ -55,8 +49,7 @@
             }
         }
 
-        private static void CopyUsers(v1_0.FileEntry oldEntry
-            , FileEntry newEntry)
+        private static void CopyUsers(v1_0.FileEntry oldEntry, FileEntry newEntry)
         {
             newEntry.Users = new User[oldEntry.Users.Length];
 
@@ -66,15 +59,13 @@
             }
         }
 
-        private static void CopyUser(v1_0.FileEntry oldEntry
-            , FileEntry newEntry
-            , int userIndex)
+        private static void CopyUser(v1_0.FileEntry oldEntry, FileEntry newEntry, int userIndex)
         {
-            v1_0.User oldUser = oldEntry.Users[userIndex];
+            var oldUser = oldEntry.Users[userIndex];
 
             if (oldUser != null)
             {
-                User newUser = new User();
+                var newUser = new User();
 
                 CopyUser(oldUser, newUser);
 
@@ -82,8 +73,7 @@
             }
         }
 
-        private static void CopyUser(v1_0.User oldUser
-            , User newUser)
+        private static void CopyUser(v1_0.User oldUser, User newUser)
         {
             if (oldUser.IgnoreSpecified)
             {
@@ -98,16 +88,15 @@
             }
         }
 
-        private static void CopyWatches(v1_0.User oldUser
-            , User newUser)
+        private static void CopyWatches(v1_0.User oldUser, User newUser)
         {
             newUser.Watches = new Watch[oldUser.Watches.Length];
 
             for (int watchIndex = 0; watchIndex < oldUser.Watches.Length; watchIndex++)
             {
-                DateTime oldWatch = oldUser.Watches[watchIndex];
+                var oldWatch = oldUser.Watches[watchIndex];
 
-                Watch newWatch = new Watch() { Value = oldWatch };
+                var newWatch = new Watch() { Value = oldWatch };
 
                 newUser.Watches[watchIndex] = newWatch;
             }

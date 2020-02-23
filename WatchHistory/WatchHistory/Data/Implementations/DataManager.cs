@@ -46,9 +46,7 @@
             _turnOfTheCentury = new DateTime(1999, 12, 31, 23, 59, 59, DateTimeKind.Utc);
         }
 
-        public DataManager(string settingsFile
-            , string dataFile
-            , IIOServices ioServices)
+        public DataManager(string settingsFile, string dataFile, IIOServices ioServices)
         {
             _ioServices = ioServices;
 
@@ -165,13 +163,9 @@
             }
         }
 
-        public void AddWatched(FileEntry entry
-           , string userName)
-            => AddWatched(entry, userName, DateTime.UtcNow);
+        public void AddWatched(FileEntry entry, string userName) => AddWatched(entry, userName, DateTime.UtcNow);
 
-        public void AddWatched(FileEntry entry
-            , string userName
-            , DateTime watchedOn)
+        public void AddWatched(FileEntry entry, string userName, DateTime watchedOn)
         {
             lock (_filesLock)
             {
@@ -185,8 +179,7 @@
             RaiseFilesChanged();
         }
 
-        public void AddIgnore(FileEntry entry
-            , string userName)
+        public void AddIgnore(FileEntry entry, string userName)
         {
             lock (_filesLock)
             {
@@ -198,8 +191,7 @@
             RaiseFilesChanged();
         }
 
-        public void UndoIgnore(FileEntry entry
-            , string userName)
+        public void UndoIgnore(FileEntry entry, string userName)
         {
             var user = TryGetUser(entry, userName);
 
@@ -211,8 +203,7 @@
             }
         }
 
-        public DateTime GetLastWatched(FileEntry entry
-            , string userName)
+        public DateTime GetLastWatched(FileEntry entry, string userName)
         {
             var user = TryGetUser(entry, userName);
 
@@ -373,8 +364,7 @@
             }
         }
 
-        private User AddUser(FileEntry entry
-            , string userName)
+        private User AddUser(FileEntry entry, string userName)
         {
             var users = entry.Users?.ToList() ?? new List<User>(1);
 
@@ -390,8 +380,7 @@
             return user;
         }
 
-        private void AddWatched(User user
-            , DateTime watchedOn)
+        private void AddWatched(User user, DateTime watchedOn)
         {
             var watches = user.Watches?.ToList() ?? new List<Watch>(1);
 
@@ -403,13 +392,9 @@
             user.Watches = watches.ToArray();
         }
 
-        private static User TryGetUser(FileEntry entry
-            , string userName)
-            => entry.Users?.Where(user => IsUser(user, userName)).FirstOrDefault();
+        private static User TryGetUser(FileEntry entry, string userName) => entry.Users?.Where(user => IsUser(user, userName)).FirstOrDefault();
 
-        private static bool IsUser(User user
-            , string userName)
-            => user.UserName == userName;
+        private static bool IsUser(User user, string userName) => user.UserName == userName;
 
         private void SyncData()
         {
@@ -419,14 +404,11 @@
             }
         }
 
-        private bool HasValidEvents(FileEntry entry)
-            => entry.Users?.HasItemsWhere(HasEvents) == true;
+        private bool HasValidEvents(FileEntry entry) => entry.Users?.HasItemsWhere(HasEvents) == true;
 
-        private static bool HasEvents(User user)
-            => user.Watches?.HasItemsWhere(w => w.SourceSpecified == false && w.Value > _turnOfTheCentury) == true;
+        private static bool HasEvents(User user) => user.Watches?.HasItemsWhere(w => w.SourceSpecified == false && w.Value > _turnOfTheCentury) == true;
 
-        private bool IsProtected(FileEntry entry)
-            => entry.FullName.EndsWith(Constants.DvdProfilerFileExtension) && entry.VideoLengthSpecified;
+        private bool IsProtected(FileEntry entry) => entry.FullName.EndsWith(Constants.DvdProfilerFileExtension) && entry.VideoLengthSpecified;
 
         private void GetActualFiles()
         {
@@ -439,11 +421,9 @@
             readyTask.ContinueWith(ProcessActualFiles);
         }
 
-        private IEnumerable<Task<IEnumerable<string>>> GetActualFiles(string folder)
-            => _fileExtensions.Select(ext => GetActualFiles(folder, ext));
+        private IEnumerable<Task<IEnumerable<string>>> GetActualFiles(string folder) => _fileExtensions.Select(ext => GetActualFiles(folder, ext));
 
-        private Task<IEnumerable<string>> GetActualFiles(string folder, string fileExtension)
-            => Task.Run(() => GetFiles(folder, fileExtension));
+        private Task<IEnumerable<string>> GetActualFiles(string folder, string fileExtension) => Task.Run(() => GetFiles(folder, fileExtension));
 
         private void ProcessActualFiles(Task<IEnumerable<string>[]> task)
         {
@@ -463,8 +443,7 @@
             RaiseFilesChanged();
         }
 
-        private IEnumerable<string> GetFiles(string rootFolder
-            , string fileExtension)
+        private IEnumerable<string> GetFiles(string rootFolder, string fileExtension)
             => _ioServices.Folder.Exists(rootFolder)
                 ? (_ioServices.Folder.GetFiles(rootFolder, "*." + fileExtension, System.IO.SearchOption.AllDirectories))
                 : (Enumerable.Empty<string>());
@@ -527,8 +506,7 @@
             }
         }
 
-        private void OnFileDeleted(object sender
-            , System.IO.FileSystemEventArgs e)
+        private void OnFileDeleted(object sender, System.IO.FileSystemEventArgs e)
         {
             lock (_filesLock)
             {
@@ -543,8 +521,7 @@
             RaiseFilesChanged();
         }
 
-        private void OnFileCreated(object sender
-            , System.IO.FileSystemEventArgs e)
+        private void OnFileCreated(object sender, System.IO.FileSystemEventArgs e)
         {
             var entry = new FileEntry()
             {
@@ -564,8 +541,7 @@
             RaiseFilesChanged();
         }
 
-        private void RaiseFilesChanged()
-            => _filesChanged?.Invoke(this, EventArgs.Empty);
+        private void RaiseFilesChanged() => _filesChanged?.Invoke(this, EventArgs.Empty);
 
         private void MergeEntry(FileEntry existingEntry, FileEntry newEntry)
         {

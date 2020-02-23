@@ -22,10 +22,7 @@
         private event PropertyChangedEventHandler _propertyChanged;
 #pragma warning restore IDE1006 // Naming Styles
 
-        public FileEntryViewModel(FileEntry entry
-            , string userName
-            , IDataManager dataManager
-            , IIOServices ioServices)
+        public FileEntryViewModel(FileEntry entry, string userName, IDataManager dataManager, IIOServices ioServices)
         {
             FileEntry = entry;
             _userName = userName;
@@ -102,7 +99,7 @@
 
                 name = name.Replace(@"\", " > ");
 
-                return (name);
+                return name;
             }
         }
 
@@ -110,16 +107,16 @@
         {
             get
             {
-                DateTime lastWatched = _dataManager.GetLastWatched(FileEntry, _userName);
+                var lastWatched = _dataManager.GetLastWatched(FileEntry, _userName);
 
-                string text = string.Empty;
+                var text = string.Empty;
 
                 if (lastWatched.Ticks != 0)
                 {
                     text = ViewModelHelper.GetFormattedDateTime(lastWatched);
                 }
 
-                return (text);
+                return text;
             }
         }
 
@@ -127,16 +124,16 @@
         {
             get
             {
-                DateTime creationTime = FileEntry.GetCreationTime(_dataManager);
+                var creationTime = FileEntry.GetCreationTime(_dataManager);
 
-                string text = string.Empty;
+                var text = string.Empty;
 
                 if (creationTime.Ticks != 0)
                 {
                     text = ViewModelHelper.GetFormattedDateTime(creationTime);
                 }
 
-                return (text);
+                return text;
             }
         }
 
@@ -144,29 +141,26 @@
         {
             get
             {
-                uint runningTime = FileEntry.GetVideoLength(_dataManager);
+                var runningTime = FileEntry.GetVideoLength(_dataManager);
 
-                string text = string.Empty;
+                var text = string.Empty;
 
                 if (runningTime > 0)
                 {
                     text = ViewModelHelper.GetFormattedRunningTime(runningTime);
                 }
 
-                return (text);
+                return text;
             }
         }
 
-        public Brush Color
-            => _ioServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red;
+        public Brush Color => _ioServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red;
 
         #endregion
 
-        private User TryGetUser()
-            => FileEntry.Users?.Where(item => item.UserName == _userName).FirstOrDefault();
+        private User TryGetUser() => FileEntry.Users?.Where(item => item.UserName == _userName).FirstOrDefault();
 
-        private void OnUsersChanged(object sender
-            , EventArgs e)
+        private void OnUsersChanged(object sender, EventArgs e)
         {
             _user = TryGetUser();
 
@@ -181,14 +175,10 @@
             }
         }
 
-        private void OnWatchesChanged(object sender
-            , EventArgs e)
-            => RaisePropertyChanged(nameof(LastWatched));
+        private void OnWatchesChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(LastWatched));
 
-        private void OnVideoLengthChanged(object sender, EventArgs e)
-            => RaisePropertyChanged(nameof(RunningTime));
+        private void OnVideoLengthChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(RunningTime));
 
-        private void RaisePropertyChanged(string attribute)
-            => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+        private void RaisePropertyChanged(string attribute) => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

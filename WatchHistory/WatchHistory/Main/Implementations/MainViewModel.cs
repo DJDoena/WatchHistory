@@ -51,11 +51,7 @@
             }
         }
 
-        public MainViewModel(IMainModel model
-            , IDataManager dataManager
-            , IIOServices ioServices
-            , IWindowFactory windowFactory
-            , string userName)
+        public MainViewModel(IMainModel model, IDataManager dataManager, IIOServices ioServices, IWindowFactory windowFactory, string userName)
         {
             _model = model;
             _dataManager = dataManager;
@@ -119,8 +115,7 @@
 
         #region IMainViewModel
 
-        public string Title
-            => $"Watch History (user: {_userName})";
+        public string Title => $"Watch History (user: {_userName})";
 
         public string Filter
         {
@@ -235,8 +230,7 @@
             }
         }
 
-        private static IEnumerable<FileEntry> GetEntries(object parameter)
-            => ((IList)parameter).Cast<IFileEntryViewModel>().Select(entry => entry.FileEntry).ToList();
+        private static IEnumerable<FileEntry> GetEntries(object parameter) => ((IList)parameter).Cast<IFileEntryViewModel>().Select(entry => entry.FileEntry).ToList();
 
         private void Ignore(object parameter)
         {
@@ -249,11 +243,9 @@
             ResumeEvents();
         }
 
-        private void OpenSettings()
-            => _windowFactory.OpenSettingsWindow();
+        private void OpenSettings() => _windowFactory.OpenSettingsWindow();
 
-        private void UndoIgnore()
-            => _windowFactory.OpenIgnoreWindow(_userName, Filter);
+        private void UndoIgnore() => _windowFactory.OpenIgnoreWindow(_userName, Filter);
 
         private void PlayFile(object parameter)
         {
@@ -282,8 +274,7 @@
             _dataManager.SaveDataFile();
         }
 
-        private static FileEntry GetFileEntry(object parameter)
-            => ((IFileEntryViewModel)parameter)?.FileEntry;
+        private static FileEntry GetFileEntry(object parameter) => ((IFileEntryViewModel)parameter)?.FileEntry;
 
         private void OpenFileLocation(object parameter)
         {
@@ -292,14 +283,11 @@
             _model.OpenFileLocation(fileEntry);
         }
 
-        private void Sort(object parameter)
-            => SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (string)parameter));
+        private void Sort(object parameter) => SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (string)parameter));
 
-        private bool CanImportCollection()
-            => IsNotSynchronizing;
+        private bool CanImportCollection() => IsNotSynchronizing;
 
-        private bool IsNotSynchronizing
-            => _dataManager.IsSynchronizing == false;
+        private bool IsNotSynchronizing => _dataManager.IsSynchronizing == false;
 
         private void ImportCollection()
         {
@@ -310,8 +298,7 @@
             ResumeEvents();
         }
 
-        private void OnModelFilesChanged(object sender
-            , EventArgs e)
+        private void OnModelFilesChanged(object sender, EventArgs e)
         {
             if (SuspendEvents == false)
             {
@@ -323,11 +310,9 @@
             }
         }
 
-        private void RaisePropertyChanged(string attribute)
-            => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+        private void RaisePropertyChanged(string attribute) => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
 
-        private void OnDataManagerIsSynchronizingChanged(object sender
-            , EventArgs e)
+        private void OnDataManagerIsSynchronizingChanged(object sender, EventArgs e)
         {
             RaisePropertyChanged(nameof(ImportCollectionCommand));
         }
@@ -349,8 +334,6 @@
 
             ResumeEvents();
         }
-
-
 
         private void CheckForUpdate()
         {
@@ -390,8 +373,7 @@
             _dataManager.SaveDataFile();
         }
 
-        private bool CanAddYoutubeLink()
-          => IsNotSynchronizing;
+        private bool CanAddYoutubeLink() => IsNotSynchronizing;
 
         private void AddYoutubeLink()
         {
@@ -400,8 +382,7 @@
             _dataManager.SaveDataFile();
         }
 
-        private bool CanAddManualEntry()
-            => IsNotSynchronizing;
+        private bool CanAddManualEntry() => IsNotSynchronizing;
 
         private void AddAddManualEntry()
         {

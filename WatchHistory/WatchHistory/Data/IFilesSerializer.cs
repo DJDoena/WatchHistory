@@ -6,7 +6,6 @@
 
         Files LoadData(string fileName);
 
-        void SaveFile(string fileName
-            , Files files);
+        void SaveFile(string fileName, Files files);
     }
 }

@@ -22,8 +22,7 @@
 
         private ISettingsListBoxItemViewModel _selectedFileExtension;
 
-        public SettingsViewModel(IDataManager dataManager
-            , IUIServices uiServices)
+        public SettingsViewModel(IDataManager dataManager, IUIServices uiServices)
         {
             _dataManager = dataManager;
             _uiServices = uiServices;
@@ -117,14 +116,11 @@
 
         #endregion
 
-        private void AddUser()
-            => Users.Add(new SettingsListBoxItemViewModel(string.Empty));
+        private void AddUser() => Users.Add(new SettingsListBoxItemViewModel(string.Empty));
 
-        private bool CanRemoveUser()
-            => SelectedUser != null;
+        private bool CanRemoveUser() => SelectedUser != null;
 
-        private void RemoveUser()
-            => Users.Remove(SelectedUser);
+        private void RemoveUser() => Users.Remove(SelectedUser);
 
         private void AddRootFolder()
         {
@@ -134,39 +130,33 @@
             }
         }
 
-        private bool CanRemoveRootFolder()
-            => SelectedRootFolder != null;
+        private bool CanRemoveRootFolder() => SelectedRootFolder != null;
 
-        private void RemoveRootFolder()
-            => RootFolders.Remove(SelectedRootFolder);
+        private void RemoveRootFolder() => RootFolders.Remove(SelectedRootFolder);
 
-        private void AddFileExtension()
-            => FileExtensions.Add(new SettingsListBoxItemViewModel(string.Empty));
+        private void AddFileExtension() => FileExtensions.Add(new SettingsListBoxItemViewModel(string.Empty));
 
-        private bool CanRemoveFileExtension()
-            => SelectedFileExtension != null;
+        private bool CanRemoveFileExtension() => SelectedFileExtension != null;
 
-        private void RemoveFileExtension()
-            => FileExtensions.Remove(SelectedFileExtension);
+        private void RemoveFileExtension() => FileExtensions.Remove(SelectedFileExtension);
 
         private void Accept()
         {
-            HashSet<string> users = new HashSet<string>(Users.Select(item => item.Value));
+            var users = new HashSet<string>(Users.Select(item => item.Value));
 
             _dataManager.Users = users.Where(item => string.IsNullOrEmpty(item) == false);
 
-            HashSet<string> rootFolders = new HashSet<string>(RootFolders);
+            var rootFolders = new HashSet<string>(RootFolders);
 
             _dataManager.RootFolders = rootFolders.Where(item => string.IsNullOrEmpty(item) == false);
 
-            HashSet<string> fileExtensions = new HashSet<string>(FileExtensions.Select(item => item.Value));
+            var fileExtensions = new HashSet<string>(FileExtensions.Select(item => item.Value));
 
             _dataManager.FileExtensions = fileExtensions.Where(item => string.IsNullOrEmpty(item) == false);
 
             Closing?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RaisePropertyChanged(string attribute)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+        private void RaisePropertyChanged(string attribute) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

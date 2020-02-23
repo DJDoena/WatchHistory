@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
@@ -10,7 +9,6 @@
     using AbstractionLayer.IOServices;
     using Data;
     using ToolBox.Commands;
-    using ToolBox.Extensions;
     using WatchHistory.IgnoreEntry;
     using WatchHistory.Implementations;
 
@@ -28,10 +26,7 @@
         private event PropertyChangedEventHandler _propertyChanged;
 #pragma warning restore IDE1006 // Naming Styles
 
-        public IgnoreEntryViewModel(IIgnoreEntryModel model
-            , IDataManager dataManager
-            , IIOServices ioServices
-            , string userName)
+        public IgnoreEntryViewModel(IIgnoreEntryModel model, IDataManager dataManager, IIOServices ioServices, string userName)
         {
             _model = model;
             _dataManager = dataManager;
@@ -101,11 +96,11 @@
         {
             get
             {
-                IEnumerable<FileEntry> modelEntries = _model.GetFiles();
+                var modelEntries = _model.GetFiles();
 
-                ObservableCollection<IFileEntryViewModel> viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, _userName, _dataManager, _ioServices, SortColumn.File, true);
+                var viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, _userName, _dataManager, _ioServices, SortColumn.File, true);
 
-                return (viewModelEntries);
+                return viewModelEntries;
             }
         }
 
@@ -115,18 +110,15 @@
 
         private void UndoIgnore(object parameter)
         {
-            IEnumerable<IFileEntryViewModel> entries = ((IList)parameter).Cast<IFileEntryViewModel>().ToList();
+            var entries = ((IList)parameter).Cast<IFileEntryViewModel>().ToList();
 
             entries.ForEach(entry => _dataManager.UndoIgnore(entry.FileEntry, _userName));
 
             _dataManager.SaveDataFile();
         }
 
-        private void OnModelFilesChanged(object sender
-            , EventArgs e)
-            => RaisePropertyChanged(nameof(Entries));
+        private void OnModelFilesChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(Entries));
 
-        private void RaisePropertyChanged(string attribute)
-            => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+        private void RaisePropertyChanged(string attribute) => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }
 }

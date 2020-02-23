@@ -17,9 +17,7 @@
 
         private readonly string _userName;
 
-        public YoutubeFileManager(IDataManager dataManager
-            , IIOServices ioServices
-            , string userName)
+        public YoutubeFileManager(IDataManager dataManager, IIOServices ioServices, string userName)
         {
             _dataManager = dataManager;
             _ioServices = ioServices;

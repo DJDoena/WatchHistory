@@ -40,7 +40,7 @@
 
         private void TryProcess()
         {
-            var folder = _ioServices.Path.Combine(WatchHistory.Environment.AppDataFolder, "DVDProfiler");
+            var folder = _ioServices.Path.Combine(Environment.AppDataFolder, "DVDProfiler");
 
             if (_ioServices.Folder.Exists(folder) == false)
             {
@@ -64,7 +64,7 @@
 
             var users = usersByDvd.SelectMany(user => user);
 
-            return (users);
+            return users;
         }
 
         private IEnumerable<string> GetUsers(DVDP.DVD dvd)
@@ -76,11 +76,9 @@
             return users;
         }
 
-        internal static IEnumerable<DVDP.Event> GetWatches(DVDP.DVD dvd)
-            => dvd.EventList.EnsureNotNull().Where(e => e.Type == DVDP.EventType.Watched);
+        internal static IEnumerable<DVDP.Event> GetWatches(DVDP.DVD dvd) => dvd.EventList.EnsureNotNull().Where(e => e.Type == DVDP.EventType.Watched);
 
-        internal static string GetUserName(DVDP.Event watch)
-            => string.Join(" ", watch.User?.FirstName, watch.User?.LastName).Trim();
+        internal static string GetUserName(DVDP.Event watch) => string.Join(" ", watch.User?.FirstName, watch.User?.LastName).Trim();
 
         private void CreateCollectionFiles(string folder)
         {

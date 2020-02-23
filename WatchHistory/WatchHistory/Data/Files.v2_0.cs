@@ -43,7 +43,7 @@
         {
             get
             {
-                return (_creationTime ?? new DateTime(0, DateTimeKind.Utc));
+                return _creationTime ?? new DateTime(0, DateTimeKind.Utc);
             }
             set
             {
@@ -57,7 +57,7 @@
         {
             get
             {
-                return (_users);
+                return _users;
             }
             set
             {
@@ -104,10 +104,10 @@
             {
                 if ((_watches == null) || (_watches.Length == 0))
                 {
-                    return (null);
+                    return null;
                 }
 
-                return (_watches);
+                return _watches;
             }
             set
             {
