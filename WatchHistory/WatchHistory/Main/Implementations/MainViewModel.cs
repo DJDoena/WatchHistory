@@ -84,6 +84,7 @@
             EditRunningTimeCommand = new ParameterizedRelayCommand(EditRunningTime);
             AddYoutubeLinkCommand = new RelayCommand(AddYoutubeLink, CanAddYoutubeLink);
             AddManualEntryCommand = new RelayCommand(AddAddManualEntry, CanAddManualEntry);
+            EditTitleCommand = new ParameterizedRelayCommand(EditTitle);
         }
 
         #region INotifyPropertyChanged
@@ -206,6 +207,8 @@
         public ICommand AddYoutubeLinkCommand { get; }
 
         public ICommand AddManualEntryCommand { get; }
+
+        public ICommand EditTitleCommand { get; }
 
         #endregion
 
@@ -347,6 +350,8 @@
             ResumeEvents();
         }
 
+
+
         private void CheckForUpdate()
         {
             OnlineAccess.CheckForNewVersion("http://doena-soft.de/dvdprofiler/3.9.0/versions.xml", new WindowHandle(), "Watch History", GetType().Assembly);
@@ -401,6 +406,22 @@
         private void AddAddManualEntry()
         {
             _windowFactory.OpenAddManualEntryWindow(_userName);
+
+            _dataManager.SaveDataFile();
+        }
+
+        private void EditTitle(object parameter)
+        {
+            var fileEntry = GetFileEntry(parameter);
+
+            var title = _windowFactory.OpenEditTitleWindow(fileEntry.Title);
+
+            if (title == null)
+            {
+                return;
+            }
+
+            fileEntry.Title = title;
 
             _dataManager.SaveDataFile();
         }

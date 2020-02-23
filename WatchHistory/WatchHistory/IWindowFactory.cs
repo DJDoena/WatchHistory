@@ -23,5 +23,7 @@
         void OpenAddYoutubeLinkWindow(string userName);
 
         void OpenAddManualEntryWindow(string userName);
+
+        string OpenEditTitleWindow(string title);
     }
 }

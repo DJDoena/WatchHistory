@@ -69,6 +69,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddYoutubeLink\Implementations\YoutubeFileManager.cs" />
+    <Compile Include="AddYoutubeLink\Implementations\AddYoutubeLinkViewModel.cs" />
+    <Compile Include="AddYoutubeLink\Implementations\AddYoutubeLinkWindow.xaml.cs">
+      <DependentUpon>AddYoutubeLinkWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddYoutubeLink\Implementations\YoutubeManager.cs" />
+    <Compile Include="AddYoutubeLink\IAddYoutubeLinkViewModel.cs" />
+    <Compile Include="AddYoutubeLink\IYoutubeManager.cs" />
+    <Compile Include="AddYoutubeLink\YoutubeApiConstants.cs" />
+    <Compile Include="AddYoutubeLink\YoutubeApi\YoutubeApi.cs" />
+    <Compile Include="AddYoutubeLink\YoutubeUrlException.cs" />
     <Compile Include="Data\Files.Extended.cs">
       <DependentUpon>Files.v2_2.cs</DependentUpon>
     </Compile>
@@ -84,25 +95,24 @@
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
     <Compile Include="Data\Implementations\FilesSerializer.cs" />
     <Compile Include="Data\IFilesSerializer.cs" />
-    <Compile Include="Manual\Implementations\ManualViewModel.cs" />
-    <Compile Include="Manual\Implementations\ManualWindow.xaml.cs">
+    <Compile Include="EditTitle\Implementations\EditTitleWindow.xaml.cs">
+      <DependentUpon>EditTitleWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddManualEntry\Implementations\AddManualEntryViewModel.cs" />
+    <Compile Include="AddManualEntry\Implementations\ManualWindow.xaml.cs">
       <DependentUpon>ManualWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Manual\IManualViewModel.cs" />
-    <Compile Include="YoutubeLink\Implementations\YoutubeFileManager.cs" />
-    <Compile Include="YoutubeLink\YoutubeApiConstants.cs" />
-    <Compile Include="YoutubeLink\Implementations\YoutubeManager.cs" />
+    <Compile Include="AddManualEntry\IAddManualEntryViewModel.cs" />
+    <Compile Include="EditTitle\Implementations\EditTitleViewModel.cs" />
+    <Compile Include="EditTitle\IEditTitleViewModel.cs" />
     <Compile Include="Data\Implementations\VideoInfoAdder.cs" />
-    <Compile Include="YoutubeLink\IYoutubeManager.cs" />
-    <Compile Include="YoutubeLink\YoutubeApi\YoutubeApi.cs" />
-    <Compile Include="YoutubeLink\YoutubeUrlException.cs" />
     <Compile Include="Environment.cs" />
-    <Compile Include="Ignore\IIgnoreModel.cs" />
-    <Compile Include="Ignore\IIgnoreViewModel.cs" />
-    <Compile Include="Ignore\Implementations\IgnoreModel.cs" />
-    <Compile Include="Ignore\Implementations\IgnoreViewModel.cs" />
-    <Compile Include="Ignore\Implementations\IgnoreWindow.xaml.cs">
-      <DependentUpon>IgnoreWindow.xaml</DependentUpon>
+    <Compile Include="IgnoreEntry\IIgnoreEntryModel.cs" />
+    <Compile Include="IgnoreEntry\IIgnoreEntryViewModel.cs" />
+    <Compile Include="IgnoreEntry\Implementations\IgnoreEntryModel.cs" />
+    <Compile Include="IgnoreEntry\Implementations\IgnoreViewModel.cs" />
+    <Compile Include="IgnoreEntry\Implementations\IgnoreEntryWindow.xaml.cs">
+      <DependentUpon>IgnoreEntryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Implementations\ModelBase.cs" />
     <Compile Include="Implementations\SerializerHelper.cs" />
@@ -125,29 +135,32 @@
     <Compile Include="Settings\ISettingsListBoxItemViewModel.cs" />
     <Compile Include="Settings\ISettingsViewModel.cs" />
     <Compile Include="Implementations\CloseEventArgs.cs" />
-    <Compile Include="RunningTime\Implementations\RunningTimeViewModel.cs" />
-    <Compile Include="RunningTime\Implementations\RunningTimeWindow.xaml.cs">
-      <DependentUpon>RunningTimeWindow.xaml</DependentUpon>
+    <Compile Include="EditRunningTime\Implementations\EditRunningTimeViewModel.cs" />
+    <Compile Include="EditRunningTime\Implementations\EditRunningTimeWindow.xaml.cs">
+      <DependentUpon>EditRunningTimeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RunningTime\IRunningTimeViewModel.cs" />
-    <Compile Include="WatchedOn\Implementations\WatchedOnViewModel.cs" />
-    <Compile Include="WatchedOn\Implementations\WatchedOnWindow.xaml.cs">
-      <DependentUpon>WatchedOnWindow.xaml</DependentUpon>
+    <Compile Include="EditRunningTime\IEditRunningTimeViewModel.cs" />
+    <Compile Include="AddWatchedOn\Implementations\AddWatchedOnViewModel.cs" />
+    <Compile Include="AddWatchedOn\Implementations\AddWatchedOnWindow.xaml.cs">
+      <DependentUpon>AddWatchedOnWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WatchedOn\IWatchedOnViewModel.cs" />
-    <Compile Include="Watches\Implementations\WatchesViewModel.cs" />
-    <Compile Include="Watches\Implementations\WatchViewModel.cs" />
-    <Compile Include="Watches\IWatchesViewModel.cs" />
-    <Compile Include="Watches\IWatchViewModel.cs" />
-    <Compile Include="Watches\Implementations\WatchesWindow.xaml.cs">
-      <DependentUpon>WatchesWindow.xaml</DependentUpon>
+    <Compile Include="AddWatchedOn\IAddWatchedOnViewModel.cs" />
+    <Compile Include="ShowWatches\Implementations\ShowWatchesViewModel.cs" />
+    <Compile Include="ShowWatches\Implementations\WatchViewModel.cs" />
+    <Compile Include="ShowWatches\IShowWatchesViewModel.cs" />
+    <Compile Include="ShowWatches\IWatchViewModel.cs" />
+    <Compile Include="ShowWatches\Implementations\ShowWatchesWindow.xaml.cs">
+      <DependentUpon>ShowWatchesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="YoutubeLink\Implementations\YoutubeLinkViewModel.cs" />
-    <Compile Include="YoutubeLink\Implementations\YoutubeLinkWindow.xaml.cs">
-      <DependentUpon>YoutubeLinkWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="YoutubeLink\IYoutubeLinkViewModel.cs" />
-    <Page Include="Ignore\Implementations\IgnoreWindow.xaml">
+    <Page Include="AddYoutubeLink\Implementations\AddYoutubeLinkWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EditTitle\Implementations\EditTitleWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="IgnoreEntry\Implementations\IgnoreEntryWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -188,23 +201,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RunningTime\Implementations\RunningTimeWindow.xaml">
+    <Page Include="EditRunningTime\Implementations\EditRunningTimeWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="WatchedOn\Implementations\WatchedOnWindow.xaml">
+    <Page Include="AddWatchedOn\Implementations\AddWatchedOnWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Watches\Implementations\WatchesWindow.xaml">
+    <Page Include="ShowWatches\Implementations\ShowWatchesWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Manual\Implementations\ManualWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="YoutubeLink\Implementations\YoutubeLinkWindow.xaml">
+    <Page Include="AddManualEntry\Implementations\ManualWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

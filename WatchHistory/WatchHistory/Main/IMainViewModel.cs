@@ -48,5 +48,7 @@
         ICommand AddYoutubeLinkCommand { get; }
 
         ICommand AddManualEntryCommand { get; }
+
+        ICommand EditTitleCommand { get; }
     }
 }

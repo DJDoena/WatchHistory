@@ -6,16 +6,7 @@
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
     using Data;
-    using Ignore.Implementations;
     using Main.Implementations;
-    using SelectUser.Implementations;
-    using Settings.Implementations;
-    using WatchedOn.Implementations;
-    using Watches.Implementations;
-    using WatchHistory.Manual.Implementations;
-    using WatchHistory.RunningTime.Implementations;
-    using WatchHistory.YoutubeLink;
-    using WatchHistory.YoutubeLink.Implementations;
 
     internal sealed class WindowFactory : IWindowFactory
     {
@@ -27,13 +18,13 @@
 
         private readonly IDataManager _dataManager;
 
-        private readonly IYoutubeManager _youtubeManager;
+        private readonly AddYoutubeLink.IYoutubeManager _youtubeManager;
 
         public WindowFactory(IIOServices ioServices
             , IUIServices uiServices
             , IClipboardServices clipboardServices
             , IDataManager dataManager
-            , IYoutubeManager youtubeManager)
+            , AddYoutubeLink.IYoutubeManager youtubeManager)
         {
             _ioServices = ioServices;
             _uiServices = uiServices;
@@ -48,9 +39,9 @@
         {
             if (_dataManager.Users.Count() > 1)
             {
-                var viewModel = new SelectUserViewModel(_dataManager, this);
+                var viewModel = new SelectUser.Implementations.SelectUserViewModel(_dataManager, this);
 
-                var window = new SelectUserWindow()
+                var window = new SelectUser.Implementations.SelectUserWindow()
                 {
                     DataContext = viewModel,
                 };
@@ -83,9 +74,9 @@
 
         public void OpenSettingsWindow()
         {
-            var viewModel = new SettingsViewModel(_dataManager, _uiServices);
+            var viewModel = new WatchHistory.Settings.Implementations.SettingsViewModel(_dataManager, _uiServices);
 
-            var window = new SettingsWindow()
+            var window = new WatchHistory.Settings.Implementations.SettingsWindow()
             {
                 DataContext = viewModel,
             };
@@ -95,14 +86,14 @@
 
         public void OpenIgnoreWindow(string userName, string filter)
         {
-            var model = new IgnoreModel(_dataManager, userName);
+            var model = new IgnoreEntry.Implementations.IgnoreEntryModel(_dataManager, userName);
 
-            var viewModel = new IgnoreViewModel(model, _dataManager, _ioServices, userName)
+            var viewModel = new IgnoreEntry.Implementations.IgnoreEntryViewModel(model, _dataManager, _ioServices, userName)
             {
                 Filter = filter,
             };
 
-            var window = new IgnoreWindow()
+            var window = new IgnoreEntry.Implementations.IgnoreEntryWindow()
             {
                 DataContext = viewModel,
             };
@@ -112,9 +103,9 @@
 
         public DateTime? OpenWatchedOnWindow()
         {
-            var viewModel = new WatchedOnViewModel();
+            var viewModel = new AddWatchedOn.Implementations.AddWatchedOnViewModel();
 
-            var window = new WatchedOnWindow()
+            var window = new AddWatchedOn.Implementations.AddWatchedOnWindow()
             {
                 DataContext = viewModel,
             };
@@ -129,9 +120,9 @@
 
         public uint? OpenRunningTimeWindow(uint seconds)
         {
-            var viewModel = new RunningTimeViewModel(seconds);
+            var viewModel = new EditRunningTime.Implementations.EditRunningTimeViewModel(seconds);
 
-            var window = new RunningTimeWindow()
+            var window = new EditRunningTime.Implementations.EditRunningTimeWindow()
             {
                 DataContext = viewModel,
             };
@@ -146,9 +137,9 @@
 
         public void OpenWatchesWindow(IEnumerable<Watch> watches)
         {
-            var viewModel = new WatchesViewModel(watches);
+            var viewModel = new ShowWatches.Implementations.ShowWatchesViewModel(watches);
 
-            var window = new WatchesWindow()
+            var window = new ShowWatches.Implementations.ShowWatchesWindow()
             {
                 DataContext = viewModel,
             };
@@ -158,9 +149,9 @@
 
         public void OpenAddYoutubeLinkWindow(string userName)
         {
-            var viewModel = new YoutubeLinkViewModel(_dataManager, _ioServices, _uiServices, _clipboardServices, _youtubeManager, userName);
+            var viewModel = new AddYoutubeLink.Implementations.AddYoutubeLinkViewModel(_dataManager, _ioServices, _uiServices, _clipboardServices, _youtubeManager, userName);
 
-            var window = new YoutubeLinkWindow()
+            var window = new AddYoutubeLink.Implementations.AddYoutubeLinkWindow()
             {
                 DataContext = viewModel,
             };
@@ -170,14 +161,31 @@
 
         public void OpenAddManualEntryWindow(string userName)
         {
-            var viewModel = new ManualViewModel(_dataManager, _ioServices, _uiServices, userName);
+            var viewModel = new AddManualEntry.Implementations.AddManualEntryViewModel(_dataManager, _ioServices, _uiServices, userName);
 
-            var window = new ManualWindow()
+            var window = new AddManualEntry.Implementations.AddManualEntryWindow()
             {
                 DataContext = viewModel,
             };
 
             window.ShowDialog();
+        }
+
+        public string OpenEditTitleWindow(string title)
+        {
+            var viewModel = new EditTitle.Implementations.EditTitleViewModel(title);
+
+            var window = new EditTitle.Implementations.EditTitleWindow()
+            {
+                DataContext = viewModel,
+            };
+
+            if (window.ShowDialog() == true)
+            {
+                return viewModel.Title;
+            }
+
+            return null;
         }
 
         #endregion
