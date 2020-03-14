@@ -95,11 +95,13 @@
 
                 _dataManager.RootFolders.ForEach(folder => folderName = folderName.Replace(folder, string.Empty));
 
-                folderName = folderName.Trim('\\', '/');
+                folderName = folderName.Replace('\\', '/');
 
-                folderName = folderName.Replace(Constants.Backslash, @"\");
+                folderName = folderName.Replace(Constants.Backslash, "/");
 
-                folderName = folderName.Replace(@"\", " > ");
+                folderName = folderName.Trim('/', ' ', '\t');
+
+                folderName = folderName.Replace("/", " > ");
 
                 if (!string.IsNullOrWhiteSpace(folderName))
                 {
