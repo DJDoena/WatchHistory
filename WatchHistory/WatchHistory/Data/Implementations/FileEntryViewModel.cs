@@ -89,17 +89,26 @@
                     return (FileEntry.Title);
                 }
 
-                string name = FileEntry.FullName;
+                var fileInfo = _ioServices.GetFileInfo(FileEntry.FullName);
 
-                _dataManager.RootFolders.ForEach(folder => name = name.Replace(folder, string.Empty));
+                var folderName = fileInfo.FolderName;
 
-                name = name.Trim('\\', '/');
+                _dataManager.RootFolders.ForEach(folder => folderName = folderName.Replace(folder, string.Empty));
 
-                name = name.Replace(Constants.Backslash, @"\");
+                folderName = folderName.Trim('\\', '/');
 
-                name = name.Replace(@"\", " > ");
+                folderName = folderName.Replace(Constants.Backslash, @"\");
 
-                return name;
+                folderName = folderName.Replace(@"\", " > ");
+
+                if (!string.IsNullOrWhiteSpace(folderName))
+                {
+                    return $"{folderName} > {fileInfo.NameWithoutExtension}";
+                }
+                else
+                {
+                    return fileInfo.NameWithoutExtension;
+                }
             }
         }
 

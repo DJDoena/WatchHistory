@@ -72,7 +72,7 @@
             UndoIgnoreCommand = new RelayCommand(UndoIgnore);
             PlayFileCommand = new ParameterizedRelayCommand(PlayFile, CanPlayFile);
             SortCommand = new ParameterizedRelayCommand(Sort);
-            OpenFileLocationCommand = new ParameterizedRelayCommand(OpenFileLocation);
+            OpenFileLocationCommand = new ParameterizedRelayCommand(OpenFileLocation, CanOpenFileLocation);
             AddWatchedOnCommand = new ParameterizedRelayCommand(AddWatchedOn);
             CheckForUpdateCommand = new RelayCommand(CheckForUpdate);
             AboutCommand = new RelayCommand(ShowAbout);
@@ -81,6 +81,7 @@
             AddYoutubeLinkCommand = new RelayCommand(AddYoutubeLink, CanAddYoutubeLink);
             AddManualEntryCommand = new RelayCommand(AddAddManualEntry, CanAddManualEntry);
             EditTitleCommand = new ParameterizedRelayCommand(EditTitle);
+            ShowReportCommand = new RelayCommand(ShowReport);
         }
 
         #region INotifyPropertyChanged
@@ -205,6 +206,8 @@
 
         public ICommand EditTitleCommand { get; }
 
+        public ICommand ShowReportCommand { get; }
+
         #endregion
 
         private void AddWatched(object parameter)
@@ -247,13 +250,6 @@
 
         private void UndoIgnore() => _windowFactory.OpenIgnoreWindow(_userName, Filter);
 
-        private void PlayFile(object parameter)
-        {
-            var fileEntry = GetFileEntry(parameter);
-
-            _model.PlayFile(fileEntry);
-        }
-
         private bool CanPlayFile(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
@@ -261,6 +257,13 @@
             var canPlay = (fileEntry != null) && (_model.CanPlayFile(fileEntry));
 
             return canPlay;
+        }
+
+        private void PlayFile(object parameter)
+        {
+            var fileEntry = GetFileEntry(parameter);
+
+            _model.PlayFile(fileEntry);
         }
 
         private void PlayFileAndAddWatched(object parameter)
@@ -276,6 +279,15 @@
 
         private static FileEntry GetFileEntry(object parameter) => ((IFileEntryViewModel)parameter)?.FileEntry;
 
+        private bool CanOpenFileLocation(object parameter)
+        {
+            var fileEntry = GetFileEntry(parameter);
+
+            var canOpen = (fileEntry != null) && (_model.CanOpenFileLocation(fileEntry));
+
+            return canOpen;
+        }
+
         private void OpenFileLocation(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
@@ -285,9 +297,9 @@
 
         private void Sort(object parameter) => SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (string)parameter));
 
-        private bool CanImportCollection() => IsNotSynchronizing;
-
         private bool IsNotSynchronizing => _dataManager.IsSynchronizing == false;
+
+        private bool CanImportCollection() => IsNotSynchronizing;
 
         private void ImportCollection()
         {
@@ -403,6 +415,13 @@
             }
 
             fileEntry.Title = title;
+
+            _dataManager.SaveDataFile();
+        }
+
+        private void ShowReport()
+        {
+            _windowFactory.OpenShowReportWindow(_userName);
 
             _dataManager.SaveDataFile();
         }

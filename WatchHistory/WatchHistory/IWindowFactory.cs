@@ -25,5 +25,7 @@
         void OpenAddManualEntryWindow(string userName);
 
         string OpenEditTitleWindow(string title);
+
+        void OpenShowReportWindow(string userName);
     }
 }

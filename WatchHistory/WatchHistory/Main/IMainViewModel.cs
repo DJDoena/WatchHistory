@@ -50,5 +50,7 @@
         ICommand AddManualEntryCommand { get; }
 
         ICommand EditTitleCommand { get; }
+
+        ICommand ShowReportCommand { get; }
     }
 }

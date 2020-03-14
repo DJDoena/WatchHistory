@@ -184,6 +184,18 @@
             return null;
         }
 
+        public void OpenShowReportWindow(string userName)
+        {
+            var viewModel = new ShowReport.Implementations.ShowReportViewModel(_dataManager, _ioServices, _uiServices, _clipboardServices, userName);
+
+            var window = new ShowReport.Implementations.ShowReportWindow()
+            {
+                DataContext = viewModel,
+            };
+
+            window.ShowDialog();
+        }
+
         #endregion
     }
 }

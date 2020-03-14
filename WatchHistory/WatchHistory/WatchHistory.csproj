@@ -145,6 +145,17 @@
       <DependentUpon>AddWatchedOnWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AddWatchedOn\IAddWatchedOnViewModel.cs" />
+    <Compile Include="ShowReport\Implementations\CalculationProcessorBase.cs" />
+    <Compile Include="ShowReport\Implementations\DayCalculationProcessor.cs" />
+    <Compile Include="ShowReport\Implementations\DayTextProcessor.cs" />
+    <Compile Include="ShowReport\Implementations\MonthCalculationProcessor.cs" />
+    <Compile Include="ShowReport\Implementations\MonthTextProcessor.cs" />
+    <Compile Include="ShowReport\Implementations\ShowReportViewModel.cs" />
+    <Compile Include="ShowReport\Implementations\ShowReportWindow.xaml.cs">
+      <DependentUpon>ShowReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShowReport\Implementations\TextProcessorBase.cs" />
+    <Compile Include="ShowReport\IShowReportViewModel.cs" />
     <Compile Include="ShowWatches\Implementations\ShowWatchesViewModel.cs" />
     <Compile Include="ShowWatches\Implementations\WatchViewModel.cs" />
     <Compile Include="ShowWatches\IShowWatchesViewModel.cs" />
@@ -206,6 +217,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="AddWatchedOn\Implementations\AddWatchedOnWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ShowReport\Implementations\ShowReportWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

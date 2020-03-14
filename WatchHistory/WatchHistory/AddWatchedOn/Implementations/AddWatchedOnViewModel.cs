@@ -24,9 +24,9 @@
 
             _date = now.Date;
 
-            _hour = (byte)(now.Hour);
+            _hour = (byte)now.Hour;
 
-            _minute = (byte)(now.Minute);
+            _minute = (byte)now.Minute;
         }
 
         #region IAddWatchedOnViewModel

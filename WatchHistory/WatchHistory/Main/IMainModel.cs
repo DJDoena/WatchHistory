@@ -18,9 +18,11 @@
 
         void ImportCollection();
 
+        bool CanPlayFile(FileEntry fileEntry);
+
         void PlayFile(FileEntry fileEntry);
 
-        bool CanPlayFile(FileEntry fileEntry);
+        bool CanOpenFileLocation(FileEntry fileEntry);
 
         void OpenFileLocation(FileEntry fileEntry);
 

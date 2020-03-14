@@ -81,28 +81,32 @@
             RaiseFilesChanged(EventArgs.Empty);
         }
 
+        public bool CanPlayFile(FileEntry fileEntry) => _ioServices.GetFileInfo(fileEntry.FullName).Exists && fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.DvdProfilerFileExtension) == false;
+
         public void PlayFile(FileEntry fileEntry)
         {
-            if (fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.YoutubeFileExtension))
+            if (CanPlayFile(fileEntry))
             {
-                var info = SerializerHelper.Deserialize<YoutubeVideoInfo>(_ioServices, fileEntry.FullName);
+                if (fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.YoutubeFileExtension))
+                {
+                    var info = SerializerHelper.Deserialize<YoutubeVideoInfo>(_ioServices, fileEntry.FullName);
 
-                var url = $"https://www.youtube.com/watch?v={info.Id}";
+                    var url = $"https://www.youtube.com/watch?v={info.Id}";
 
-                Process.Start(url);
+                    Process.Start(url);
+                }
+                else
+                {
+                    Process.Start(fileEntry.FullName);
+                }
             }
-            else
-            {
-                Process.Start(fileEntry.FullName);
-            }
-
         }
 
-        public bool CanPlayFile(FileEntry fileEntry) => _ioServices.GetFileInfo(fileEntry.FullName).Exists && fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.DvdProfilerFileExtension) == false;
+        public bool CanOpenFileLocation(FileEntry fileEntry) => _ioServices.GetFileInfo(fileEntry.FullName).Exists;
 
         public void OpenFileLocation(FileEntry fileEntry)
         {
-            if (_ioServices.GetFileInfo(fileEntry.FullName).Exists)
+            if (CanOpenFileLocation(fileEntry))
             {
                 Process.Start("explorer.exe", $"/select, \"{fileEntry.FullName}\"");
             }
