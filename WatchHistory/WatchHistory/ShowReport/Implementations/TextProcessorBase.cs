@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using WatchHistory.Data;
 
     internal abstract class TextProcessorBase
@@ -10,12 +11,28 @@
 
         protected IEnumerable<FileEntry> Entries { get; }
 
-        protected TextProcessorBase(DateTime date, IEnumerable<FileEntry> entries)
+        protected string UserName { get; }
+
+        protected TextProcessorBase(DateTime date, IEnumerable<FileEntry> entries, string userName)
         {
-            Date = date;
+            Date = date.Date;
             Entries = entries;
+            UserName = userName;
         }
 
         internal abstract string GetText();
+
+        protected uint GetVideoLength(FileEntry fileEntry)
+        {
+            var watches = fileEntry.Users.First(u => u.UserName == UserName).Watches.Where(WatchContainsDate).ToList();
+
+            var singleLength = fileEntry.VideoLength;
+
+            var fullLength = (uint)(singleLength * watches.Count);
+
+            return fullLength;
+        }
+
+        protected abstract bool WatchContainsDate(Watch watch);
     }
 }

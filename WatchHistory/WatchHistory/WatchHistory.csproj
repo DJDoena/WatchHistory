@@ -155,6 +155,7 @@
       <DependentUpon>ShowReportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShowReport\Implementations\TextProcessorBase.cs" />
+    <Compile Include="ShowReport\Implementations\WatchHelper.cs" />
     <Compile Include="ShowReport\IShowReportViewModel.cs" />
     <Compile Include="ShowWatches\Implementations\ShowWatchesViewModel.cs" />
     <Compile Include="ShowWatches\Implementations\WatchViewModel.cs" />

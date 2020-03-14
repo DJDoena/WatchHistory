@@ -12,7 +12,7 @@
     {
         private readonly IIOServices _ioServices;
 
-        internal DayTextProcessor(IIOServices ioServices, DateTime date, IEnumerable<FileEntry> entries) : base(date, entries)
+        internal DayTextProcessor(IIOServices ioServices, DateTime date, IEnumerable<FileEntry> entries, string userName) : base(date, entries, userName)
         {
             _ioServices = ioServices;
         }
@@ -28,13 +28,15 @@
                 text.AppendLine(GetTitle(entry));
             }
 
-            var totalLength = Entries.Select(e => e.VideoLength).Sum();
+            var totalLength = Entries.Select(GetVideoLength).Sum();
 
             text.Append("Total: ");
             text.AppendLine(Helper.FormatTime(totalLength));
 
             return text.ToString();
         }
+
+        protected override bool WatchContainsDate(Watch watch) => WatchHelper.MatchesDay(watch, Date);
 
         private string GetTitle(FileEntry entry)
         {

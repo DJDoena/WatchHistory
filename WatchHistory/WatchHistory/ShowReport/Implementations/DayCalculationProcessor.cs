@@ -20,7 +20,7 @@
             return entries;
         }
 
-        protected override bool WatchesContainsDate(Watch watch) => string.IsNullOrWhiteSpace(watch.Source) && watch.Value.ToLocalTime().Date == Date;
+        protected override bool WatchContainsDate(Watch watch) => WatchHelper.MatchesDay(watch, Date);
 
         private int CompareWatchDates(FileEntry left, FileEntry right)
         {
@@ -42,7 +42,7 @@
                 return new DateTime(0);
             }
 
-            var watches = user.Watches.Where(WatchesContainsDate);
+            var watches = user.Watches.Where(WatchContainsDate);
 
             var lastWatched = watches.Max(watch => watch.Value).ToLocalTime();
 

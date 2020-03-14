@@ -76,7 +76,7 @@
         {
             var entries = GetFilteredEntries(new DayCalculationProcessor(_dataManager, _userName, Date));
 
-            var success = CopyReportToClipboard(new DayTextProcessor(_ioServices, Date, entries));
+            var success = CopyReportToClipboard(new DayTextProcessor(_ioServices, Date, entries, _userName));
 
             if (success)
             {
@@ -88,7 +88,7 @@
         {
             var entries = GetFilteredEntries(new MonthCalculationProcessor(_dataManager, _userName, Date));
 
-            var success = CopyReportToClipboard(new MonthTextProcessor(Date, entries));
+            var success = CopyReportToClipboard(new MonthTextProcessor(Date, entries, _userName));
 
             if (success)
             {

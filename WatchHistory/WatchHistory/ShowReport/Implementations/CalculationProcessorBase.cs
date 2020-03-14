@@ -16,7 +16,7 @@
 
         protected bool EntryContainsUserWithWatchedDate(FileEntry entry) => entry.Users?.Any(UserIsCorrectAndContainsDate) == true;
 
-        protected abstract bool WatchesContainsDate(Watch watch);
+        protected abstract bool WatchContainsDate(Watch watch);
 
         protected CalculationProcessorBase(IDataManager dataManager, string userName, DateTime date)
         {
@@ -47,6 +47,6 @@
             return entries;
         }
 
-        private bool UserIsCorrectAndContainsDate(User user) => user.UserName == UserName && user.Watches?.Any(WatchesContainsDate) == true;
+        private bool UserIsCorrectAndContainsDate(User user) => user.UserName == UserName && user.Watches?.Any(WatchContainsDate) == true;
     }
 }

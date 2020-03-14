@@ -9,13 +9,13 @@
 
     internal sealed class MonthTextProcessor : TextProcessorBase
     {
-        internal MonthTextProcessor(DateTime date, IEnumerable<FileEntry> entries) : base(date, entries)
+        internal MonthTextProcessor(DateTime date, IEnumerable<FileEntry> entries, string userName) : base(date, entries, userName)
         {
         }
 
         internal override string GetText()
         {
-            var totalLength = Entries.Select(e => e.VideoLength).Sum();
+            var totalLength = Entries.Select(GetVideoLength).Sum();
 
             var dailyLength = GetDailyLength(totalLength);
 
@@ -32,6 +32,8 @@
 
             return text.ToString();
         }
+
+        protected override bool WatchContainsDate(Watch watch) => WatchHelper.MatchesMonth(watch, Date);
 
         private uint GetDailyLength(uint totalLength)
         {
