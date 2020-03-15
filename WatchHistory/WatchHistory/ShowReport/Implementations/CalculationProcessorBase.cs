@@ -14,10 +14,6 @@
 
         protected DateTime Date { get; }
 
-        protected bool EntryContainsUserWithWatchedDate(FileEntry entry) => entry.Users?.Any(UserIsCorrectAndContainsDate) == true;
-
-        protected abstract bool WatchContainsDate(Watch watch);
-
         protected CalculationProcessorBase(IDataManager dataManager, string userName, DateTime date)
         {
             _dataManager = dataManager;
@@ -27,6 +23,10 @@
 
         internal abstract IEnumerable<FileEntry> GetEntries();
 
+        protected abstract bool WatchContainsDate(Watch watch);
+
+        protected bool EntryContainsUserWithWatchedDate(FileEntry entry) => entry.Users?.Any(UserIsCorrectAndContainsDate) == true;
+        
         protected List<FileEntry> GetFilteredEntries()
         {
             var entries = _dataManager.GetFiles().Where(EntryContainsUserWithWatchedDate).ToList();

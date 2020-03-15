@@ -22,6 +22,8 @@
 
         internal abstract string GetText();
 
+        protected abstract bool WatchContainsDate(Watch watch);
+
         protected uint GetVideoLength(FileEntry fileEntry)
         {
             var watches = fileEntry.Users.First(u => u.UserName == UserName).Watches.Where(WatchContainsDate).ToList();
@@ -31,8 +33,6 @@
             var fullLength = (uint)(singleLength * watches.Count);
 
             return fullLength;
-        }
-
-        protected abstract bool WatchContainsDate(Watch watch);
+        }        
     }
 }
