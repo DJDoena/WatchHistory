@@ -36,7 +36,7 @@
             return text.ToString();
         }
 
-        protected override bool WatchContainsDate(Watch watch) => WatchHelper.MatchesDay(watch, Date);
+        protected override bool WatchContainsDate(Watch watch) => watch.MatchesDay(Date);
 
         private string GetTitle(FileEntry entry)
         {

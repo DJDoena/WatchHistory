@@ -55,18 +55,18 @@
 
         private static int CompareLastWatched(FileEntryViewModel left, FileEntryViewModel right, string userName, IDataManager dataManager)
         {
-            var leftLastWatched = dataManager.GetLastWatched(left.FileEntry, userName);
+            var leftLastWatched = dataManager.GetLastWatched(left.Entry, userName);
 
-            var rightLastWatched = dataManager.GetLastWatched(right.FileEntry, userName);
+            var rightLastWatched = dataManager.GetLastWatched(right.Entry, userName);
 
             return leftLastWatched.CompareTo(rightLastWatched);
         }
 
         private static int CompareCreationTime(FileEntryViewModel left, FileEntryViewModel right, IDataManager dataManager)
         {
-            var leftCreationTime = left.FileEntry.GetCreationTime(dataManager);
+            var leftCreationTime = left.Entry.GetCreationTime(dataManager);
 
-            var rightCreationTime = right.FileEntry.GetCreationTime(dataManager);
+            var rightCreationTime = right.Entry.GetCreationTime(dataManager);
 
             return leftCreationTime.CompareTo(rightCreationTime);
         }

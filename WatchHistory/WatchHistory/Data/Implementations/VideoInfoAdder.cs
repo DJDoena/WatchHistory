@@ -10,17 +10,17 @@
     {
         private readonly IIOServices _ioServices;
 
-        private readonly FileEntry _fileEntry;
+        private readonly FileEntry _entry;
 
-        public VideoInfoAdder(IIOServices ioServices, FileEntry fileEntry)
+        public VideoInfoAdder(IIOServices ioServices, FileEntry entry)
         {
             _ioServices = ioServices;
-            _fileEntry = fileEntry;
+            _entry = entry;
         }
 
         internal void Add()
         {
-            var xmlFile = _fileEntry.FullName + ".xml";
+            var xmlFile = _entry.FullName + ".xml";
 
             if (_ioServices.File.Exists(xmlFile))
             {
@@ -37,9 +37,9 @@
         {
             var info = SerializerHelper.Deserialize<Doc>(_ioServices, xmlFile);
 
-            _fileEntry.VideoLength = info.VideoInfo.Duration;
+            _entry.VideoLength = info.VideoInfo.Duration;
 
-            _fileEntry.Title = BuildTitle(info.VideoInfo.Episode);
+            _entry.Title = BuildTitle(info.VideoInfo.Episode);
         }
 
         private static string BuildTitle(Episode episode)

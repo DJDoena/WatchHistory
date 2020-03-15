@@ -81,15 +81,15 @@
             RaiseFilesChanged(EventArgs.Empty);
         }
 
-        public bool CanPlayFile(FileEntry fileEntry) => _ioServices.GetFileInfo(fileEntry.FullName).Exists && fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.DvdProfilerFileExtension) == false;
+        public bool CanPlayFile(FileEntry entry) => _ioServices.GetFileInfo(entry.FullName).Exists && entry.FullName.EndsWith(MediaInfoHelper.Constants.DvdProfilerFileExtension) == false;
 
-        public void PlayFile(FileEntry fileEntry)
+        public void PlayFile(FileEntry entry)
         {
-            if (CanPlayFile(fileEntry))
+            if (CanPlayFile(entry))
             {
-                if (fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.YoutubeFileExtension))
+                if (entry.FullName.EndsWith(MediaInfoHelper.Constants.YoutubeFileExtension))
                 {
-                    var info = SerializerHelper.Deserialize<YoutubeVideoInfo>(_ioServices, fileEntry.FullName);
+                    var info = SerializerHelper.Deserialize<YoutubeVideoInfo>(_ioServices, entry.FullName);
 
                     var url = $"https://www.youtube.com/watch?v={info.Id}";
 
@@ -97,22 +97,20 @@
                 }
                 else
                 {
-                    Process.Start(fileEntry.FullName);
+                    Process.Start(entry.FullName);
                 }
             }
         }
 
-        public bool CanOpenFileLocation(FileEntry fileEntry) => _ioServices.GetFileInfo(fileEntry.FullName).Exists;
+        public bool CanOpenFileLocation(FileEntry entry) => _ioServices.GetFileInfo(entry.FullName).Exists;
 
-        public void OpenFileLocation(FileEntry fileEntry)
+        public void OpenFileLocation(FileEntry entry)
         {
-            if (CanOpenFileLocation(fileEntry))
+            if (CanOpenFileLocation(entry))
             {
-                Process.Start("explorer.exe", $"/select, \"{fileEntry.FullName}\"");
+                Process.Start("explorer.exe", $"/select, \"{entry.FullName}\"");
             }
         }
-
-        public IEnumerable<Watch> GetWatches(FileEntry fileEntry) => fileEntry.Users?.FirstOrDefault(IsUser)?.Watches?.ToList() ?? Enumerable.Empty<Watch>();
 
         #endregion
 

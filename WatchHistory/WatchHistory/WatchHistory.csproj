@@ -80,9 +80,7 @@
     <Compile Include="AddYoutubeLink\YoutubeApiConstants.cs" />
     <Compile Include="AddYoutubeLink\YoutubeApi\YoutubeApi.cs" />
     <Compile Include="AddYoutubeLink\YoutubeUrlException.cs" />
-    <Compile Include="Data\Files.Extended.cs">
-      <DependentUpon>Files.v2_2.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Data\DataManagerFilesExtensions.cs" />
     <Compile Include="Data\Files.v1_0.cs" />
     <Compile Include="Data\Files.v2_1.cs">
       <DependentUpon>Files.v2_1.xsd</DependentUpon>
@@ -90,6 +88,7 @@
     <Compile Include="Data\Files.v2_2.cs">
       <DependentUpon>Files.v2_2.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Data\FilesExtensions.cs" />
     <Compile Include="Data\Implementations\YoutubeWatchesProcessor.cs" />
     <Compile Include="Data\Implementations\DvdWatchesProcessor.cs" />
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
@@ -155,7 +154,6 @@
       <DependentUpon>ShowReportWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShowReport\Implementations\TextProcessorBase.cs" />
-    <Compile Include="ShowReport\Implementations\WatchHelper.cs" />
     <Compile Include="ShowReport\IShowReportViewModel.cs" />
     <Compile Include="ShowWatches\Implementations\ShowWatchesViewModel.cs" />
     <Compile Include="ShowWatches\Implementations\WatchViewModel.cs" />

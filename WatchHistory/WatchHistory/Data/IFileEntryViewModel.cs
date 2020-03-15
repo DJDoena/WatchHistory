@@ -5,7 +5,7 @@
 
     internal interface IFileEntryViewModel : INotifyPropertyChanged
     {
-        FileEntry FileEntry { get; }
+        FileEntry Entry { get; }
 
         string Name { get; }
 

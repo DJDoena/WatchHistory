@@ -33,8 +33,6 @@
     {
         private User[] _users;
 
-        private DateTime? _creationTime;
-
         private uint _videoLength;
 
         [XmlElement]
@@ -43,8 +41,8 @@
         [XmlAttribute]
         public DateTime CreationTime
         {
-            get => _creationTime ?? new DateTime(0, DateTimeKind.Utc);
-            set => _creationTime = value.Conform();
+            get => CreationTimeValue ?? new DateTime(0, DateTimeKind.Utc);
+            set => CreationTimeValue = value.Conform();
         }
 
         [XmlArray("Users")]
@@ -89,6 +87,52 @@
 
         [XmlAnyElement]
         public XmlElement[] AnyElements;
+
+        [XmlIgnore]
+        internal DateTime? CreationTimeValue;
+
+        [XmlIgnore]
+        public string Key => GetKey(FullName);
+
+        public static string GetKey(string fullName)
+        {
+            string key;
+            if (string.IsNullOrEmpty(fullName))
+            {
+                key = string.Empty;
+            }
+            else if (fullName.EndsWith(Constants.YoutubeFileExtension))
+            {
+                var parts = fullName.Split('\\');
+
+                for (int partIndex = 0; partIndex < parts.Length - 1; partIndex++)
+                {
+                    parts[partIndex] = parts[partIndex].ToLowerInvariant();
+                }
+
+                key = string.Join("\\", parts);
+            }
+            else
+            {
+                key = fullName.ToLowerInvariant();
+            }
+
+            return key;
+        }
+
+        public override int GetHashCode() => Key.GetHashCode();
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is FileEntry other))
+            {
+                return false;
+            }
+
+            bool equals = Key == other.Key;
+
+            return equals;
+        }
 
         public event EventHandler UsersChanged;
 

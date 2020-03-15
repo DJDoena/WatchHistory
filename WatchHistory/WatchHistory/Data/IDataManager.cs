@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using MediaInfoHelper;
 
     internal interface IDataManager
     {
@@ -37,10 +38,10 @@
 
         void Resume();
 
-        DateTime GetCreationTime(FileEntry fileEntry);
+        DateTime GetCreationTime(FileEntry entry);
 
-        void DetermineVideoLength(FileEntry fileEntry);
+        MediaFileData DetermineVideoLength(FileEntry entry);
 
-        FileEntry TryCreateEntry(FileEntry fileEntry);
+        FileEntry TryCreateEntry(FileEntry entry);
     }
 }

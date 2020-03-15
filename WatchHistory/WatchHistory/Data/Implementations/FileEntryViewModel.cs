@@ -24,7 +24,7 @@
 
         public FileEntryViewModel(FileEntry entry, string userName, IDataManager dataManager, IIOServices ioServices)
         {
-            FileEntry = entry;
+            Entry = entry;
             _userName = userName;
             _dataManager = dataManager;
             _ioServices = ioServices;
@@ -46,10 +46,10 @@
                     }
                     else
                     {
-                        FileEntry.UsersChanged += OnUsersChanged;
+                        Entry.UsersChanged += OnUsersChanged;
                     }
 
-                    FileEntry.VideoLengthChanged += OnVideoLengthChanged;
+                    Entry.VideoLengthChanged += OnVideoLengthChanged;
                 }
 
                 _propertyChanged += value;
@@ -60,7 +60,7 @@
 
                 if (_propertyChanged == null)
                 {
-                    FileEntry.VideoLengthChanged -= OnVideoLengthChanged;
+                    Entry.VideoLengthChanged -= OnVideoLengthChanged;
 
                     if (_user != null)
                     {
@@ -68,7 +68,7 @@
                     }
                     else
                     {
-                        FileEntry.UsersChanged -= OnUsersChanged;
+                        Entry.UsersChanged -= OnUsersChanged;
                     }
                 }
             }
@@ -78,18 +78,18 @@
 
         #region IFileEntryViewModel
 
-        public FileEntry FileEntry { get; private set; }
+        public FileEntry Entry { get; private set; }
 
         public string Name
         {
             get
             {
-                if (FileEntry.TitleSpecified)
+                if (Entry.TitleSpecified)
                 {
-                    return (FileEntry.Title);
+                    return (Entry.Title);
                 }
 
-                var fileInfo = _ioServices.GetFileInfo(FileEntry.FullName);
+                var fileInfo = _ioServices.GetFileInfo(Entry.FullName);
 
                 var folderName = fileInfo.FolderName;
 
@@ -118,7 +118,7 @@
         {
             get
             {
-                var lastWatched = _dataManager.GetLastWatched(FileEntry, _userName);
+                var lastWatched = _dataManager.GetLastWatched(Entry, _userName);
 
                 var text = string.Empty;
 
@@ -135,7 +135,7 @@
         {
             get
             {
-                var creationTime = FileEntry.GetCreationTime(_dataManager);
+                var creationTime = Entry.GetCreationTime(_dataManager);
 
                 var text = string.Empty;
 
@@ -152,7 +152,7 @@
         {
             get
             {
-                var runningTime = FileEntry.GetVideoLength(_dataManager);
+                var runningTime = Entry.GetVideoLength(_dataManager);
 
                 var text = string.Empty;
 
@@ -165,11 +165,11 @@
             }
         }
 
-        public Brush Color => _ioServices.File.Exists(FileEntry.FullName) ? Brushes.Black : Brushes.Red;
+        public Brush Color => _ioServices.File.Exists(Entry.FullName) ? Brushes.Black : Brushes.Red;
 
         #endregion
 
-        private User TryGetUser() => FileEntry.Users?.Where(item => item.UserName == _userName).FirstOrDefault();
+        private User TryGetUser() => Entry.Users?.Where(item => item.UserName == _userName).FirstOrDefault();
 
         private void OnUsersChanged(object sender, EventArgs e)
         {
@@ -179,7 +179,7 @@
             {
                 if (_propertyChanged != null)
                 {
-                    FileEntry.UsersChanged -= OnUsersChanged;
+                    Entry.UsersChanged -= OnUsersChanged;
 
                     _user.WatchesChanged += OnWatchesChanged;
                 }

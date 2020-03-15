@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using WatchHistory.Data;
 
     internal sealed class DayCalculationProcessor : CalculationProcessorBase
@@ -20,33 +19,17 @@
             return entries;
         }
 
-        protected override bool WatchContainsDate(Watch watch) => WatchHelper.MatchesDay(watch, Date);
+        protected override bool WatchContainsDate(Watch watch) => watch.MatchesDay(_date);
 
         private int CompareWatchDates(FileEntry left, FileEntry right)
         {
-            var leftLastWatched = GetLastWatched(left);
+            var leftLastWatched = _dataManager.GetLastWatched(left, _userName);
 
-            var rightLastWatched = GetLastWatched(right);
+            var rightLastWatched = _dataManager.GetLastWatched(right, _userName);
 
             var compare = leftLastWatched.CompareTo(rightLastWatched);
 
             return compare;
-        }
-
-        private DateTime GetLastWatched(FileEntry entry) => entry.Users.Max(GetLastWatched);
-
-        private DateTime GetLastWatched(User user)
-        {
-            if (user.UserName != UserName)
-            {
-                return new DateTime(0);
-            }
-
-            var watches = user.Watches.Where(WatchContainsDate);
-
-            var lastWatched = watches.Max(watch => watch.Value).ToLocalTime();
-
-            return lastWatched;
         }
     }
 }

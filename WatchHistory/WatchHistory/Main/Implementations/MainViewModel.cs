@@ -233,7 +233,7 @@
             }
         }
 
-        private static IEnumerable<FileEntry> GetEntries(object parameter) => ((IList)parameter).Cast<IFileEntryViewModel>().Select(entry => entry.FileEntry).ToList();
+        private static IEnumerable<FileEntry> GetEntries(object parameter) => ((IList)parameter).Cast<IFileEntryViewModel>().Select(entry => entry.Entry).ToList();
 
         private void Ignore(object parameter)
         {
@@ -277,7 +277,7 @@
             _dataManager.SaveDataFile();
         }
 
-        private static FileEntry GetFileEntry(object parameter) => ((IFileEntryViewModel)parameter)?.FileEntry;
+        private static FileEntry GetFileEntry(object parameter) => ((IFileEntryViewModel)parameter)?.Entry;
 
         private bool CanOpenFileLocation(object parameter)
         {
@@ -364,7 +364,7 @@
         {
             var fileEntry = GetFileEntry(parameter);
 
-            var watches = _model.GetWatches(fileEntry);
+            var watches = fileEntry.GetWatches(_userName).ToList();
 
             _windowFactory.OpenWatchesWindow(watches);
         }

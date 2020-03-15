@@ -24,11 +24,11 @@
 
         protected abstract bool WatchContainsDate(Watch watch);
 
-        protected uint GetVideoLength(FileEntry fileEntry)
+        protected uint GetVideoLength(FileEntry entry)
         {
-            var watches = fileEntry.Users.First(u => u.UserName == UserName).Watches.Where(WatchContainsDate).ToList();
+            var watches = entry.GetWatchesByUserAndWatchDate(UserName, WatchContainsDate).ToList();
 
-            var singleLength = fileEntry.VideoLength;
+            var singleLength = entry.VideoLength;
 
             var fullLength = (uint)(singleLength * watches.Count);
 

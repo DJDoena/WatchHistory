@@ -33,7 +33,7 @@
             return text.ToString();
         }
 
-        protected override bool WatchContainsDate(Watch watch) => WatchHelper.MatchesMonth(watch, Date);
+        protected override bool WatchContainsDate(Watch watch) => watch.MatchesMonth(Date);
 
         private uint GetDailyLength(uint totalLength)
         {

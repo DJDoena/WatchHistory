@@ -169,9 +169,7 @@
         {
             lock (_filesLock)
             {
-                var user = TryGetUser(entry, userName);
-
-                user = user ?? AddUser(entry, userName);
+                var user = entry.TryGetUser(userName) ?? AddUser(entry, userName);
 
                 AddWatched(user, watchedOn);
             }
@@ -183,7 +181,7 @@
         {
             lock (_filesLock)
             {
-                var user = TryGetUser(entry, userName) ?? AddUser(entry, userName);
+                var user = entry.TryGetUser(userName) ?? AddUser(entry, userName);
 
                 user.Ignore = true;
             }
@@ -193,7 +191,7 @@
 
         public void UndoIgnore(FileEntry entry, string userName)
         {
-            var user = TryGetUser(entry, userName);
+            var user = entry.TryGetUser(userName);
 
             if (user != null)
             {
@@ -205,21 +203,23 @@
 
         public DateTime GetLastWatched(FileEntry entry, string userName)
         {
-            var user = TryGetUser(entry, userName);
-
-            var lastWatched = new DateTime(0, DateTimeKind.Local);
+            var user = entry.TryGetUser(userName);
 
             if (user?.Watches?.HasItems() == true)
             {
-                lastWatched = user.Watches.Max(watch => watch.Value).ToLocalTime();
-            }
+                var lastWatched = user.Watches.Max(watch => watch.Value).ToLocalTime();
 
-            return lastWatched;
+                return lastWatched;
+            }
+            else
+            {
+                return new DateTime(0, DateTimeKind.Local);
+            }
         }
 
-        public DateTime GetCreationTime(FileEntry fileEntry)
+        public DateTime GetCreationTime(FileEntry entry)
         {
-            var fi = _ioServices.GetFileInfo(fileEntry.FullName);
+            var fi = _ioServices.GetFileInfo(entry.FullName);
 
             var creationTime = new DateTime(0);
 
@@ -231,24 +231,21 @@
             return creationTime;
         }
 
-        public void DetermineVideoLength(FileEntry fileEntry)
+        public MediaFileData DetermineVideoLength(FileEntry entry)
         {
+            MediaFileData mediaFileData;
             try
             {
-                var mediaFileData = new MediaFileData(fileEntry.FullName, fileEntry.CreationTime, fileEntry.VideoLength);
+                mediaFileData = new MediaFileData(entry.FullName, entry.CreationTime, entry.VideoLength);
 
-                var hasChanged = (new VideoReader(mediaFileData, false)).DetermineLength();
-
-                if (hasChanged)
-                {
-                    fileEntry.VideoLength = mediaFileData.VideoLength;
-                    fileEntry.CreationTime = mediaFileData.CreationTime;
-                }
+                (new VideoReader(mediaFileData, false)).DetermineLength();
             }
             catch
             {
-                fileEntry.VideoLength = 0;
+                mediaFileData = new MediaFileData(entry.FullName, entry.CreationTime, 0);
             }
+
+            return mediaFileData;
         }
 
         public void SaveSettingsFile()
@@ -391,10 +388,6 @@
 
             user.Watches = watches.ToArray();
         }
-
-        private static User TryGetUser(FileEntry entry, string userName) => entry.Users?.Where(user => IsUser(user, userName)).FirstOrDefault();
-
-        private static bool IsUser(User user, string userName) => user.UserName == userName;
 
         private void SyncData()
         {
@@ -576,7 +569,7 @@
 
         private static void MergeUser(FileEntry existingEntry, User newUser)
         {
-            var existingUser = existingEntry.Users.FirstOrDefault(eu => eu.UserName == newUser.UserName);
+            var existingUser = existingEntry.TryGetUser(newUser.UserName);
 
             if (existingUser == null)
             {

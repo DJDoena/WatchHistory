@@ -112,7 +112,7 @@
         {
             var entries = ((IList)parameter).Cast<IFileEntryViewModel>().ToList();
 
-            entries.ForEach(entry => _dataManager.UndoIgnore(entry.FileEntry, _userName));
+            entries.ForEach(entry => _dataManager.UndoIgnore(entry.Entry, _userName));
 
             _dataManager.SaveDataFile();
         }

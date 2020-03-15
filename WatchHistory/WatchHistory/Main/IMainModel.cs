@@ -18,14 +18,12 @@
 
         void ImportCollection();
 
-        bool CanPlayFile(FileEntry fileEntry);
+        bool CanPlayFile(FileEntry entry);
 
-        void PlayFile(FileEntry fileEntry);
+        void PlayFile(FileEntry entry);
 
-        bool CanOpenFileLocation(FileEntry fileEntry);
+        bool CanOpenFileLocation(FileEntry entry);
 
-        void OpenFileLocation(FileEntry fileEntry);
-
-        IEnumerable<Watch> GetWatches(FileEntry fileEntry);
+        void OpenFileLocation(FileEntry entry);
     }
 }

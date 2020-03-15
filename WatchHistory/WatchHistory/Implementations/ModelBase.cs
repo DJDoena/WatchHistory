@@ -86,7 +86,7 @@
 
         #endregion
 
-        protected bool IsUser(Data.User user) => user.UserName == _userName;
+        protected bool IsUser(User user) => user.UserName == _userName;
 
         #region ContainsFilter
 
