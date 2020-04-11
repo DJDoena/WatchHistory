@@ -1,5 +1,7 @@
 ﻿namespace DoenaSoft.WatchHistory.Data.Implementations
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Text;
     using AbstractionLayer.IOServices;
     using WatchHistory.Implementations;
@@ -15,7 +17,7 @@
 
         #region IFilesSerializer
 
-        public Files LoadData(string fileName)
+        public IEnumerable<FileEntry> LoadData(string fileName)
         {
             Files files;
             try
@@ -27,10 +29,60 @@
                 files = new Files();
             }
 
-            return files;
+            return files?.Entries ?? Enumerable.Empty<FileEntry>();
         }
 
-        public void SaveFile(string fileName, Files files) => SerializerHelper.Serialize(_ioServices, fileName, files);
+        public DefaultValues LoadSettings(string fileName)
+        {
+            DefaultValues defaultValues;
+            try
+            {
+                var settings = SerializerHelper.Deserialize<Settings>(_ioServices, fileName);
+
+                defaultValues = settings.DefaultValues ?? new DefaultValues();
+            }
+            catch
+            {
+                defaultValues = new DefaultValues();
+            }
+
+            if (defaultValues.Users == null)
+            {
+                defaultValues.Users = new string[0];
+            }
+
+            if (defaultValues.RootFolders == null)
+            {
+                defaultValues.RootFolders = new string[0];
+            }
+
+            if (defaultValues.FileExtensions == null)
+            {
+                defaultValues.FileExtensions = new string[0];
+            }
+
+            return defaultValues;
+        }
+
+        public void SaveData(string fileName, IEnumerable<FileEntry> entries)
+        {
+            var files = new Files()
+            {
+                Entries = entries.ToArray(),
+            };
+
+            SerializerHelper.Serialize(_ioServices, fileName, files);
+        }
+
+        public void SaveSettings(string fileName, DefaultValues defaultValues)
+        {
+            var settings = new Settings()
+            {
+                DefaultValues = defaultValues,
+            };
+
+            SerializerHelper.Serialize(_ioServices, fileName, settings);
+        }
 
         public void CreateBackup(string fileName)
         {

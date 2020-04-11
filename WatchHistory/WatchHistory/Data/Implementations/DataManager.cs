@@ -52,17 +52,19 @@
 
             _filesLock = new object();
 
-            _fileObserver = new FileObserver(ioServices);
-
             _settingsFile = settingsFile;
 
-            LoadSettings();
+            _dataFile = dataFile;
+
+            _fileObserver = new FileObserver(ioServices);
 
             _filesSerializer = new FilesSerializer(ioServices);
 
-            _filesSerializer.CreateBackup(dataFile);
+            _filesSerializer.CreateBackup(settingsFile);
 
-            _dataFile = dataFile;
+            LoadSettings();
+
+            _filesSerializer.CreateBackup(dataFile);
 
             LoadData();
         }
@@ -254,15 +256,10 @@
             {
                 Users = _users.ToArray(),
                 RootFolders = _rootFolders.ToArray(),
-                FileExtensions = _fileExtensions.ToArray()
+                FileExtensions = _fileExtensions.ToArray(),
             };
 
-            var settings = new Settings()
-            {
-                DefaultValues = defaultValues
-            };
-
-            SerializerHelper.Serialize(_ioServices, _settingsFile, settings);
+            _filesSerializer.SaveSettings(_settingsFile, defaultValues);
         }
 
         public void SaveDataFile()
@@ -273,12 +270,7 @@
 
                 entries.Sort((left, right) => left.FullName.CompareTo(right.FullName));
 
-                var files = new Files()
-                {
-                    Entries = entries.ToArray()
-                };
-
-                _filesSerializer.SaveFile(_dataFile, files);
+                _filesSerializer.SaveData(_dataFile, entries);
             }
         }
 
@@ -340,22 +332,20 @@
                 };
             }
 
-            _users = settings?.DefaultValues?.Users ?? Enumerable.Empty<string>();
+            _users = settings.DefaultValues.Users;
 
-            _rootFolders = settings?.DefaultValues?.RootFolders ?? Enumerable.Empty<string>();
+            _rootFolders = settings.DefaultValues.RootFolders;
 
-            _fileExtensions = settings?.DefaultValues?.FileExtensions ?? Enumerable.Empty<string>();
+            _fileExtensions = settings.DefaultValues.FileExtensions;
         }
 
         private void LoadData()
         {
-            var files = _filesSerializer.LoadData(_dataFile);
+            var entries = _filesSerializer.LoadData(_dataFile);
 
             lock (_filesLock)
             {
-                Files = new Dictionary<string, FileEntry>(files?.Entries?.Length ?? 0);
-
-                var entries = files?.Entries ?? Enumerable.Empty<FileEntry>();
+                Files = new Dictionary<string, FileEntry>(entries.Count());
 
                 entries.ForEach(entry => Files[entry.Key] = entry);
             }

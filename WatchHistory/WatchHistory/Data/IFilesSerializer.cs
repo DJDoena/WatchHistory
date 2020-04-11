@@ -1,11 +1,17 @@
-﻿namespace DoenaSoft.WatchHistory.Data
+﻿using System.Collections.Generic;
+
+namespace DoenaSoft.WatchHistory.Data
 {
     internal interface IFilesSerializer
     {
         void CreateBackup(string fileName);
 
-        Files LoadData(string fileName);
+        IEnumerable<FileEntry> LoadData(string fileName);
 
-        void SaveFile(string fileName, Files files);
+        void SaveData(string fileName, IEnumerable<FileEntry> entries);
+
+        DefaultValues LoadSettings(string fileName);
+
+        void SaveSettings(string fileName, DefaultValues defaultValues);
     }
 }
