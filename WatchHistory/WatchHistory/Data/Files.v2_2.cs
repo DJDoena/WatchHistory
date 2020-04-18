@@ -101,20 +101,20 @@
             {
                 key = string.Empty;
             }
-            else if (fullName.EndsWith(Constants.YoutubeFileExtension))
+            else
             {
                 var parts = fullName.Split('\\');
 
-                for (int partIndex = 0; partIndex < parts.Length - 1; partIndex++)
+                var end = fullName.EndsWith(Constants.YoutubeFileExtension)
+                    ? parts.Length - 1
+                    : parts.Length;
+
+                for (int partIndex = 0; partIndex < end; partIndex++)
                 {
-                    parts[partIndex] = parts[partIndex].ToLowerInvariant();
+                    parts[partIndex] = parts[partIndex].ToLowerInvariant().TrimEnd('.');
                 }
 
                 key = string.Join("\\", parts);
-            }
-            else
-            {
-                key = fullName.ToLowerInvariant();
             }
 
             return key;

@@ -347,7 +347,17 @@
             {
                 Files = new Dictionary<string, FileEntry>(entries.Count());
 
-                entries.ForEach(entry => Files[entry.Key] = entry);
+                entries.ForEach(entry =>
+                {
+                    if (!Files.TryGetValue(entry.Key, out var existing))
+                    {
+                        Files.Add(entry.Key, entry);
+                    }
+                    else
+                    {
+                        MergeEntry(existing, entry);
+                    }
+                });
             }
         }
 
@@ -584,7 +594,15 @@
                 return;
             }
 
-            existingUser.Watches = existingUser.Watches.Union(newUser.Watches).ToArray();
+            var watches = new List<Watch>(existingUser.Watches);
+
+            foreach (var newWatch in newUser.Watches)
+            {
+                if (!watches.Any(existingWatch => existingWatch.Source == newWatch.Source && existingWatch.Value == newWatch.Value))
+                {
+                    watches.Add(newWatch);
+                }
+            }
         }
     }
 }
