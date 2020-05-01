@@ -8,6 +8,8 @@
 
     internal sealed class FilesSerializer : IFilesSerializer
     {
+        private const int MaximumBackups = 9;
+
         private readonly IIOServices _ioServices;
 
         public FilesSerializer(IIOServices ioServices)
@@ -19,17 +21,47 @@
 
         public IEnumerable<FileEntry> LoadData(string fileName)
         {
-            Files files;
+            IEnumerable<FileEntry> entries;
             try
             {
-                files = ReadXml(fileName);
+                entries = ReadXml(fileName);
             }
             catch
             {
-                files = new Files();
+                entries = TryRestoreDataBackup(fileName);
             }
 
-            return files?.Entries ?? Enumerable.Empty<FileEntry>();
+            return entries ?? Enumerable.Empty<FileEntry>();
+        }
+
+        private IEnumerable<FileEntry> TryRestoreDataBackup(string fileName)
+        {
+            IEnumerable<FileEntry> entries = null;
+
+            var lastIndexOf = fileName.LastIndexOf(".");
+
+            var extension = fileName.Substring(lastIndexOf);
+
+            var fileBaseName = fileName.Substring(0, lastIndexOf);
+
+            for (var backupIndex = 1; backupIndex <= MaximumBackups; backupIndex++)
+            {
+                var newFileName = fileBaseName + "." + backupIndex.ToString() + extension;
+
+                if (_ioServices.File.Exists(newFileName))
+                {
+                    try
+                    {
+                        entries = ReadXml(newFileName);
+
+                        break;
+                    }
+                    catch
+                    { }
+                }
+            }
+
+            return entries;
         }
 
         public DefaultValues LoadSettings(string fileName)
@@ -39,9 +71,14 @@
             {
                 var settings = SerializerHelper.Deserialize<Settings>(_ioServices, fileName);
 
-                defaultValues = settings.DefaultValues ?? new DefaultValues();
+                defaultValues = settings.DefaultValues;
             }
             catch
+            {
+                defaultValues = TryRestoreSettingsBackup(fileName);
+            }
+
+            if (defaultValues == null)
             {
                 defaultValues = new DefaultValues();
             }
@@ -59,6 +96,38 @@
             if (defaultValues.FileExtensions == null)
             {
                 defaultValues.FileExtensions = new string[0];
+            }
+
+            return defaultValues;
+        }
+
+        private DefaultValues TryRestoreSettingsBackup(string fileName)
+        {
+            DefaultValues defaultValues = null;
+
+            var lastIndexOf = fileName.LastIndexOf(".");
+
+            var extension = fileName.Substring(lastIndexOf);
+
+            var fileBaseName = fileName.Substring(0, lastIndexOf);
+
+            for (var backupIndex = 1; backupIndex <= MaximumBackups; backupIndex++)
+            {
+                var newFileName = fileBaseName + "." + backupIndex.ToString() + extension;
+
+                if (_ioServices.File.Exists(newFileName))
+                {
+                    try
+                    {
+                        var settings = SerializerHelper.Deserialize<Settings>(_ioServices, newFileName);
+
+                        defaultValues = settings.DefaultValues;
+
+                        break;
+                    }
+                    catch
+                    { }
+                }
             }
 
             return defaultValues;
@@ -94,8 +163,6 @@
 
             try
             {
-                const int MaximumBackups = 9;
-
                 var newFileName = fileBaseName + "." + MaximumBackups.ToString() + extension;
 
                 if (_ioServices.File.Exists(newFileName))
@@ -124,9 +191,11 @@
             { }
         }
 
+
+
         #endregion
 
-        private Files ReadXml(string fileName) => (IsVersion2File(fileName)) ? ReadVersion2File(fileName) : ReadVersion1File(fileName);
+        private IEnumerable<FileEntry> ReadXml(string fileName) => (IsVersion2File(fileName)) ? ReadVersion2File(fileName) : ReadVersion1File(fileName);
 
         private bool IsVersion2File(string fileName)
         {
@@ -150,15 +219,15 @@
             }
         }
 
-        private Files ReadVersion2File(string fileName) => SerializerHelper.Deserialize<Files>(_ioServices, fileName);
+        private IEnumerable<FileEntry> ReadVersion2File(string fileName) => SerializerHelper.Deserialize<Files>(_ioServices, fileName).Entries;
 
-        private Files ReadVersion1File(string fileName)
+        private IEnumerable<FileEntry> ReadVersion1File(string fileName)
         {
             var oldFiles = SerializerHelper.Deserialize<v1_0.Files>(_ioServices, fileName);
 
             var newFiles = FilesModelConverter.Convert(oldFiles);
 
-            return newFiles;
+            return newFiles.Entries;
         }
     }
 }

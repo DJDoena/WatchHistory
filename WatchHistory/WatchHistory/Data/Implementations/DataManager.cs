@@ -7,7 +7,6 @@
     using AbstractionLayer.IOServices;
     using MediaInfoHelper;
     using ToolBox.Extensions;
-    using WatchHistory.Implementations;
 
     internal sealed class DataManager : IDataManager
     {
@@ -319,24 +318,13 @@
 
         private void LoadSettings()
         {
-            Settings settings;
-            try
-            {
-                settings = SerializerHelper.Deserialize<Settings>(_ioServices, _settingsFile);
-            }
-            catch
-            {
-                settings = new Settings()
-                {
-                    DefaultValues = new DefaultValues()
-                };
-            }
+            var defaultValues = _filesSerializer.LoadSettings(_settingsFile);
 
-            _users = settings.DefaultValues.Users;
+            _users = defaultValues.Users;
 
-            _rootFolders = settings.DefaultValues.RootFolders;
+            _rootFolders = defaultValues.RootFolders;
 
-            _fileExtensions = settings.DefaultValues.FileExtensions;
+            _fileExtensions = defaultValues.FileExtensions;
         }
 
         private void LoadData()
@@ -359,6 +347,8 @@
                     }
                 });
             }
+
+            RaiseFilesChanged();
         }
 
         private User AddUser(FileEntry entry, string userName)
