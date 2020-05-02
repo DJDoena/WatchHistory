@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Watches" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Height="200" Width="350" MinWidth="350" MinHeight="200" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO">
+        Title="Watches" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Height="200" Width="350" MinWidth="350" MinHeight="200" Icon="/WatchHistory;component/djdsoft.ico">
     <ListView Margin="5,5,5,5"
               ItemsSource="{Binding Watches, Mode=OneWay}">
         <ListView.View>

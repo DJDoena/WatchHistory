@@ -6,7 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Watched on ..." WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Height="80" Width="430" MinWidth="400" MaxHeight="80" MinHeight="80"
-        Loaded="OnLoaded" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO">
+        Loaded="OnLoaded" Icon="/WatchHistory;component/djdsoft.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

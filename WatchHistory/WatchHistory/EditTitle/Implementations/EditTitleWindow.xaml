@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Edit title" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Height="120" Width="600" MinWidth="600" MaxHeight="120" MinHeight="120"
-        Loaded="OnLoaded" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO">
+        Loaded="OnLoaded" Icon="/WatchHistory;component/djdsoft.ico">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60"/>

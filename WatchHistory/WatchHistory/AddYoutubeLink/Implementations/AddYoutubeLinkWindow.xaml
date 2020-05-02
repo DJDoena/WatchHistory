@@ -6,7 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Add Youtube Link" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Height="160" Width="430" MinWidth="400" MaxHeight="160" MinHeight="160"
-        Loaded="OnLoaded" Icon="pack://siteoforigin:,,,/DJDSOFT.ICO"
+        Loaded="OnLoaded" Icon="/WatchHistory;component/djdsoft.ico"
         FocusManager.FocusedElement="{Binding ElementName=UrlTextBox}">
     <Grid>
         <Grid.ColumnDefinitions>
