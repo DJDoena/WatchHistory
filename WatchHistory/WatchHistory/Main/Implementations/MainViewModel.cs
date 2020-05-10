@@ -76,11 +76,11 @@
             AddWatchedOnCommand = new ParameterizedRelayCommand(AddWatchedOn);
             CheckForUpdateCommand = new RelayCommand(CheckForUpdate);
             AboutCommand = new RelayCommand(ShowAbout);
-            ShowHistoryCommand = new ParameterizedRelayCommand(ShowHistory);
-            EditRunningTimeCommand = new ParameterizedRelayCommand(EditRunningTime);
+            ShowHistoryCommand = new ParameterizedRelayCommand(ShowHistory, CanShowHistory);
+            EditRunningTimeCommand = new ParameterizedRelayCommand(EditRunningTime, CanEditRunningTime);
             AddYoutubeLinkCommand = new RelayCommand(AddYoutubeLink, CanAddYoutubeLink);
             AddManualEntryCommand = new RelayCommand(AddAddManualEntry, CanAddManualEntry);
-            EditTitleCommand = new ParameterizedRelayCommand(EditTitle);
+            EditTitleCommand = new ParameterizedRelayCommand(EditTitle, CanEditTitle);
             ShowReportCommand = new RelayCommand(ShowReport);
         }
 
@@ -214,7 +214,7 @@
         {
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName));
+            GetEntries(parameter)?.ForEach(entry => _dataManager.AddWatched(entry, _userName));
 
             _dataManager.SaveDataFile();
 
@@ -233,13 +233,13 @@
             }
         }
 
-        private static IEnumerable<FileEntry> GetEntries(object parameter) => ((IList)parameter).Cast<IFileEntryViewModel>().Select(entry => entry.Entry).ToList();
+        private static IEnumerable<FileEntry> GetEntries(object parameter) => ((IList)parameter)?.Cast<IFileEntryViewModel>().Select(entry => entry.Entry).ToList();
 
         private void Ignore(object parameter)
         {
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => _dataManager.AddIgnore(entry, _userName));
+            GetEntries(parameter)?.ForEach(entry => _dataManager.AddIgnore(entry, _userName));
 
             _dataManager.SaveDataFile();
 
@@ -262,6 +262,11 @@
         private void PlayFile(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
+
+            if (fileEntry == null)
+            {
+                return;
+            }
 
             _model.PlayFile(fileEntry);
         }
@@ -331,6 +336,13 @@
 
         private void AddWatchedOn(object parameter)
         {
+            var entries = GetEntries(parameter);
+
+            if (entries == null)
+            {
+                return;
+            }
+
             var watchedOn = _windowFactory.OpenWatchedOnWindow();
 
             if (watchedOn.HasValue == false)
@@ -340,7 +352,7 @@
 
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName, watchedOn.Value));
+            entries.ForEach(entry => _dataManager.AddWatched(entry, _userName, watchedOn.Value));
 
             _dataManager.SaveDataFile();
 
@@ -360,6 +372,8 @@
             }
         }
 
+        private bool CanShowHistory(object parameter) => GetFileEntry(parameter) != null;
+
         private void ShowHistory(object parameter)
         {
             var fileEntry = GetFileEntry(parameter);
@@ -368,6 +382,8 @@
 
             _windowFactory.OpenWatchesWindow(watches);
         }
+
+        private bool CanEditRunningTime(object parameter) => GetFileEntry(parameter) != null;
 
         private void EditRunningTime(object parameter)
         {
@@ -402,6 +418,8 @@
 
             _dataManager.SaveDataFile();
         }
+
+        private bool CanEditTitle(object parameter) => GetFileEntry(parameter) != null;
 
         private void EditTitle(object parameter)
         {
