@@ -64,16 +64,16 @@
             SuspendEvents = false;
             EventRaisedWhileSuspended = false;
 
-            AddWatchedCommand = new ParameterizedRelayCommand(AddWatched);
+            AddWatchedCommand = new ParameterizedRelayCommand(AddWatched, CanAddWatched);
             PlayFileAndAddWatchedCommand = new ParameterizedRelayCommand(PlayFileAndAddWatched, CanPlayFile);
             OpenSettingsCommand = new RelayCommand(OpenSettings);
             ImportCollectionCommand = new RelayCommand(ImportCollection, CanImportCollection);
-            IgnoreCommand = new ParameterizedRelayCommand(Ignore);
+            IgnoreCommand = new ParameterizedRelayCommand(Ignore, CanIgnore);
             UndoIgnoreCommand = new RelayCommand(UndoIgnore);
             PlayFileCommand = new ParameterizedRelayCommand(PlayFile, CanPlayFile);
             SortCommand = new ParameterizedRelayCommand(Sort);
             OpenFileLocationCommand = new ParameterizedRelayCommand(OpenFileLocation, CanOpenFileLocation);
-            AddWatchedOnCommand = new ParameterizedRelayCommand(AddWatchedOn);
+            AddWatchedOnCommand = new ParameterizedRelayCommand(AddWatchedOn, CanAddWatchedOn);
             CheckForUpdateCommand = new RelayCommand(CheckForUpdate);
             AboutCommand = new RelayCommand(ShowAbout);
             ShowHistoryCommand = new ParameterizedRelayCommand(ShowHistory, CanShowHistory);
@@ -210,11 +210,13 @@
 
         #endregion
 
+        private bool CanAddWatched(object parameter) => GetEntries(parameter) != null;
+
         private void AddWatched(object parameter)
         {
             SuspendEvents = true;
 
-            GetEntries(parameter)?.ForEach(entry => _dataManager.AddWatched(entry, _userName));
+            GetEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName));
 
             _dataManager.SaveDataFile();
 
@@ -235,11 +237,13 @@
 
         private static IEnumerable<FileEntry> GetEntries(object parameter) => ((IList)parameter)?.Cast<IFileEntryViewModel>().Select(entry => entry.Entry).ToList();
 
+        private bool CanIgnore(object parameter) => GetEntries(parameter) != null;
+
         private void Ignore(object parameter)
         {
             SuspendEvents = true;
 
-            GetEntries(parameter)?.ForEach(entry => _dataManager.AddIgnore(entry, _userName));
+            GetEntries(parameter).ForEach(entry => _dataManager.AddIgnore(entry, _userName));
 
             _dataManager.SaveDataFile();
 
@@ -334,15 +338,10 @@
             RaisePropertyChanged(nameof(ImportCollectionCommand));
         }
 
+        private bool CanAddWatchedOn(object parameter) => GetEntries(parameter) != null;
+
         private void AddWatchedOn(object parameter)
         {
-            var entries = GetEntries(parameter);
-
-            if (entries == null)
-            {
-                return;
-            }
-
             var watchedOn = _windowFactory.OpenWatchedOnWindow();
 
             if (watchedOn.HasValue == false)
@@ -352,7 +351,7 @@
 
             SuspendEvents = true;
 
-            entries.ForEach(entry => _dataManager.AddWatched(entry, _userName, watchedOn.Value));
+            GetEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName, watchedOn.Value));
 
             _dataManager.SaveDataFile();
 
