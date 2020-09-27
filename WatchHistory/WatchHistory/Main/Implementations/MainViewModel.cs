@@ -210,13 +210,18 @@
 
         #endregion
 
-        private bool CanAddWatched(object parameter) => GetEntries(parameter) != null;
+        private bool CanAddWatched(object parameter) => GetFileEntries(parameter).Any();
 
         private void AddWatched(object parameter)
         {
+            if (!CanAddWatched(parameter))
+            {
+                return;
+            }
+
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName));
+            GetFileEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName));
 
             _dataManager.SaveDataFile();
 
@@ -235,15 +240,20 @@
             }
         }
 
-        private static IEnumerable<FileEntry> GetEntries(object parameter) => ((IList)parameter)?.Cast<IFileEntryViewModel>().Select(entry => entry.Entry).ToList();
+        private static IEnumerable<FileEntry> GetFileEntries(object parameter) => ((parameter as IEnumerable) ?? Enumerable.Empty<IFileEntryViewModel>()).OfType<IFileEntryViewModel>().Select(entry => entry.Entry).ToList();
 
-        private bool CanIgnore(object parameter) => GetEntries(parameter) != null;
+        private bool CanIgnore(object parameter) => GetFileEntries(parameter).Any();
 
         private void Ignore(object parameter)
         {
+            if (!CanIgnore(parameter))
+            {
+                return;
+            }
+
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => _dataManager.AddIgnore(entry, _userName));
+            GetFileEntries(parameter).ForEach(entry => _dataManager.AddIgnore(entry, _userName));
 
             _dataManager.SaveDataFile();
 
@@ -265,18 +275,23 @@
 
         private void PlayFile(object parameter)
         {
-            var fileEntry = GetFileEntry(parameter);
-
-            if (fileEntry == null)
+            if (!CanPlayFile(parameter))
             {
                 return;
             }
+
+            var fileEntry = GetFileEntry(parameter);
 
             _model.PlayFile(fileEntry);
         }
 
         private void PlayFileAndAddWatched(object parameter)
         {
+            if (!CanPlayFile(parameter))
+            {
+                return;
+            }
+
             var fileEntry = GetFileEntry(parameter);
 
             _model.PlayFile(fileEntry);
@@ -286,7 +301,7 @@
             _dataManager.SaveDataFile();
         }
 
-        private static FileEntry GetFileEntry(object parameter) => ((IFileEntryViewModel)parameter)?.Entry;
+        private static FileEntry GetFileEntry(object parameter) => (parameter as IFileEntryViewModel)?.Entry;
 
         private bool CanOpenFileLocation(object parameter)
         {
@@ -299,6 +314,11 @@
 
         private void OpenFileLocation(object parameter)
         {
+            if (!CanOpenFileLocation(parameter))
+            {
+                return;
+            }
+
             var fileEntry = GetFileEntry(parameter);
 
             _model.OpenFileLocation(fileEntry);
@@ -312,6 +332,11 @@
 
         private void ImportCollection()
         {
+            if (!CanImportCollection())
+            {
+                return;
+            }
+
             SuspendEvents = true;
 
             _model.ImportCollection();
@@ -338,10 +363,15 @@
             RaisePropertyChanged(nameof(ImportCollectionCommand));
         }
 
-        private bool CanAddWatchedOn(object parameter) => GetEntries(parameter) != null;
+        private bool CanAddWatchedOn(object parameter) => GetFileEntries(parameter).Any();
 
         private void AddWatchedOn(object parameter)
         {
+            if (!CanAddWatchedOn(parameter))
+            {
+                return;
+            }
+
             var watchedOn = _windowFactory.OpenWatchedOnWindow();
 
             if (watchedOn.HasValue == false)
@@ -351,7 +381,7 @@
 
             SuspendEvents = true;
 
-            GetEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName, watchedOn.Value));
+            GetFileEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName, watchedOn.Value));
 
             _dataManager.SaveDataFile();
 
@@ -375,6 +405,11 @@
 
         private void ShowHistory(object parameter)
         {
+            if (!CanShowHistory(parameter))
+            {
+                return;
+            }
+
             var fileEntry = GetFileEntry(parameter);
 
             var watches = fileEntry.GetWatches(_userName).ToList();
@@ -386,6 +421,11 @@
 
         private void EditRunningTime(object parameter)
         {
+            if (!CanEditRunningTime(parameter))
+            {
+                return;
+            }
+
             var fileEntry = GetFileEntry(parameter);
 
             var runningTime = _windowFactory.OpenRunningTimeWindow(fileEntry.VideoLength);
@@ -404,6 +444,11 @@
 
         private void AddYoutubeLink()
         {
+            if (!CanAddYoutubeLink())
+            {
+                return;
+            }
+
             _windowFactory.OpenAddYoutubeLinkWindow(_userName);
 
             _dataManager.SaveDataFile();
@@ -413,6 +458,11 @@
 
         private void AddAddManualEntry()
         {
+            if (!CanAddManualEntry())
+            {
+                return;
+            }
+
             _windowFactory.OpenAddManualEntryWindow(_userName);
 
             _dataManager.SaveDataFile();
@@ -422,6 +472,11 @@
 
         private void EditTitle(object parameter)
         {
+            if (!CanEditTitle(parameter))
+            {
+                return;
+            }
+
             var fileEntry = GetFileEntry(parameter);
 
             var title = _windowFactory.OpenEditTitleWindow(fileEntry.Title);
