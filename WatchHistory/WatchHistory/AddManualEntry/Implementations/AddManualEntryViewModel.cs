@@ -2,6 +2,8 @@
 {
     using System;
     using System.ComponentModel;
+    using System.IO;
+    using System.Text;
     using System.Windows.Input;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
@@ -32,6 +34,8 @@
         private byte _lengthSeconds;
 
         private string _title;
+
+        private string _note;
 
         public AddManualEntryViewModel(IDataManager dataManager
             , IIOServices ioService
@@ -159,6 +163,20 @@
             }
         }
 
+        public string Note
+        {
+            get => _note;
+            set
+            {
+                if (_note != value)
+                {
+                    _note = value;
+
+                    RaisePropertyChanged(nameof(Note));
+                }
+            }
+        }
+
         public event EventHandler<CloseEventArgs> Closing;
 
         #endregion
@@ -181,7 +199,19 @@
                 return;
             }
 
-            var fileName = _ioService.Path.Combine(_ioService.Path.GetTempPath(), $"{Guid.NewGuid()}.man");
+            var folder = _ioService.Path.Combine(WatchHistory.Environment.AppDataFolder, "Manual");
+
+            _ioService.Folder.CreateFolder(folder);
+
+            var fileName = _ioService.Path.Combine(folder, $"{Guid.NewGuid()}.man");
+
+            using (var fs = _ioService.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                using (var sw = new StreamWriter(fs, Encoding.UTF8))
+                {
+                    sw.WriteLine(_note);
+                }
+            }
 
             var length = (uint)(new TimeSpan(LengthHours, LengthMinutes, LengthSeconds)).TotalSeconds;
 

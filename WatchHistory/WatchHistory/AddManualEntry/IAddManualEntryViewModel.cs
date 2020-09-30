@@ -25,6 +25,8 @@
 
         string Title { get; set; }
 
+        string Note { get; set; }
+
         event EventHandler<CloseEventArgs> Closing;
     }
 }
