@@ -239,6 +239,11 @@
                 },
             };
 
+            if (!string.IsNullOrWhiteSpace(_note))
+            {
+                entry.Note = _note;
+            }
+
             _dataManager.TryCreateEntry(entry);
 
             Closing?.Invoke(this, new CloseEventArgs(Result.OK));

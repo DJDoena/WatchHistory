@@ -63,8 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\WatchHistory\WatchHistory\Data\Files.v2_2.cs">
-      <Link>Data\Files.v2_2.cs</Link>
+    <Compile Include="..\WatchHistory\WatchHistory\Data\Files.v2_3.cs">
+      <Link>Data\Files.v2_3.cs</Link>
     </Compile>
     <Compile Include="..\WatchHistory\WatchHistory\Environment.cs">
       <Link>Environment.cs</Link>

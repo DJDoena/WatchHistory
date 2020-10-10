@@ -1,4 +1,4 @@
-﻿namespace DoenaSoft.WatchHistory.Data.v2_2
+﻿namespace DoenaSoft.WatchHistory.Data
 {
     using System;
     using System.Diagnostics;
@@ -24,7 +24,7 @@
 
         public Files()
         {
-            Version = 2.2m;
+            Version = 2.3m;
         }
     }
 
@@ -57,6 +57,9 @@
                 UsersChanged?.Invoke(this, EventArgs.Empty);
             }
         }
+
+        [XmlElement]
+        public string Note;
 
         [XmlAttribute]
         public uint VideoLength

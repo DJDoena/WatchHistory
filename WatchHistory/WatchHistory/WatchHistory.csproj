@@ -118,6 +118,9 @@
     <Compile Include="Data\Files.v2_1.cs">
       <DependentUpon>Files.v2_1.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Data\Files.v2_3.cs">
+      <DependentUpon>Files.v2_3.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Data\Files.v2_2.cs">
       <DependentUpon>Files.v2_2.xsd</DependentUpon>
     </Compile>
@@ -272,6 +275,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Files.v2_3.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Data\Files.v2_2.xsd" />
     <None Include="Data\Files.v2_1.xsd" />
     <None Include="Data\Files.v2_0.xsd" />
