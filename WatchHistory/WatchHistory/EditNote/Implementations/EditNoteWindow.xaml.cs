@@ -1,26 +1,26 @@
-﻿namespace DoenaSoft.WatchHistory.EditTitle.Implementations
+﻿namespace DoenaSoft.WatchHistory.EditNote.Implementations
 {
     using System.Windows;
     using AbstractionLayer.UIServices;
     using WatchHistory.Implementations;
 
-    public partial class EditTitleWindow : Window
+    public partial class EditNoteWindow : Window
     {
-        public EditTitleWindow()
+        public EditNoteWindow()
         {
             InitializeComponent();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var viewModel = (IEditTitleViewModel)DataContext;
+            var viewModel = (IEditNoteViewModel)DataContext;
 
             viewModel.Closing += OnClosing;
         }
 
         private void OnClosing(object sender, CloseEventArgs e)
         {
-            var viewModel = (IEditTitleViewModel)DataContext;
+            var viewModel = (IEditNoteViewModel)DataContext;
 
             viewModel.Closing -= OnClosing;
 

@@ -18,14 +18,13 @@
             viewModel.Closing += OnClosing;
         }
 
-        private void OnClosing(object sender
-            , CloseEventArgs e)
+        private void OnClosing(object sender, CloseEventArgs e)
         {
             var viewModel = (IAddWatchedOnViewModel)DataContext;
 
             viewModel.Closing -= OnClosing;
 
-            DialogResult = e.Result == Result.OK ? true : false;
+            DialogResult = e.Result == Result.OK;
 
             Close();
         }

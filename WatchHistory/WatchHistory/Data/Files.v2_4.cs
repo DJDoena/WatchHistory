@@ -24,7 +24,7 @@
 
         public Files()
         {
-            Version = 2.3m;
+            Version = 2.4m;
         }
     }
 
@@ -81,6 +81,9 @@
 
         [XmlAttribute]
         public string Title;
+
+        [XmlAttribute]
+        public bool FileExists = true;
 
         [XmlIgnore]
         public bool TitleSpecified => !string.IsNullOrWhiteSpace(Title);
@@ -189,7 +192,7 @@
 
         public override bool Equals(object obj) => Equals(obj as User);
 
-        public bool Equals(User other) => other != null ? UserName == other.UserName : false;
+        public bool Equals(User other) => other != null && UserName == other.UserName;
     }
 
     [DebuggerDisplay("Watched: {Value}")]
@@ -220,6 +223,6 @@
 
         public override bool Equals(object obj) => (Equals(obj as Watch));
 
-        public bool Equals(Watch other) => other != null ? Value == other.Value && Source == other.Source : false;
+        public bool Equals(Watch other) => other != null && Value == other.Value && Source == other.Source;
     }
 }

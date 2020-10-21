@@ -187,8 +187,7 @@
 
         #endregion
 
-        private DateTime WatchedOn
-            => new DateTime(WatchedDate.Year, WatchedDate.Month, WatchedDate.Day, WatchedHour, WatchedMinute, 0);
+        private DateTime WatchedOn => new DateTime(WatchedDate.Year, WatchedDate.Month, WatchedDate.Day, WatchedHour, WatchedMinute, 0);
 
         private void Accept()
         {

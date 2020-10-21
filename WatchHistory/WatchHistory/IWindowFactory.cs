@@ -27,5 +27,7 @@
         string OpenEditTitleWindow(string title);
 
         void OpenShowReportWindow(string userName);
+
+        string OpenEditNoteWindow(string note);
     }
 }

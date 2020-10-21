@@ -80,8 +80,9 @@
             EditRunningTimeCommand = new ParameterizedRelayCommand(EditRunningTime, CanEditRunningTime);
             AddYoutubeLinkCommand = new RelayCommand(AddYoutubeLink, CanAddYoutubeLink);
             AddManualEntryCommand = new RelayCommand(AddAddManualEntry, CanAddManualEntry);
-            EditTitleCommand = new ParameterizedRelayCommand(EditTitle, CanEditTitle);
+            EditTitleCommand = new ParameterizedRelayCommand(EditTitle, CanEditTitle);            
             ShowReportCommand = new RelayCommand(ShowReport);
+            EditNoteCommand = new ParameterizedRelayCommand(EditNote, CanEditNote);
         }
 
         #region INotifyPropertyChanged
@@ -207,6 +208,8 @@
         public ICommand EditTitleCommand { get; }
 
         public ICommand ShowReportCommand { get; }
+
+        public ICommand EditNoteCommand { get; }
 
         #endregion
 
@@ -494,6 +497,29 @@
         private void ShowReport()
         {
             _windowFactory.OpenShowReportWindow(_userName);
+
+            _dataManager.SaveDataFile();
+        }
+
+        private bool CanEditNote(object parameter) => GetFileEntry(parameter) != null;
+
+        private void EditNote(object parameter)
+        {
+            if (!CanEditTitle(parameter))
+            {
+                return;
+            }
+
+            var fileEntry = GetFileEntry(parameter);
+
+            var note = _windowFactory.OpenEditNoteWindow(fileEntry.Note);
+
+            if (note == null)
+            {
+                return;
+            }
+
+            fileEntry.Note = note;
 
             _dataManager.SaveDataFile();
         }

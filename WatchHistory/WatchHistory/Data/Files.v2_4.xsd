@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Files" type="Files" />
+
+  <xs:complexType name="Files">
+    <xs:sequence>
+      <xs:element name="Entries" type="Entries" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="Version" type="xs:decimal" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="Entries">
+    <xs:sequence>
+      <xs:element name="Entry" type="FileEntry" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="FileEntry">
+    <xs:sequence>
+      <xs:element name="FullName" type="xs:string" minOccurs="1" maxOccurs="1" />      
+      <xs:element name="Users" type="Users" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Note" type="xs:string" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="CreationTime" type="xs:dateTime" use="required" />
+    <xs:attribute name="VideoLength" type="xs:unsignedInt" use="optional" />
+    <xs:attribute name="Title" type="xs:string" use="optional" />
+    <xs:attribute name="FileExists" type="xs:boolean" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="Users">
+    <xs:sequence>
+      <xs:element name="User" type="User" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="User">
+    <xs:sequence>
+      <xs:element name="Watches" type="Watches" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="UserName" type="xs:string" use="required" />
+    <xs:attribute name="Ignore" type="xs:boolean" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="Watches">
+    <xs:sequence>
+      <xs:element name="Watch" type="Watch" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Watch">
+    <xs:attribute name="Value" type="xs:dateTime" use="required" />
+    <xs:attribute name="Source" type="xs:string" use="optional" />
+  </xs:complexType>
+
+</xs:schema>

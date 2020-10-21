@@ -443,6 +443,7 @@
                     entry = new FileEntry()
                     {
                         FullName = actualFile,
+                        FileExists = true,
                     };
 
                     entry.CreationTime = entry.GetCreationTime(this);
@@ -472,19 +473,23 @@
             {
                 var files = Files.ToList();
 
-                var fileKeys = actualFiles.Select(file => file.ToLower()).ToList();
+                var actualFileKeys = actualFiles.Select(file => FileEntry.GetKey(file)).ToList();
 
-                files.ForEach(file => TryRemoveFile(fileKeys, file));
+                files.ForEach(file => TryRemoveFile(actualFileKeys, file));
             }
         }
 
-        private void TryRemoveFile(List<string> fileKeys, KeyValuePair<string, FileEntry> file)
+        private void TryRemoveFile(List<string> actualFileKeys, KeyValuePair<string, FileEntry> file)
         {
             lock (_filesLock)
             {
-                if ((fileKeys.Contains(file.Key) == false) && (HasValidEvents(file.Value) == false) && (IsProtected(file.Value) == false))
+                if ((actualFileKeys.Contains(file.Key) == false) && (HasValidEvents(file.Value) == false) && (IsProtected(file.Value) == false))
                 {
                     Files.Remove(file.Key);
+                }
+                else
+                {
+                    file.Value.FileExists = actualFileKeys.Contains(file.Key);
                 }
             }
         }
@@ -495,9 +500,13 @@
             {
                 var key = FileEntry.GetKey(e.FullPath);
 
-                if ((Files.TryGetValue(key, out var entry)) && (HasValidEvents(entry) == false) && (IsProtected(entry) == false))
+                if (Files.TryGetValue(key, out var entry) && (HasValidEvents(entry) == false) && (IsProtected(entry) == false))
                 {
                     Files.Remove(key);
+                }
+                else if (entry != null)
+                {
+                    entry.FileExists = _ioServices.File.Exists(entry.FullName);
                 }
             }
 

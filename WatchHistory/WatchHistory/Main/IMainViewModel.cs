@@ -52,5 +52,7 @@
         ICommand EditTitleCommand { get; }
 
         ICommand ShowReportCommand { get; }
+
+        ICommand EditNoteCommand { get; }
     }
 }

@@ -196,6 +196,23 @@
             window.ShowDialog();
         }
 
+        public string OpenEditNoteWindow(string note)
+        {
+            var viewModel = new EditNote.Implementations.EditNoteViewModel(note);
+
+            var window = new EditNote.Implementations.EditNoteWindow()
+            {
+                DataContext = viewModel,
+            };
+
+            if (window.ShowDialog() == true)
+            {
+                return viewModel.Note;
+            }
+
+            return null;
+        }
+
         #endregion
     }
 }

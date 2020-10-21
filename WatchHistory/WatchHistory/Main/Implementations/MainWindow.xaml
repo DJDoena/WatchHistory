@@ -76,12 +76,14 @@
                                   Command="{Binding IgnoreCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItems}" />
                         <MenuItem Header="Open file location"
                                   Command="{Binding OpenFileLocationCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
-                        <MenuItem Header="Show History"
+                        <MenuItem Header="Show history"
                                   Command="{Binding ShowHistoryCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                         <MenuItem Header="Edit title"
                                   Command="{Binding EditTitleCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                         <MenuItem Header="Edit running time"
                                   Command="{Binding EditRunningTimeCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                        <MenuItem Header="Edit note"
+                                  Command="{Binding EditNoteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.View>
