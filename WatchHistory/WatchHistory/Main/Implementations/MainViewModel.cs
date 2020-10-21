@@ -5,7 +5,9 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Windows.Input;
     using AbstractionLayer.IOServices;
     using Data;
@@ -80,7 +82,7 @@
             EditRunningTimeCommand = new ParameterizedRelayCommand(EditRunningTime, CanEditRunningTime);
             AddYoutubeLinkCommand = new RelayCommand(AddYoutubeLink, CanAddYoutubeLink);
             AddManualEntryCommand = new RelayCommand(AddAddManualEntry, CanAddManualEntry);
-            EditTitleCommand = new ParameterizedRelayCommand(EditTitle, CanEditTitle);            
+            EditTitleCommand = new ParameterizedRelayCommand(EditTitle, CanEditTitle);
             ShowReportCommand = new RelayCommand(ShowReport);
             EditNoteCommand = new ParameterizedRelayCommand(EditNote, CanEditNote);
         }
@@ -520,6 +522,14 @@
             }
 
             fileEntry.Note = note;
+
+            using (var fs = _ioServices.GetFileStream(fileEntry.FullName, FileMode.Create, FileAccess.Write, FileShare.Read))
+            {
+                using (var sw = new StreamWriter(fs, Encoding.UTF8))
+                {
+                    sw.WriteLine(note);
+                }
+            }
 
             _dataManager.SaveDataFile();
         }
