@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Edit note" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Height="120" Width="600" MinWidth="600" MinHeight="300"
-        Loaded="OnLoaded" Icon="/WatchHistory;component/djdsoft.ico">
+        Loaded="OnLoaded" Icon="/WatchHistory;component/djdsoft.ico" FocusManager.FocusedElement="{Binding ElementName=NoteTextBox}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="60"/>
@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
         <Label Grid.Column="0" Grid.Row="0" Margin="5,5,5,5" Padding="5,6,5,5"
                  Content="Note:"/>
-        <TextBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" Margin="5,5,5,5" Padding="5,6,5,5"
+        <TextBox Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0" Margin="5,5,5,5" Padding="5,6,5,5" Name="NoteTextBox"
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"
                  Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" />
         <Button Grid.Column="2" Grid.Row="1" Content="Accept" Margin="5,5,5,5"
