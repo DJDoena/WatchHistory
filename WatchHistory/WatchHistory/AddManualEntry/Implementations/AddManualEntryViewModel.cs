@@ -212,9 +212,13 @@
                 }
             }
 
-            var length = (uint)(new TimeSpan(LengthHours, LengthMinutes, LengthSeconds)).TotalSeconds;
+            var watchedOn = WatchedOn.ToUniversalTime();
 
-            var watchedOn = WatchedOn;
+            var fi = _ioService.GetFileInfo(fileName);
+
+            fi.CreationTimeUtc = watchedOn;
+
+            var length = (uint)(new TimeSpan(LengthHours, LengthMinutes, LengthSeconds)).TotalSeconds;
 
             var entry = new FileEntry()
             {

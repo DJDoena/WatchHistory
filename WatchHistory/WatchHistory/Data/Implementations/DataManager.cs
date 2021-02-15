@@ -222,11 +222,11 @@
         {
             var fi = _ioServices.GetFileInfo(entry.FullName);
 
-            var creationTime = new DateTime(0);
+            var creationTime = new DateTime(0, DateTimeKind.Utc);
 
             if (fi.Exists)
             {
-                creationTime = fi.CreationTime;
+                creationTime = fi.CreationTimeUtc;
             }
 
             return creationTime;

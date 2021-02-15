@@ -66,13 +66,13 @@
 
             var fi = _ioServices.GetFileInfo(fileName);
 
-            fi.CreationTime = info.Published;
+            fi.CreationTimeUtc = info.Published;
 
             var fileEntry = new FileEntry()
             {
                 FullName = fileName,
                 Title = info.Title,
-                CreationTime = fi.CreationTime.Conform(),
+                CreationTime = fi.CreationTimeUtc.Conform(),
                 VideoLength = info.RunningTime,
             };
 

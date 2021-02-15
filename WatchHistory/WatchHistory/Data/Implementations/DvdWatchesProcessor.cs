@@ -28,7 +28,7 @@
                 return;
             }
 
-            entry.CreationTime = fi.CreationTime.Conform();
+            entry.CreationTime = fi.CreationTimeUtc.Conform();
 
             MIH.DvdWatches watches = null;
             try

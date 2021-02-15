@@ -445,7 +445,7 @@
             _dataManager.SaveDataFile();
         }
 
-        private bool CanAddYoutubeLink() => IsNotSynchronizing;
+        private bool CanAddYoutubeLink() => false; //IsNotSynchronizing;
 
         private void AddYoutubeLink()
         {
