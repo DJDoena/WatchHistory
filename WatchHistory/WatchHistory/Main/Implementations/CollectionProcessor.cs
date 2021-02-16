@@ -103,7 +103,7 @@
 
             var fi = _ioServices.GetFileInfo(fileName);
 
-            fi.CreationTime = title.PurchaseDate;
+            fi.CreationTime = title.PurchaseDate.Date;
 
             var fileEntry = new FileEntry()
             {

@@ -7,6 +7,7 @@
     using System.Windows.Input;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
+    using DoenaSoft.MediaInfoHelper;
     using ToolBox.Commands;
     using WatchHistory.Data;
     using WatchHistory.Implementations;
@@ -15,7 +16,7 @@
     {
         private readonly IDataManager _dataManager;
 
-        private readonly IIOServices _ioService;
+        private readonly IIOServices _ioServices;
 
         private readonly IUIServices _uiServices;
 
@@ -38,12 +39,12 @@
         private string _note;
 
         public AddManualEntryViewModel(IDataManager dataManager
-            , IIOServices ioService
+            , IIOServices ioServices
             , IUIServices uiServices
             , string userName)
         {
             _dataManager = dataManager;
-            _ioService = ioService;
+            _ioServices = ioServices;
             _uiServices = uiServices;
             _userName = userName;
 
@@ -198,13 +199,13 @@
                 return;
             }
 
-            var folder = _ioService.Path.Combine(WatchHistory.Environment.AppDataFolder, "Manual");
+            var folder = _ioServices.Path.Combine(WatchHistory.Environment.AppDataFolder, "Manual");
 
-            _ioService.Folder.CreateFolder(folder);
+            _ioServices.Folder.CreateFolder(folder);
 
-            var fileName = _ioService.Path.Combine(folder, $"{Guid.NewGuid()}.man");
+            var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.man");
 
-            using (var fs = _ioService.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (var fs = _ioServices.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 using (var sw = new StreamWriter(fs, Encoding.UTF8))
                 {
@@ -212,9 +213,9 @@
                 }
             }
 
-            var watchedOn = WatchedOn.ToUniversalTime();
+            var watchedOn = WatchedOn.ToUniversalTime().Conform();
 
-            var fi = _ioService.GetFileInfo(fileName);
+            var fi = _ioServices.GetFileInfo(fileName);
 
             fi.CreationTimeUtc = watchedOn;
 
