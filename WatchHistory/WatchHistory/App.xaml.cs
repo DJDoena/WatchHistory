@@ -29,13 +29,15 @@
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
+            (new DataUpgrader(IOServices)).Upgrade();
+
             Environment.Init(IOServices);
 
             DataManager = new DataManager(Environment.SettingsFile, Environment.DataFile, IOServices);
 
             var youtubeManager = new AddYoutubeLink.Implementations.YoutubeManager();
 
-            IWindowFactory windowFactory = new WindowFactory(IOServices, UIServices, clipboardServices, DataManager, youtubeManager);
+            var windowFactory = new WindowFactory(IOServices, UIServices, clipboardServices, DataManager, youtubeManager);
 
             windowFactory.OpenSelectUserWindow();
         }
@@ -52,7 +54,7 @@
             {
                 var exceptionXml = new ExceptionXml(ex);
 
-                var fileName = IOServices.Path.Combine(Environment.AppDataFolder, "Crash.xml");
+                var fileName = IOServices.Path.Combine(Environment.MyDocumentsFolder, "Crash.xml");
 
                 SerializerHelper.Serialize(IOServices, fileName, exceptionXml);
 

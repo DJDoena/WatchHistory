@@ -30,7 +30,7 @@
 
             try
             {
-                TryProcess(info, watchedOn);
+                this.TryProcess(info, watchedOn);
             }
             finally
             {
@@ -40,7 +40,7 @@
 
         private void TryProcess(YoutubeVideoInfo info, DateTime watchedOn)
         {
-            var folder = _ioServices.Path.Combine(WatchHistory.Environment.AppDataFolder, "Youtube");
+            var folder = _ioServices.Path.Combine(WatchHistory.Environment.MyDocumentsFolder, "Youtube");
 
             if (_ioServices.Folder.Exists(folder) == false)
             {
@@ -51,7 +51,7 @@
 
             _dataManager.FileExtensions = Constants.YoutubeFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
 
-            CreateYoutubeFile(folder, info, watchedOn);
+            this.CreateYoutubeFile(folder, info, watchedOn);
         }
 
         private void CreateYoutubeFile(string folder, YoutubeVideoInfo info, DateTime watchedOn)

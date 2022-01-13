@@ -40,7 +40,7 @@
 
         private void TryProcess()
         {
-            var folder = _ioServices.Path.Combine(Environment.AppDataFolder, "DVDProfiler");
+            var folder = _ioServices.Path.Combine(Environment.MyDocumentsFolder, "DVDProfiler");
 
             if (_ioServices.Folder.Exists(folder) == false)
             {

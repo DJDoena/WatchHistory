@@ -119,6 +119,7 @@
       <DependentUpon>Files.v2_4.xsd</DependentUpon>
     </Compile>
     <Compile Include="Data\FilesExtensions.cs" />
+    <Compile Include="Data\Implementations\DataUpgrader.cs" />
     <Compile Include="Data\Implementations\YoutubeWatchesProcessor.cs" />
     <Compile Include="Data\Implementations\DvdWatchesProcessor.cs" />
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
@@ -315,7 +316,7 @@
   <PropertyGroup>
     <PostBuildEvent>IF NOT $(PlatformName)==x64 GOTO end
 IF NOT $(ConfigurationName)==Release GOTO end
-"%25ProgramFiles%25\Inno Setup 6\iscc.exe"  ..\..\..\..\..\WatchHistorySetup\setup.iss
+"%25ProgramFiles(x86)%25\Inno Setup 6\iscc.exe"  ..\..\..\..\..\WatchHistorySetup\setup.iss
 :end</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

@@ -8,29 +8,29 @@
 
         internal static string DataFile { get; private set; }
 
-        internal static string AppDataFolder { get; private set; }
+        internal static string MyDocumentsFolder { get; private set; }
 
         internal static void Init(IIOServices ioServices)
         {
-            AppDataFolder = GetAppDataFolder(ioServices);
+            MyDocumentsFolder = GetMyDocumentsFolder(ioServices);
 
-            SettingsFile = ioServices.Path.Combine(AppDataFolder, "Settings.xml");
+            SettingsFile = ioServices.Path.Combine(MyDocumentsFolder, "Settings.xml");
 
-            DataFile = ioServices.Path.Combine(AppDataFolder, "Files.xml");
+            DataFile = ioServices.Path.Combine(MyDocumentsFolder, "Files.xml");
         }
 
-        private static string GetAppDataFolder(IIOServices ioServices)
+        private static string GetMyDocumentsFolder(IIOServices ioServices)
         {
-            var appDataFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData);
+            var myDocumentsFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
 
-            appDataFolder = ioServices.Path.Combine(appDataFolder, "Doena Soft.", "WatchHistory");
+            myDocumentsFolder = ioServices.Path.Combine(myDocumentsFolder, "WatchHistory");
 
-            if (ioServices.Folder.Exists(appDataFolder) == false)
+            if (ioServices.Folder.Exists(myDocumentsFolder) == false)
             {
-                ioServices.Folder.CreateFolder(appDataFolder);
+                ioServices.Folder.CreateFolder(myDocumentsFolder);
             }
 
-            return (appDataFolder);
+            return myDocumentsFolder;
         }
     }
 }

@@ -61,11 +61,11 @@
 
             _filesSerializer.CreateBackup(settingsFile);
 
-            LoadSettings();
+            this.LoadSettings();
 
             _filesSerializer.CreateBackup(dataFile);
 
-            LoadData();
+            this.LoadData();
         }
 
         #region IDataManager
@@ -77,14 +77,14 @@
             {
                 value = new HashSet<string>(value);
 
-                if (IsSuspended == false)
+                if (this.IsSuspended == false)
                 {
                     _fileObserver.Observe(value, _fileExtensions);
                 }
 
                 _rootFolders = value.ToList();
 
-                SyncData();
+                this.SyncData();
             }
         }
 
@@ -97,14 +97,14 @@
 
                 value = new HashSet<string>(value);
 
-                if (IsSuspended == false)
+                if (this.IsSuspended == false)
                 {
                     _fileObserver.Observe(_rootFolders, value);
                 }
 
                 _fileExtensions = value.ToList();
 
-                SyncData();
+                this.SyncData();
             }
         }
 
@@ -138,8 +138,8 @@
             {
                 if (_filesChanged == null)
                 {
-                    _fileObserver.Created += OnFileCreated;
-                    _fileObserver.Deleted += OnFileDeleted;
+                    _fileObserver.Created += this.OnFileCreated;
+                    _fileObserver.Deleted += this.OnFileDeleted;
                 }
 
                 _filesChanged += value;
@@ -150,8 +150,8 @@
 
                 if (_filesChanged == null)
                 {
-                    _fileObserver.Created -= OnFileCreated;
-                    _fileObserver.Deleted -= OnFileDeleted;
+                    _fileObserver.Created -= this.OnFileCreated;
+                    _fileObserver.Deleted -= this.OnFileDeleted;
                 }
             }
         }
@@ -160,34 +160,34 @@
         {
             lock (_filesLock)
             {
-                return Files.Values;
+                return this.Files.Values;
             }
         }
 
-        public void AddWatched(FileEntry entry, string userName) => AddWatched(entry, userName, DateTime.UtcNow);
+        public void AddWatched(FileEntry entry, string userName) => this.AddWatched(entry, userName, DateTime.UtcNow);
 
         public void AddWatched(FileEntry entry, string userName, DateTime watchedOn)
         {
             lock (_filesLock)
             {
-                var user = entry.TryGetUser(userName) ?? AddUser(entry, userName);
+                var user = entry.TryGetUser(userName) ?? this.AddUser(entry, userName);
 
-                AddWatched(user, watchedOn);
+                this.AddWatched(user, watchedOn);
             }
 
-            RaiseFilesChanged();
+            this.RaiseFilesChanged();
         }
 
         public void AddIgnore(FileEntry entry, string userName)
         {
             lock (_filesLock)
             {
-                var user = entry.TryGetUser(userName) ?? AddUser(entry, userName);
+                var user = entry.TryGetUser(userName) ?? this.AddUser(entry, userName);
 
                 user.Ignore = true;
             }
 
-            RaiseFilesChanged();
+            this.RaiseFilesChanged();
         }
 
         public void UndoIgnore(FileEntry entry, string userName)
@@ -198,7 +198,7 @@
             {
                 user.Ignore = false;
 
-                RaiseFilesChanged();
+                this.RaiseFilesChanged();
             }
         }
 
@@ -265,7 +265,7 @@
         {
             lock (_filesLock)
             {
-                var entries = Files.Values.ToList();
+                var entries = this.Files.Values.ToList();
 
                 entries.Sort((left, right) => left.FullName.CompareTo(right.FullName));
 
@@ -275,18 +275,18 @@
 
         public void Suspend()
         {
-            IsSuspended = true;
+            this.IsSuspended = true;
 
             _fileObserver.Suspend();
         }
 
         public void Resume()
         {
-            IsSuspended = false;
+            this.IsSuspended = false;
 
             _fileObserver.Observe(_rootFolders, _fileExtensions);
 
-            SyncData();
+            this.SyncData();
         }
 
         public FileEntry TryCreateEntry(FileEntry newFileEntry)
@@ -297,19 +297,19 @@
             {
                 var key = newFileEntry.Key;
 
-                if (Files.TryGetValue(key, out var existingFileEntry))
+                if (this.Files.TryGetValue(key, out var existingFileEntry))
                 {
-                    MergeEntry(existingFileEntry, newFileEntry);
+                    this.MergeEntry(existingFileEntry, newFileEntry);
 
                     result = existingFileEntry;
                 }
                 else
                 {
-                    Files.Add(key, newFileEntry);
+                    this.Files.Add(key, newFileEntry);
                 }
             }
 
-            RaiseFilesChanged();
+            this.RaiseFilesChanged();
 
             return result;
         }
@@ -333,22 +333,22 @@
 
             lock (_filesLock)
             {
-                Files = new Dictionary<string, FileEntry>(entries.Count());
+                this.Files = new Dictionary<string, FileEntry>(entries.Count());
 
                 entries.ForEach(entry =>
                 {
-                    if (!Files.TryGetValue(entry.Key, out var existing))
+                    if (!this.Files.TryGetValue(entry.Key, out var existing))
                     {
-                        Files.Add(entry.Key, entry);
+                        this.Files.Add(entry.Key, entry);
                     }
                     else
                     {
-                        MergeEntry(existing, entry);
+                        this.MergeEntry(existing, entry);
                     }
                 });
             }
 
-            RaiseFilesChanged();
+            this.RaiseFilesChanged();
         }
 
         private User AddUser(FileEntry entry, string userName)
@@ -381,9 +381,9 @@
 
         private void SyncData()
         {
-            if (IsSuspended == false)
+            if (this.IsSuspended == false)
             {
-                GetActualFiles();
+                this.GetActualFiles();
             }
         }
 
@@ -395,18 +395,18 @@
 
         private void GetActualFiles()
         {
-            IsSynchronizing = true;
+            this.IsSynchronizing = true;
 
-            var tasks = _rootFolders.Select(GetActualFiles).SelectMany(task => task);
+            var tasks = _rootFolders.Select(this.GetActualFiles).SelectMany(task => task);
 
             var readyTask = Task.WhenAll(tasks);
 
-            readyTask.ContinueWith(ProcessActualFiles);
+            readyTask.ContinueWith(this.ProcessActualFiles);
         }
 
-        private IEnumerable<Task<IEnumerable<string>>> GetActualFiles(string folder) => _fileExtensions.Select(ext => GetActualFiles(folder, ext));
+        private IEnumerable<Task<IEnumerable<string>>> GetActualFiles(string folder) => _fileExtensions.Select(ext => this.GetActualFiles(folder, ext));
 
-        private Task<IEnumerable<string>> GetActualFiles(string folder, string fileExtension) => Task.Run(() => GetFiles(folder, fileExtension));
+        private Task<IEnumerable<string>> GetActualFiles(string folder, string fileExtension) => Task.Run(() => this.GetFiles(folder, fileExtension));
 
         private void ProcessActualFiles(Task<IEnumerable<string>[]> task)
         {
@@ -414,21 +414,21 @@
 
             lock (_filesLock)
             {
-                actualFiles.ForEach(AddActualFile);
+                actualFiles.ForEach(this.AddActualFile);
 
-                RemoveObsoletesFiles(actualFiles);
+                this.RemoveObsoletesFiles(actualFiles);
 
-                SaveDataFile();
+                this.SaveDataFile();
             }
 
-            IsSynchronizing = false;
+            this.IsSynchronizing = false;
 
-            RaiseFilesChanged();
+            this.RaiseFilesChanged();
         }
 
         private IEnumerable<string> GetFiles(string rootFolder, string fileExtension)
             => _ioServices.Folder.Exists(rootFolder)
-                ? (_ioServices.Folder.GetFiles(rootFolder, "*." + fileExtension, System.IO.SearchOption.AllDirectories))
+                ? (_ioServices.Folder.GetFileNames(rootFolder, "*." + fileExtension, System.IO.SearchOption.AllDirectories))
                 : (Enumerable.Empty<string>());
 
         private void AddActualFile(string actualFile)
@@ -438,7 +438,7 @@
             {
                 var key = FileEntry.GetKey(actualFile);
 
-                if (Files.TryGetValue(key, out entry) == false)
+                if (this.Files.TryGetValue(key, out entry) == false)
                 {
                     entry = new FileEntry()
                     {
@@ -448,7 +448,7 @@
 
                     entry.CreationTime = entry.GetCreationTime(this);
 
-                    Files.Add(key, entry);
+                    this.Files.Add(key, entry);
                 }
             }
 
@@ -471,11 +471,11 @@
         {
             lock (_filesLock)
             {
-                var files = Files.ToList();
+                var files = this.Files.ToList();
 
                 var actualFileKeys = actualFiles.Select(file => FileEntry.GetKey(file)).ToList();
 
-                files.ForEach(file => TryRemoveFile(actualFileKeys, file));
+                files.ForEach(file => this.TryRemoveFile(actualFileKeys, file));
             }
         }
 
@@ -483,9 +483,9 @@
         {
             lock (_filesLock)
             {
-                if ((actualFileKeys.Contains(file.Key) == false) && (HasValidEvents(file.Value) == false) && (IsProtected(file.Value) == false))
+                if ((actualFileKeys.Contains(file.Key) == false) && (this.HasValidEvents(file.Value) == false) && (this.IsProtected(file.Value) == false))
                 {
-                    Files.Remove(file.Key);
+                    this.Files.Remove(file.Key);
                 }
                 else
                 {
@@ -500,9 +500,9 @@
             {
                 var key = FileEntry.GetKey(e.FullPath);
 
-                if (Files.TryGetValue(key, out var entry) && (HasValidEvents(entry) == false) && (IsProtected(entry) == false))
+                if (this.Files.TryGetValue(key, out var entry) && (this.HasValidEvents(entry) == false) && (this.IsProtected(entry) == false))
                 {
-                    Files.Remove(key);
+                    this.Files.Remove(key);
                 }
                 else if (entry != null)
                 {
@@ -510,7 +510,7 @@
                 }
             }
 
-            RaiseFilesChanged();
+            this.RaiseFilesChanged();
         }
 
         private void OnFileCreated(object sender, System.IO.FileSystemEventArgs e)
@@ -524,13 +524,13 @@
             {
                 var key = entry.Key;
 
-                if (Files.ContainsKey(key) == false)
+                if (this.Files.ContainsKey(key) == false)
                 {
-                    Files.Add(key, entry);
+                    this.Files.Add(key, entry);
                 }
             }
 
-            RaiseFilesChanged();
+            this.RaiseFilesChanged();
         }
 
         private void RaiseFilesChanged() => _filesChanged?.Invoke(this, EventArgs.Empty);
@@ -542,6 +542,11 @@
             if (newEntry.VideoLength > 0)
             {
                 existingEntry.VideoLength = newEntry.VideoLength;
+            }
+
+            if (!string.IsNullOrWhiteSpace(newEntry.Note))
+            {
+                existingEntry.Note = newEntry.Note;
             }
 
             MergeUsers(existingEntry, newEntry);

@@ -28,7 +28,7 @@
 
         private static void TryClean()
         {
-            Files files = SerializerHelper.Deserialize<Files>(IOServices, Environment.DataFile);
+            var files = SerializerHelper.Deserialize<Files>(IOServices, Environment.DataFile);
 
             CreateBackup();
 

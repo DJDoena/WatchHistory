@@ -3,12 +3,14 @@
     using System;
     using System.ComponentModel;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Windows.Input;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
-    using DoenaSoft.MediaInfoHelper;
+    using MediaInfoHelper;
     using ToolBox.Commands;
+    using ToolBox.Extensions;
     using WatchHistory.Data;
     using WatchHistory.Implementations;
 
@@ -48,8 +50,8 @@
             _uiServices = uiServices;
             _userName = userName;
 
-            AcceptCommand = new RelayCommand(Accept);
-            CancelCommand = new RelayCommand(Cancel);
+            this.AcceptCommand = new RelayCommand(this.Accept);
+            this.CancelCommand = new RelayCommand(this.Cancel);
 
             var now = DateTime.Now;
 
@@ -75,7 +77,7 @@
                 {
                     _watchedDate = value;
 
-                    RaisePropertyChanged(nameof(WatchedDate));
+                    this.RaisePropertyChanged(nameof(this.WatchedDate));
                 }
             }
         }
@@ -89,7 +91,7 @@
                 {
                     _watchedHour = value;
 
-                    RaisePropertyChanged(nameof(WatchedHour));
+                    this.RaisePropertyChanged(nameof(this.WatchedHour));
                 }
             }
         }
@@ -103,7 +105,7 @@
                 {
                     _watchedMinute = value;
 
-                    RaisePropertyChanged(nameof(WatchedMinute));
+                    this.RaisePropertyChanged(nameof(this.WatchedMinute));
                 }
             }
         }
@@ -117,7 +119,7 @@
                 {
                     _lengtHours = value;
 
-                    RaisePropertyChanged(nameof(LengthHours));
+                    this.RaisePropertyChanged(nameof(this.LengthHours));
                 }
             }
         }
@@ -131,7 +133,7 @@
                 {
                     _lengthMinutes = value;
 
-                    RaisePropertyChanged(nameof(LengthMinutes));
+                    this.RaisePropertyChanged(nameof(this.LengthMinutes));
                 }
             }
         }
@@ -145,7 +147,7 @@
                 {
                     _lengthSeconds = value;
 
-                    RaisePropertyChanged(nameof(LengthSeconds));
+                    this.RaisePropertyChanged(nameof(this.LengthSeconds));
                 }
             }
         }
@@ -159,7 +161,7 @@
                 {
                     _title = value;
 
-                    RaisePropertyChanged(nameof(Title));
+                    this.RaisePropertyChanged(nameof(this.Title));
                 }
             }
         }
@@ -173,7 +175,7 @@
                 {
                     _note = value;
 
-                    RaisePropertyChanged(nameof(Note));
+                    this.RaisePropertyChanged(nameof(this.Note));
                 }
             }
         }
@@ -188,22 +190,28 @@
 
         #endregion
 
-        private DateTime WatchedOn => new DateTime(WatchedDate.Year, WatchedDate.Month, WatchedDate.Day, WatchedHour, WatchedMinute, 0);
+        private DateTime WatchedOn => new DateTime(this.WatchedDate.Year, this.WatchedDate.Month, this.WatchedDate.Day, this.WatchedHour, this.WatchedMinute, 0);
 
         private void Accept()
         {
-            if (string.IsNullOrEmpty(Title))
+            if (string.IsNullOrEmpty(this.Title))
             {
                 _uiServices.ShowMessageBox("You need to enter a title", "Title Missing", Buttons.OK, Icon.Warning);
 
                 return;
             }
 
-            var folder = _ioServices.Path.Combine(WatchHistory.Environment.AppDataFolder, "Manual");
+            var folder = _ioServices.Path.Combine(WatchHistory.Environment.MyDocumentsFolder, "Manual");
 
             _ioServices.Folder.CreateFolder(folder);
 
-            var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.man");
+            _dataManager.RootFolders = folder.Enumerate().Union(_dataManager.RootFolders);
+
+            const string ManualFileExtensionName = "man";
+
+            _dataManager.FileExtensions = ManualFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
+
+            var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.{ManualFileExtensionName}");
 
             using (var fs = _ioServices.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
@@ -213,13 +221,13 @@
                 }
             }
 
-            var watchedOn = WatchedOn.ToUniversalTime().Conform();
+            var watchedOn = this.WatchedOn.ToUniversalTime().Conform();
 
             var fi = _ioServices.GetFileInfo(fileName);
 
             fi.CreationTimeUtc = watchedOn;
 
-            var length = (uint)(new TimeSpan(LengthHours, LengthMinutes, LengthSeconds)).TotalSeconds;
+            var length = (uint)(new TimeSpan(this.LengthHours, this.LengthMinutes, this.LengthSeconds)).TotalSeconds;
 
             var entry = new FileEntry()
             {
