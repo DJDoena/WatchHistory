@@ -73,7 +73,7 @@
                 _ioServices.File.Copy(oldFile.FullName, newFile.FullName, false);
 
                 newFile.CreationTime = oldFile.CreationTime;
-                newFile.LastWriteTime = oldFile.LastWriteTime;
+                newFile.LastWriteTime = oldFile.CreationTime;
 
                 _ioServices.File.Delete(oldFile.FullName);
             }

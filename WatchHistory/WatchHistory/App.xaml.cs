@@ -1,6 +1,7 @@
 ﻿namespace DoenaSoft.WatchHistory
 {
     using System;
+    using System.Diagnostics;
     using System.Windows;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.IOServices.Implementations;
@@ -13,6 +14,8 @@
 
     public partial class App : Application
     {
+        private bool _cancelStartUp;
+
         private IUIServices UIServices { get; set; }
 
         private IIOServices IOServices { get; set; }
@@ -21,31 +24,51 @@
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            IOServices = new IOServices();
+            _cancelStartUp = false;
 
-            UIServices = new WindowUIServices();
+            this.UIServices = new WindowUIServices();
+
+            var processes = Process.GetProcessesByName("WatchHistory");
+
+            if (processes.Length > 1)
+            {
+                if (this.UIServices.ShowMessageBox("There's already an instance running. If you start another one, you could invalidate your cache. Continue?"
+                    , "Continue?", Buttons.YesNo, Icon.Error) == Result.No)
+                {
+                    _cancelStartUp = true;
+
+                    this.Shutdown(0);
+
+                    return;
+                }
+            }
+
+            this.IOServices = new IOServices();
 
             var clipboardServices = new WindowClipboardServices();
 
-            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += this.OnUnhandledException;
 
-            (new DataUpgrader(IOServices)).Upgrade();
+            (new DataUpgrader(this.IOServices)).Upgrade();
 
-            Environment.Init(IOServices);
+            Environment.Init(this.IOServices);
 
-            DataManager = new DataManager(Environment.SettingsFile, Environment.DataFile, IOServices);
+            this.DataManager = new DataManager(Environment.SettingsFile, Environment.DataFile, this.IOServices);
 
             var youtubeManager = new AddYoutubeLink.Implementations.YoutubeManager();
 
-            var windowFactory = new WindowFactory(IOServices, UIServices, clipboardServices, DataManager, youtubeManager);
+            var windowFactory = new WindowFactory(this.IOServices, this.UIServices, clipboardServices, this.DataManager, youtubeManager);
 
             windowFactory.OpenSelectUserWindow();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            DataManager.SaveSettingsFile();
-            DataManager.SaveDataFile();
+            if (!_cancelStartUp)
+            {
+                this.DataManager.SaveSettingsFile();
+                this.DataManager.SaveDataFile();
+            }
         }
 
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -54,15 +77,15 @@
             {
                 var exceptionXml = new ExceptionXml(ex);
 
-                var fileName = IOServices.Path.Combine(Environment.MyDocumentsFolder, "Crash.xml");
+                var fileName = this.IOServices.Path.Combine(Environment.MyDocumentsFolder, "Crash.xml");
 
-                SerializerHelper.Serialize(IOServices, fileName, exceptionXml);
+                SerializerHelper.Serialize(this.IOServices, fileName, exceptionXml);
 
-                UIServices.ShowMessageBox(ex.Message, string.Empty, Buttons.OK, Icon.Error);
+                this.UIServices.ShowMessageBox(ex.Message, string.Empty, Buttons.OK, Icon.Error);
             }
             else
             {
-                UIServices.ShowMessageBox(e.ExceptionObject?.ToString() ?? "Error", string.Empty, Buttons.OK, Icon.Error);
+                this.UIServices.ShowMessageBox(e.ExceptionObject?.ToString() ?? "Error", string.Empty, Buttons.OK, Icon.Error);
             }
         }
     }
