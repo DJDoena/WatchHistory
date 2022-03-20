@@ -41,8 +41,18 @@
         [XmlAttribute]
         public DateTime CreationTime
         {
-            get => CreationTimeValue ?? new DateTime(0, DateTimeKind.Utc);
-            set => CreationTimeValue = value.Conform();
+            get => CreationTimeValue ?? default(DateTime).ToUniversalTime();
+            set
+            {
+                var newValue = value.Conform();
+
+                if (CreationTimeValue.HasValue && CreationTimeValue.Value != default && CreationTimeValue.Value < newValue)
+                {
+                    //System.Diagnostics.Debugger.Launch();
+                }
+
+                CreationTimeValue = newValue;
+            }
         }
 
         [XmlArray("Users")]
@@ -77,7 +87,7 @@
         }
 
         [XmlIgnore]
-        public bool VideoLengthSpecified => VideoLength > 0;
+        public bool VideoLengthSpecified => this.VideoLength > 0;
 
         [XmlAttribute]
         public string Title;
@@ -126,7 +136,7 @@
             return key;
         }
 
-        public override int GetHashCode() => Key.GetHashCode();
+        public override int GetHashCode() => this.Key.GetHashCode();
 
         public override bool Equals(object obj)
         {
@@ -135,7 +145,7 @@
                 return false;
             }
 
-            bool equals = Key == other.Key;
+            bool equals = this.Key == other.Key;
 
             return equals;
         }
@@ -190,7 +200,7 @@
 
         public override int GetHashCode() => UserName?.GetHashCode() ?? 0;
 
-        public override bool Equals(object obj) => Equals(obj as User);
+        public override bool Equals(object obj) => this.Equals(obj as User);
 
         public bool Equals(User other) => other != null && UserName == other.UserName;
     }
@@ -219,10 +229,10 @@
         [XmlAnyElement]
         public XmlElement[] AnyElements;
 
-        public override int GetHashCode() => Value.GetHashCode();
+        public override int GetHashCode() => this.Value.GetHashCode();
 
-        public override bool Equals(object obj) => (Equals(obj as Watch));
+        public override bool Equals(object obj) => (this.Equals(obj as Watch));
 
-        public bool Equals(Watch other) => other != null && Value == other.Value && Source == other.Source;
+        public bool Equals(Watch other) => other != null && this.Value == other.Value && Source == other.Source;
     }
 }

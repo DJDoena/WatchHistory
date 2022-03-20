@@ -206,12 +206,10 @@
             _ioServices.Folder.CreateFolder(folder);
 
             _dataManager.RootFolders = folder.Enumerate().Union(_dataManager.RootFolders);
+            
+            _dataManager.FileExtensions = Constants.ManualFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
 
-            const string ManualFileExtensionName = "man";
-
-            _dataManager.FileExtensions = ManualFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
-
-            var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.{ManualFileExtensionName}");
+            var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.{Constants.ManualFileExtensionName}");
 
             using (var fs = _ioServices.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
