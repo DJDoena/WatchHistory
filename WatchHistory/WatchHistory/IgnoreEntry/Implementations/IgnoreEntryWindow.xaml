@@ -54,6 +54,12 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding CreationTime}" Width="100">
+                        <GridViewColumnHeader Content="Creation Time" />
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding RunningTime}" Width="100">
+                        <GridViewColumnHeader Content="Running Time" />
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
