@@ -32,7 +32,7 @@
             {
                 if (_note != value)
                 {
-                    _note = value;
+                    _note = value?.Trim();
 
                     RaisePropertyChanged(nameof(Note));
                 }

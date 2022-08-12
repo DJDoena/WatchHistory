@@ -159,7 +159,7 @@
             {
                 if (_title != value)
                 {
-                    _title = value;
+                    _title = value?.Trim();
 
                     this.RaisePropertyChanged(nameof(this.Title));
                 }
@@ -173,7 +173,7 @@
             {
                 if (_note != value)
                 {
-                    _note = value;
+                    _note = value?.Trim();
 
                     this.RaisePropertyChanged(nameof(this.Note));
                 }

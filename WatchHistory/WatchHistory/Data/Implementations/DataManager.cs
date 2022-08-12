@@ -267,10 +267,51 @@
             {
                 var entries = this.Files.Values.ToList();
 
-                entries.Sort((left, right) => left.FullName.CompareTo(right.FullName));
+                entries.Sort((left, right) =>
+                {
+                    var compare = 0;
+                    if (left.TitleSpecified && !right.TitleSpecified)
+                    {
+                        compare = -1;
+                    }
+                    else if (!left.TitleSpecified && right.TitleSpecified)
+                    {
+                        compare = 1;
+                    }
+                    else if (left.TitleSpecified && right.TitleSpecified)
+                    {
+                        compare = left.Title.CompareTo(right.Title);
+                    }
+
+                    if (compare == 0)
+                    {
+                        compare = this.GetCompareName(left).CompareTo(this.GetCompareName(right));
+                    }
+
+                    if (compare == 0)
+                    {
+                        compare = left.FullName.CompareTo(right.FullName);
+                    }
+
+                    return compare;
+                });
 
                 _filesSerializer.SaveData(_dataFile, entries);
             }
+        }
+
+        private string GetCompareName(FileEntry left)
+        {
+            var name = left.FullName;
+
+            foreach (var rootFolder in _rootFolders)
+            {
+                name = name.Replace(rootFolder, string.Empty);
+            }
+
+            name = name.TrimStart('\\');
+
+            return name;
         }
 
         public void Suspend()

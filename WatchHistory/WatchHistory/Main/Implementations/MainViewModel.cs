@@ -45,11 +45,11 @@
             get => _sortColumn;
             set
             {
-                SortAscending = (value != _sortColumn) ? true : (SortAscending == false);
+                this.SortAscending = (value != _sortColumn) ? true : (this.SortAscending == false);
 
                 _sortColumn = value;
 
-                RaisePropertyChanged(nameof(Entries));
+                this.RaisePropertyChanged(nameof(this.Entries));
             }
         }
 
@@ -62,29 +62,29 @@
             _userName = userName;
 
             _sortColumn = SortColumn.CreationTime;
-            SortAscending = false;
-            SuspendEvents = false;
-            EventRaisedWhileSuspended = false;
+            this.SortAscending = false;
+            this.SuspendEvents = false;
+            this.EventRaisedWhileSuspended = false;
 
-            AddWatchedCommand = new ParameterizedRelayCommand(AddWatched, CanAddWatched);
-            PlayFileAndAddWatchedCommand = new ParameterizedRelayCommand(PlayFileAndAddWatched, CanPlayFile);
-            OpenSettingsCommand = new RelayCommand(OpenSettings);
-            ImportCollectionCommand = new RelayCommand(ImportCollection, CanImportCollection);
-            IgnoreCommand = new ParameterizedRelayCommand(Ignore, CanIgnore);
-            UndoIgnoreCommand = new RelayCommand(UndoIgnore);
-            PlayFileCommand = new ParameterizedRelayCommand(PlayFile, CanPlayFile);
-            SortCommand = new ParameterizedRelayCommand(Sort);
-            OpenFileLocationCommand = new ParameterizedRelayCommand(OpenFileLocation, CanOpenFileLocation);
-            AddWatchedOnCommand = new ParameterizedRelayCommand(AddWatchedOn, CanAddWatchedOn);
-            CheckForUpdateCommand = new RelayCommand(CheckForUpdate);
-            AboutCommand = new RelayCommand(ShowAbout);
-            ShowHistoryCommand = new ParameterizedRelayCommand(ShowHistory, CanShowHistory);
-            EditRunningTimeCommand = new ParameterizedRelayCommand(EditRunningTime, CanEditRunningTime);
-            AddYoutubeLinkCommand = new RelayCommand(AddYoutubeLink, CanAddYoutubeLink);
-            AddManualEntryCommand = new RelayCommand(AddAddManualEntry, CanAddManualEntry);
-            EditTitleCommand = new ParameterizedRelayCommand(EditTitle, CanEditTitle);
-            ShowReportCommand = new RelayCommand(ShowReport);
-            EditNoteCommand = new ParameterizedRelayCommand(EditNote, CanEditNote);
+            this.AddWatchedCommand = new ParameterizedRelayCommand(this.AddWatched, this.CanAddWatched);
+            this.PlayFileAndAddWatchedCommand = new ParameterizedRelayCommand(this.PlayFileAndAddWatched, this.CanPlayFile);
+            this.OpenSettingsCommand = new RelayCommand(this.OpenSettings);
+            this.ImportCollectionCommand = new RelayCommand(this.ImportCollection, this.CanImportCollection);
+            this.IgnoreCommand = new ParameterizedRelayCommand(this.Ignore, this.CanIgnore);
+            this.UndoIgnoreCommand = new RelayCommand(this.UndoIgnore);
+            this.PlayFileCommand = new ParameterizedRelayCommand(this.PlayFile, this.CanPlayFile);
+            this.SortCommand = new ParameterizedRelayCommand(this.Sort);
+            this.OpenFileLocationCommand = new ParameterizedRelayCommand(this.OpenFileLocation, this.CanOpenFileLocation);
+            this.AddWatchedOnCommand = new ParameterizedRelayCommand(this.AddWatchedOn, this.CanAddWatchedOn);
+            this.CheckForUpdateCommand = new RelayCommand(this.CheckForUpdate);
+            this.AboutCommand = new RelayCommand(this.ShowAbout);
+            this.ShowHistoryCommand = new ParameterizedRelayCommand(this.ShowHistory, this.CanShowHistory);
+            this.EditRunningTimeCommand = new ParameterizedRelayCommand(this.EditRunningTime, this.CanEditRunningTime);
+            this.AddYoutubeLinkCommand = new RelayCommand(this.AddYoutubeLink, this.CanAddYoutubeLink);
+            this.AddManualEntryCommand = new RelayCommand(this.AddAddManualEntry, this.CanAddManualEntry);
+            this.EditTitleCommand = new ParameterizedRelayCommand(this.EditTitle, this.CanEditTitle);
+            this.ShowReportCommand = new RelayCommand(this.ShowReport);
+            this.EditNoteCommand = new ParameterizedRelayCommand(this.EditNote, this.CanEditNote);
         }
 
         #region INotifyPropertyChanged
@@ -95,9 +95,9 @@
             {
                 if (_propertyChanged == null)
                 {
-                    _model.FilesChanged += OnModelFilesChanged;
+                    _model.FilesChanged += this.OnModelFilesChanged;
 
-                    _dataManager.IsSynchronizingChanged += OnDataManagerIsSynchronizingChanged;
+                    _dataManager.IsSynchronizingChanged += this.OnDataManagerIsSynchronizingChanged;
                 }
 
                 _propertyChanged += value;
@@ -108,9 +108,9 @@
 
                 if (_propertyChanged == null)
                 {
-                    _dataManager.IsSynchronizingChanged -= OnDataManagerIsSynchronizingChanged;
+                    _dataManager.IsSynchronizingChanged -= this.OnDataManagerIsSynchronizingChanged;
 
-                    _model.FilesChanged -= OnModelFilesChanged;
+                    _model.FilesChanged -= this.OnModelFilesChanged;
                 }
             }
         }
@@ -130,7 +130,7 @@
                 {
                     _model.Filter = value;
 
-                    RaisePropertyChanged(nameof(Filter));
+                    this.RaisePropertyChanged(nameof(this.Filter));
                 }
             }
         }
@@ -144,7 +144,7 @@
                 {
                     _model.IgnoreWatched = value;
 
-                    RaisePropertyChanged(nameof(IgnoreWatched));
+                    this.RaisePropertyChanged(nameof(this.IgnoreWatched));
                 }
             }
         }
@@ -158,7 +158,7 @@
                 {
                     _model.SearchInPath = value;
 
-                    RaisePropertyChanged(nameof(SearchInPath));
+                    this.RaisePropertyChanged(nameof(this.SearchInPath));
                 }
             }
         }
@@ -169,7 +169,7 @@
             {
                 var modelEntries = _model.GetFiles();
 
-                var viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, _userName, _dataManager, _ioServices, SortColumn, SortAscending);
+                var viewModelEntries = ViewModelHelper.GetSortedEntries(modelEntries, _userName, _dataManager, _ioServices, this.SortColumn, this.SortAscending);
 
                 return viewModelEntries;
             }
@@ -219,29 +219,29 @@
 
         private void AddWatched(object parameter)
         {
-            if (!CanAddWatched(parameter))
+            if (!this.CanAddWatched(parameter))
             {
                 return;
             }
 
-            SuspendEvents = true;
+            this.SuspendEvents = true;
 
             GetFileEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName));
 
             _dataManager.SaveDataFile();
 
-            ResumeEvents();
+            this.ResumeEvents();
         }
 
         private void ResumeEvents()
         {
-            SuspendEvents = false;
+            this.SuspendEvents = false;
 
-            if (EventRaisedWhileSuspended)
+            if (this.EventRaisedWhileSuspended)
             {
-                OnModelFilesChanged(this, EventArgs.Empty);
+                this.OnModelFilesChanged(this, EventArgs.Empty);
 
-                EventRaisedWhileSuspended = false;
+                this.EventRaisedWhileSuspended = false;
             }
         }
 
@@ -251,23 +251,23 @@
 
         private void Ignore(object parameter)
         {
-            if (!CanIgnore(parameter))
+            if (!this.CanIgnore(parameter))
             {
                 return;
             }
 
-            SuspendEvents = true;
+            this.SuspendEvents = true;
 
             GetFileEntries(parameter).ForEach(entry => _dataManager.AddIgnore(entry, _userName));
 
             _dataManager.SaveDataFile();
 
-            ResumeEvents();
+            this.ResumeEvents();
         }
 
         private void OpenSettings() => _windowFactory.OpenSettingsWindow();
 
-        private void UndoIgnore() => _windowFactory.OpenIgnoreWindow(_userName, Filter);
+        private void UndoIgnore() => _windowFactory.OpenIgnoreWindow(_userName, this.Filter);
 
         private bool CanPlayFile(object parameter)
         {
@@ -280,7 +280,7 @@
 
         private void PlayFile(object parameter)
         {
-            if (!CanPlayFile(parameter))
+            if (!this.CanPlayFile(parameter))
             {
                 return;
             }
@@ -292,7 +292,7 @@
 
         private void PlayFileAndAddWatched(object parameter)
         {
-            if (!CanPlayFile(parameter))
+            if (!this.CanPlayFile(parameter))
             {
                 return;
             }
@@ -319,7 +319,7 @@
 
         private void OpenFileLocation(object parameter)
         {
-            if (!CanOpenFileLocation(parameter))
+            if (!this.CanOpenFileLocation(parameter))
             {
                 return;
             }
@@ -329,35 +329,35 @@
             _model.OpenFileLocation(fileEntry);
         }
 
-        private void Sort(object parameter) => SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (string)parameter));
+        private void Sort(object parameter) => this.SortColumn = (SortColumn)(Enum.Parse(typeof(SortColumn), (string)parameter));
 
         private bool IsNotSynchronizing => _dataManager.IsSynchronizing == false;
 
-        private bool CanImportCollection() => IsNotSynchronizing;
+        private bool CanImportCollection() => this.IsNotSynchronizing;
 
         private void ImportCollection()
         {
-            if (!CanImportCollection())
+            if (!this.CanImportCollection())
             {
                 return;
             }
 
-            SuspendEvents = true;
+            this.SuspendEvents = true;
 
             _model.ImportCollection();
 
-            ResumeEvents();
+            this.ResumeEvents();
         }
 
         private void OnModelFilesChanged(object sender, EventArgs e)
         {
-            if (SuspendEvents == false)
+            if (this.SuspendEvents == false)
             {
-                RaisePropertyChanged(nameof(Entries));
+                this.RaisePropertyChanged(nameof(this.Entries));
             }
             else
             {
-                EventRaisedWhileSuspended = true;
+                this.EventRaisedWhileSuspended = true;
             }
         }
 
@@ -365,14 +365,14 @@
 
         private void OnDataManagerIsSynchronizingChanged(object sender, EventArgs e)
         {
-            RaisePropertyChanged(nameof(ImportCollectionCommand));
+            this.RaisePropertyChanged(nameof(this.ImportCollectionCommand));
         }
 
         private bool CanAddWatchedOn(object parameter) => GetFileEntries(parameter).Any();
 
         private void AddWatchedOn(object parameter)
         {
-            if (!CanAddWatchedOn(parameter))
+            if (!this.CanAddWatchedOn(parameter))
             {
                 return;
             }
@@ -384,23 +384,23 @@
                 return;
             }
 
-            SuspendEvents = true;
+            this.SuspendEvents = true;
 
             GetFileEntries(parameter).ForEach(entry => _dataManager.AddWatched(entry, _userName, watchedOn.Value));
 
             _dataManager.SaveDataFile();
 
-            ResumeEvents();
+            this.ResumeEvents();
         }
 
         private void CheckForUpdate()
         {
-            OnlineAccess.CheckForNewVersion("http://doena-soft.de/dvdprofiler/3.9.0/versions.xml", new WindowHandle(), "Watch History", GetType().Assembly);
+            OnlineAccess.CheckForNewVersion("http://doena-soft.de/dvdprofiler/3.9.0/versions.xml", new WindowHandle(), "Watch History", this.GetType().Assembly);
         }
 
         private void ShowAbout()
         {
-            using (var form = new AboutBox(GetType().Assembly))
+            using (var form = new AboutBox(this.GetType().Assembly))
             {
                 form.ShowDialog();
             }
@@ -410,7 +410,7 @@
 
         private void ShowHistory(object parameter)
         {
-            if (!CanShowHistory(parameter))
+            if (!this.CanShowHistory(parameter))
             {
                 return;
             }
@@ -426,7 +426,7 @@
 
         private void EditRunningTime(object parameter)
         {
-            if (!CanEditRunningTime(parameter))
+            if (!this.CanEditRunningTime(parameter))
             {
                 return;
             }
@@ -449,7 +449,7 @@
 
         private void AddYoutubeLink()
         {
-            if (!CanAddYoutubeLink())
+            if (!this.CanAddYoutubeLink())
             {
                 return;
             }
@@ -459,11 +459,11 @@
             _dataManager.SaveDataFile();
         }
 
-        private bool CanAddManualEntry() => IsNotSynchronizing;
+        private bool CanAddManualEntry() => this.IsNotSynchronizing;
 
         private void AddAddManualEntry()
         {
-            if (!CanAddManualEntry())
+            if (!this.CanAddManualEntry())
             {
                 return;
             }
@@ -477,7 +477,7 @@
 
         private void EditTitle(object parameter)
         {
-            if (!CanEditTitle(parameter))
+            if (!this.CanEditTitle(parameter))
             {
                 return;
             }
@@ -507,7 +507,7 @@
 
         private void EditNote(object parameter)
         {
-            if (!CanEditTitle(parameter))
+            if (!this.CanEditTitle(parameter))
             {
                 return;
             }
@@ -523,11 +523,16 @@
 
             fileEntry.Note = note;
 
-            using (var fs = _ioServices.GetFileStream(fileEntry.FullName, FileMode.Create, FileAccess.Write, FileShare.Read))
+            var manualFolder = _ioServices.Path.Combine(WatchHistory.Environment.MyDocumentsFolder, "Manual");
+
+            if (fileEntry.FullName.StartsWith(manualFolder) && fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.ManualFileExtension))
             {
-                using (var sw = new StreamWriter(fs, Encoding.UTF8))
+                using (var fs = _ioServices.GetFileStream(fileEntry.FullName, FileMode.Create, FileAccess.Write, FileShare.Read))
                 {
-                    sw.WriteLine(note);
+                    using (var sw = new StreamWriter(fs, Encoding.UTF8))
+                    {
+                        sw.WriteLine(note);
+                    }
                 }
             }
 
