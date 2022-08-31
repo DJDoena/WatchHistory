@@ -45,17 +45,17 @@
 
         public IEnumerable<FileEntry> GetFiles()
         {
-            var allFiles = _dataManager.GetFiles();
+            var allFiles = _dataManager.GetFiles().ToList();
 
             var notIgnoredFiles = allFiles.Except(allFiles.Where(UserIgnores));
 
-            var filteredFiles = notIgnoredFiles.Where(ContainsFilter);
+            var filteredFiles = notIgnoredFiles.Where(ContainsFilter).ToList();
 
-            var unwatchedFiles = IgnoreWatched ? filteredFiles.Except(filteredFiles.Where(UserHasWatched)) : filteredFiles;
+            var unwatchedFiles = IgnoreWatched 
+                ? filteredFiles.Except(filteredFiles.Where(UserHasWatched)).ToList()
+                : filteredFiles;
 
-            var result = unwatchedFiles.ToList();
-
-            return result;
+            return unwatchedFiles;
         }
 
         public void ImportCollection()

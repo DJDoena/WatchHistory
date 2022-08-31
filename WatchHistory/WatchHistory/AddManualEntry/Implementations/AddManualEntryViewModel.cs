@@ -154,12 +154,12 @@
 
         public string Title
         {
-            get => _title;
+            get => _title ?? string.Empty;
             set
             {
                 if (_title != value)
                 {
-                    _title = value?.Trim();
+                    _title = value;
 
                     this.RaisePropertyChanged(nameof(this.Title));
                 }
@@ -168,12 +168,12 @@
 
         public string Note
         {
-            get => _note;
+            get => _note ?? string.Empty;
             set
             {
                 if (_note != value)
                 {
-                    _note = value?.Trim();
+                    _note = value;
 
                     this.RaisePropertyChanged(nameof(this.Note));
                 }
@@ -194,7 +194,7 @@
 
         private void Accept()
         {
-            if (string.IsNullOrEmpty(this.Title))
+            if (string.IsNullOrWhiteSpace(this.Title))
             {
                 _uiServices.ShowMessageBox("You need to enter a title", "Title Missing", Buttons.OK, Icon.Warning);
 
@@ -206,7 +206,7 @@
             _ioServices.Folder.CreateFolder(folder);
 
             _dataManager.RootFolders = folder.Enumerate().Union(_dataManager.RootFolders);
-            
+
             _dataManager.FileExtensions = Constants.ManualFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
 
             var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.{Constants.ManualFileExtensionName}");
@@ -215,7 +215,7 @@
             {
                 using (var sw = new StreamWriter(fs, Encoding.UTF8))
                 {
-                    sw.WriteLine(_note);
+                    sw.WriteLine(_note?.Trim());
                 }
             }
 
@@ -230,7 +230,7 @@
             var entry = new FileEntry()
             {
                 FullName = fileName,
-                Title = Title,
+                Title = this.Title.Trim(),
                 VideoLength = length,
                 CreationTime = watchedOn,
                 Users = new User[]
@@ -249,9 +249,9 @@
                 },
             };
 
-            if (!string.IsNullOrWhiteSpace(_note))
+            if (!string.IsNullOrWhiteSpace(this.Note))
             {
-                entry.Note = _note;
+                entry.Note = this.Note.Trim();
             }
 
             _dataManager.TryCreateEntry(entry);
