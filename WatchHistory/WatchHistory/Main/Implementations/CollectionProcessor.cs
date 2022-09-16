@@ -30,7 +30,7 @@
 
             try
             {
-                TryProcess();
+                this.TryProcess();
             }
             finally
             {
@@ -47,20 +47,20 @@
                 _ioServices.Folder.CreateFolder(folder);
             }
 
-            _dataManager.Users = GetUsers().Union(_dataManager.Users);
+            _dataManager.Users = this.GetUsers().Union(_dataManager.Users);
 
             _dataManager.RootFolders = folder.Enumerate().Union(_dataManager.RootFolders);
 
             _dataManager.FileExtensions = MediaInfoHelper.Constants.DvdProfilerFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
 
-            CreateCollectionFiles(folder);
+            this.CreateCollectionFiles(folder);
         }
 
         private IEnumerable<string> GetUsers()
         {
             var dvds = _collection.DVDList.EnsureNotNull();
 
-            var usersByDvd = dvds.Select(GetUsers);
+            var usersByDvd = dvds.Select(this.GetUsers);
 
             var users = usersByDvd.SelectMany(user => user);
 
@@ -86,7 +86,7 @@
 
             titles = new HashSet<EpisodeTitle>(titles);
 
-            titles.ForEach(title => CreateCollectionFile(folder, title));
+            titles.ForEach(title => this.CreateCollectionFile(folder, title));
         }
 
         private void CreateCollectionFile(string folder, EpisodeTitle title)
@@ -96,6 +96,8 @@
             var watches = new MIH.DvdWatches()
             {
                 Title = title.Title,
+                PurchaseDate = title.PurchaseDate.Date,
+                PurchaseDateSpecified = true,
                 Watches = title.Watches?.Select(ToDvdWatch).ToArray()
             };
 
