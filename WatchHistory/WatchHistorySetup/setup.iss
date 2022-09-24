@@ -35,12 +35,12 @@ Name: "full"; Description: "Full installation"
 
 [Files]
 Source: "djdsoft.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "AbstractionLayer.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "AbstractionLayer.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "DVDProfilerHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "DVDProfilerHelper.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "DVDProfilerXML.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "DVDProfilerXML.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.AbstractionLayer.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "DoenaSoft.AbstractionLayer.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.DVDProfilerHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "DoenaSoft.DVDProfilerHelper.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.DVDProfilerXML.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "DVDProfilerXML.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Xceed.Wpf.Toolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -53,7 +53,7 @@ Source: "Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; Source: "Google.Apis.PlatformServices.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; Source: "Google.Apis.YouTube.v3.dll"; DestDir: "{app}"; Flags: ignoreversion
 
-Source: "de\DVDProfilerHelper.resources.dll"; DestDir: "{app}\de"; Flags: ignoreversion
+Source: "de\DoenaSoft.DVDProfilerHelper.resources.dll"; DestDir: "{app}\de"; Flags: ignoreversion
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

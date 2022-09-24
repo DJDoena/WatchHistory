@@ -264,31 +264,21 @@
     <None Include="Data\Files.v2_0.xsd" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\AbstractionLayer\AbstractionLayer\AbstractionLayer.csproj">
-      <Project>{491b235a-1d56-4732-b491-338a3dd2246d}</Project>
-      <Name>AbstractionLayer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\DVDProfilerXML\DVDProfilerHelper\DVDProfilerHelper\DVDProfilerHelper.csproj">
-      <Project>{461dacca-8ebf-4c03-ad1a-c438e4eb3b36}</Project>
-      <Name>DVDProfilerHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\DVDProfilerXML\DVDProfilerXML\DVDProfilerXML.csproj">
-      <Project>{2e90cc6f-892e-45b3-8812-ee52ffa3b222}</Project>
-      <Name>DVDProfilerXML</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MediaInfoHelper\MediaInfoHelper\MediaInfoHelper.csproj">
-      <Project>{b6f830c3-6f73-4096-aebe-07814018814b}</Project>
-      <Name>MediaInfoHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ToolBox\ToolBox\ToolBox.csproj">
-      <Project>{4782e10e-b5cc-4c2d-9d7f-d132cb5a50a0}</Project>
-      <Name>ToolBox</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="djdsoft.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DoenaSoft.AbstractionLayer">
+      <Version>2.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="DoenaSoft.DVDProfilerXML">
+      <Version>4.1.2</Version>
+    </PackageReference>
+    <PackageReference Include="DoenaSoft.MediaInfoHelper">
+      <Version>1.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="DoenaSoft.ToolBox">
+      <Version>1.0.5</Version>
+    </PackageReference>
     <PackageReference Include="Extended.Wpf.Toolkit">
       <Version>4.4.0</Version>
     </PackageReference>
@@ -301,7 +291,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF NOT $(PlatformName)==x64 GOTO end
+    <PostBuildEvent>xcopy $(ProjectDir)\djdsoft.ico $(TargetDir)\
+IF NOT $(PlatformName)==x64 GOTO end
 IF NOT $(ConfigurationName)==Release GOTO end
 "%25ProgramFiles(x86)%25\Inno Setup 6\iscc.exe"  ..\..\..\..\..\WatchHistorySetup\setup.iss
 :end</PostBuildEvent>

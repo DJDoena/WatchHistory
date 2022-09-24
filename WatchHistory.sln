@@ -3,16 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Libraries", "_Libraries", "{9DDCC0D1-4448-4F03-B892-23424E26AE20}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbstractionLayer", "AbstractionLayer\AbstractionLayer\AbstractionLayer.csproj", "{491B235A-1D56-4732-B491-338A3DD2246D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolBox", "ToolBox\ToolBox\ToolBox.csproj", "{4782E10E-B5CC-4C2D-9D7F-D132CB5A50A0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVDProfilerHelper", "DVDProfilerXML\DVDProfilerHelper\DVDProfilerHelper\DVDProfilerHelper.csproj", "{461DACCA-8EBF-4C03-AD1A-C438E4EB3B36}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DVDProfilerXML", "DVDProfilerXML\DVDProfilerXML\DVDProfilerXML.csproj", "{2E90CC6F-892E-45B3-8812-EE52FFA3B222}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WatchHistory", "WatchHistory\WatchHistory\WatchHistory.csproj", "{B5876E77-34BB-46A9-AACA-4FA81FB5A6A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{90C69892-4459-4625-83E2-051A822A4CD6}"
@@ -24,30 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{757D0591
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanUpHistory", "CleanUpHistory\CleanUpHistory.csproj", "{0095D0DA-710B-4A9D-9488-D978B1999E5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaInfoHelper", "MediaInfoHelper\MediaInfoHelper\MediaInfoHelper.csproj", "{B6F830C3-6F73-4096-AEBE-07814018814B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{491B235A-1D56-4732-B491-338A3DD2246D}.Debug|x64.ActiveCfg = Debug|x64
-		{491B235A-1D56-4732-B491-338A3DD2246D}.Debug|x64.Build.0 = Debug|x64
-		{491B235A-1D56-4732-B491-338A3DD2246D}.Release|x64.ActiveCfg = Release|x64
-		{491B235A-1D56-4732-B491-338A3DD2246D}.Release|x64.Build.0 = Release|x64
-		{4782E10E-B5CC-4C2D-9D7F-D132CB5A50A0}.Debug|x64.ActiveCfg = Debug|x64
-		{4782E10E-B5CC-4C2D-9D7F-D132CB5A50A0}.Debug|x64.Build.0 = Debug|x64
-		{4782E10E-B5CC-4C2D-9D7F-D132CB5A50A0}.Release|x64.ActiveCfg = Release|x64
-		{4782E10E-B5CC-4C2D-9D7F-D132CB5A50A0}.Release|x64.Build.0 = Release|x64
-		{461DACCA-8EBF-4C03-AD1A-C438E4EB3B36}.Debug|x64.ActiveCfg = Debug|x64
-		{461DACCA-8EBF-4C03-AD1A-C438E4EB3B36}.Debug|x64.Build.0 = Debug|x64
-		{461DACCA-8EBF-4C03-AD1A-C438E4EB3B36}.Release|x64.ActiveCfg = Release|x64
-		{461DACCA-8EBF-4C03-AD1A-C438E4EB3B36}.Release|x64.Build.0 = Release|x64
-		{2E90CC6F-892E-45B3-8812-EE52FFA3B222}.Debug|x64.ActiveCfg = Debug|x64
-		{2E90CC6F-892E-45B3-8812-EE52FFA3B222}.Debug|x64.Build.0 = Debug|x64
-		{2E90CC6F-892E-45B3-8812-EE52FFA3B222}.Release|x64.ActiveCfg = Release|x64
-		{2E90CC6F-892E-45B3-8812-EE52FFA3B222}.Release|x64.Build.0 = Release|x64
 		{B5876E77-34BB-46A9-AACA-4FA81FB5A6A4}.Debug|x64.ActiveCfg = Debug|x64
 		{B5876E77-34BB-46A9-AACA-4FA81FB5A6A4}.Debug|x64.Build.0 = Debug|x64
 		{B5876E77-34BB-46A9-AACA-4FA81FB5A6A4}.Release|x64.ActiveCfg = Release|x64
@@ -56,21 +28,12 @@ Global
 		{0095D0DA-710B-4A9D-9488-D978B1999E5A}.Debug|x64.Build.0 = Debug|x64
 		{0095D0DA-710B-4A9D-9488-D978B1999E5A}.Release|x64.ActiveCfg = Release|x64
 		{0095D0DA-710B-4A9D-9488-D978B1999E5A}.Release|x64.Build.0 = Release|x64
-		{B6F830C3-6F73-4096-AEBE-07814018814B}.Debug|x64.ActiveCfg = Debug|x64
-		{B6F830C3-6F73-4096-AEBE-07814018814B}.Debug|x64.Build.0 = Debug|x64
-		{B6F830C3-6F73-4096-AEBE-07814018814B}.Release|x64.ActiveCfg = Release|x64
-		{B6F830C3-6F73-4096-AEBE-07814018814B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{491B235A-1D56-4732-B491-338A3DD2246D} = {9DDCC0D1-4448-4F03-B892-23424E26AE20}
-		{4782E10E-B5CC-4C2D-9D7F-D132CB5A50A0} = {9DDCC0D1-4448-4F03-B892-23424E26AE20}
-		{461DACCA-8EBF-4C03-AD1A-C438E4EB3B36} = {9DDCC0D1-4448-4F03-B892-23424E26AE20}
-		{2E90CC6F-892E-45B3-8812-EE52FFA3B222} = {9DDCC0D1-4448-4F03-B892-23424E26AE20}
 		{0095D0DA-710B-4A9D-9488-D978B1999E5A} = {757D0591-4E58-4788-A4FC-08BF7DFDB672}
-		{B6F830C3-6F73-4096-AEBE-07814018814B} = {9DDCC0D1-4448-4F03-B892-23424E26AE20}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59D07010-E1FC-47D6-9B19-BAA156832D57}
