@@ -506,6 +506,10 @@
             {
                 (new YoutubeWatchesProcessor(_ioServices)).Update(entry);
             }
+            else if (actualFile.EndsWith(Constants.ManualFileExtension))
+            {
+                (new ManualWatchesProcessor(_ioServices)).Update(entry);
+            }
         }
 
         private void RemoveObsoletesFiles(IEnumerable<string> actualFiles)

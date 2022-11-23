@@ -5,12 +5,11 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Windows.Input;
     using AbstractionLayer.IOServices;
     using Data;
+    using Data.Implementations;
     using DVDProfiler.DVDProfilerHelper;
     using ToolBox.Commands;
     using ToolBox.Extensions;
@@ -527,13 +526,18 @@
 
             if (fileEntry.FullName.StartsWith(manualFolder) && fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.ManualFileExtension))
             {
-                using (var fs = _ioServices.GetFileStream(fileEntry.FullName, FileMode.Create, FileAccess.Write, FileShare.Read))
+                var info = (new ManualWatchesProcessor(_ioServices)).TryGetInfo(fileEntry);
+
+                if (info == null)
                 {
-                    using (var sw = new StreamWriter(fs, Encoding.UTF8))
-                    {
-                        sw.WriteLine(note);
-                    }
+                    info = ManualWatchesProcessor.CreateInfo(fileEntry.Title, fileEntry.VideoLength, note);
                 }
+                else
+                {
+                    info.Note = note;
+                }
+
+                SerializerHelper.Serialize(_ioServices, fileEntry.FullName, info);
             }
 
             _dataManager.SaveDataFile();

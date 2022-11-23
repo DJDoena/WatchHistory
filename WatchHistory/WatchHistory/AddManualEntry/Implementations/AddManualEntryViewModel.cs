@@ -2,12 +2,11 @@
 {
     using System;
     using System.ComponentModel;
-    using System.IO;
     using System.Linq;
-    using System.Text;
     using System.Windows.Input;
     using AbstractionLayer.IOServices;
     using AbstractionLayer.UIServices;
+    using Data.Implementations;
     using MediaInfoHelper;
     using ToolBox.Commands;
     using ToolBox.Extensions;
@@ -211,13 +210,15 @@
 
             var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.{Constants.ManualFileExtensionName}");
 
-            using (var fs = _ioServices.GetFileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                using (var sw = new StreamWriter(fs, Encoding.UTF8))
-                {
-                    sw.WriteLine(_note?.Trim());
-                }
-            }
+            var title = this.Title.Trim();
+
+            var length = (uint)(new TimeSpan(this.LengthHours, this.LengthMinutes, this.LengthSeconds)).TotalSeconds;
+
+            var note = this.Note.Trim();
+
+            var info = ManualWatchesProcessor.CreateInfo(title, length, note);
+
+            SerializerHelper.Serialize(_ioServices, fileName, info);
 
             var watchedOn = this.WatchedOn.ToUniversalTime().Conform();
 
@@ -225,12 +226,10 @@
 
             fi.CreationTimeUtc = watchedOn;
 
-            var length = (uint)(new TimeSpan(this.LengthHours, this.LengthMinutes, this.LengthSeconds)).TotalSeconds;
-
             var entry = new FileEntry()
             {
                 FullName = fileName,
-                Title = this.Title.Trim(),
+                Title = title,
                 VideoLength = length,
                 CreationTime = watchedOn,
                 Users = new User[]
@@ -249,9 +248,9 @@
                 },
             };
 
-            if (!string.IsNullOrWhiteSpace(this.Note))
+            if (!string.IsNullOrEmpty(note))
             {
-                entry.Note = this.Note.Trim();
+                entry.Note = note;
             }
 
             _dataManager.TryCreateEntry(entry);

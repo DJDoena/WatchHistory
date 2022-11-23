@@ -17,7 +17,6 @@
         internal void Update(FileEntry entry)
         {
             YoutubeVideoInfo info = null;
-
             if (_ioServices.File.Exists(entry.FullName))
             {
                 try

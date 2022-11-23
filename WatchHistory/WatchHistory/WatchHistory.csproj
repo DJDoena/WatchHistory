@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="Data\FilesExtensions.cs" />
     <Compile Include="Data\Implementations\DataUpgrader.cs" />
+    <Compile Include="Data\Implementations\ManualWatchesProcessor.cs" />
     <Compile Include="Data\Implementations\YoutubeWatchesProcessor.cs" />
     <Compile Include="Data\Implementations\DvdWatchesProcessor.cs" />
     <Compile Include="Data\Implementations\FilesModelConverter.cs" />
@@ -268,16 +269,16 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DoenaSoft.AbstractionLayer">
-      <Version>2.0.4</Version>
+      <Version>2.0.6</Version>
     </PackageReference>
     <PackageReference Include="DoenaSoft.DVDProfilerXML">
-      <Version>4.1.2</Version>
+      <Version>4.1.4</Version>
     </PackageReference>
     <PackageReference Include="DoenaSoft.MediaInfoHelper">
-      <Version>2.0.0</Version>
+      <Version>2.0.7</Version>
     </PackageReference>
     <PackageReference Include="DoenaSoft.ToolBox">
-      <Version>1.0.7</Version>
+      <Version>1.0.8</Version>
     </PackageReference>
     <PackageReference Include="Extended.Wpf.Toolkit">
       <Version>4.4.0</Version>
