@@ -9,24 +9,40 @@
 
     internal sealed class AddWatchedOnViewModel : IAddWatchedOnViewModel
     {
-        private DateTime _date;
+        private static DateTime _date;
 
-        private byte _hour;
+        private static byte _hour;
 
-        private byte _minute;
+        private static byte _minute;
 
-        public AddWatchedOnViewModel()
+        static AddWatchedOnViewModel()
         {
-            AcceptCommand = new RelayCommand(Accept);
-            CancelCommand = new RelayCommand(Cancel);
-
-            var now = DateTime.Now;
+            var now = DateTime.Now.AddMinutes(-1);
 
             _date = now.Date;
 
             _hour = (byte)now.Hour;
 
             _minute = (byte)now.Minute;
+        }
+
+        public AddWatchedOnViewModel()
+        {
+            AcceptCommand = new RelayCommand(Accept);
+            CancelCommand = new RelayCommand(Cancel);
+
+            var lastWatched = new DateTime(_date.Year, _date.Month, Date.Day, _hour, _minute, 0);
+
+            if (lastWatched != new DateTime(2000, 1, 1, 0, 0, 0))
+            {
+                lastWatched = lastWatched.AddMinutes(1);
+
+                _date = lastWatched.Date;
+
+                _hour = (byte)lastWatched.Hour;
+
+                _minute = (byte)lastWatched.Minute;
+            }
         }
 
         #region IAddWatchedOnViewModel
