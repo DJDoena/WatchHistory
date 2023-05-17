@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using AbstractionLayer.IOServices;
@@ -434,6 +435,20 @@
 
         private bool IsProtected(FileEntry entry) => entry.FullName.EndsWith(Constants.DvdProfilerFileExtension) && entry.VideoLengthSpecified;
 
+        private bool DriveIsAvailable(FileEntry value)
+        {
+            try
+            {
+                var drive = new DriveInfo(value.FullName.Substring(0, 1));
+
+                return drive.IsReady;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private void GetActualFiles()
         {
             this.IsSynchronizing = true;
@@ -528,7 +543,10 @@
         {
             lock (_filesLock)
             {
-                if ((actualFileKeys.Contains(file.Key) == false) && (this.HasValidEvents(file.Value) == false) && (this.IsProtected(file.Value) == false))
+                if (!actualFileKeys.Contains(file.Key)
+                    && !this.HasValidEvents(file.Value)
+                    && !this.IsProtected(file.Value)
+                    && this.DriveIsAvailable(file.Value))
                 {
                     this.Files.Remove(file.Key);
                 }
