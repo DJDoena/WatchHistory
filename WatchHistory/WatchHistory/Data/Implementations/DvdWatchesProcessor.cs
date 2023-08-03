@@ -1,13 +1,13 @@
-﻿namespace DoenaSoft.WatchHistory.Data.Implementations
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using AbstractionLayer.IOServices;
-    using MediaInfoHelper;
-    using ToolBox.Extensions;
-    using WatchHistory.Implementations;
-    using MIH = MediaInfoHelper.DVDProfiler;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.MediaInfoHelper.Helpers;
+using DoenaSoft.ToolBox.Extensions;
+using DoenaSoft.WatchHistory.Implementations;
+using MIH = DoenaSoft.MediaInfoHelper.DataObjects;
 
+namespace DoenaSoft.WatchHistory.Data.Implementations
+{
     internal sealed class DvdWatchesProcessor
     {
         private readonly IIOServices _ioServices;

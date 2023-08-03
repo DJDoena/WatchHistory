@@ -21,7 +21,7 @@
             if (mediaFileData.HasChanged)
             {
                 entry.CreationTime = mediaFileData.CreationTime;
-                entry.VideoLength = mediaFileData.VideoLength;
+                entry.VideoLength = mediaFileData.Length;
             }
 
             return entry.VideoLength;

@@ -2,6 +2,7 @@
 {
     using System.Text;
     using AbstractionLayer.IOServices;
+    using DoenaSoft.MediaInfoHelper.DataObjects.VideoMetaXml;
     using MediaInfoHelper;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
@@ -35,7 +36,7 @@
 
         private void TryAddVideoInfo(string xmlFile)
         {
-            var info = SerializerHelper.Deserialize<Doc>(_ioServices, xmlFile);
+            var info = SerializerHelper.Deserialize<VideoInfoDocument>(_ioServices, xmlFile);
 
             _entry.VideoLength = info.VideoInfo.Duration;
 

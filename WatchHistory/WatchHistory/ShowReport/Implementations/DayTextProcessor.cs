@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Text;
     using AbstractionLayer.IOServices;
-    using MediaInfoHelper;
+    using DoenaSoft.MediaInfoHelper.Helpers;
     using WatchHistory.Data;
 
     internal sealed class DayTextProcessor : TextProcessorBase
@@ -31,7 +31,7 @@
             var totalLength = Entries.Select(GetVideoLength).Sum();
 
             text.Append("Total: ");
-            text.AppendLine(Helper.FormatTime(totalLength));
+            text.AppendLine(TimeHelper.FormatTime(totalLength));
 
             return text.ToString();
         }

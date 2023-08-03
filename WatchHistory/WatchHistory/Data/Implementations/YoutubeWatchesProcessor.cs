@@ -1,10 +1,10 @@
-﻿namespace DoenaSoft.WatchHistory.Data.Implementations
-{
-    using AbstractionLayer.IOServices;
-    using MediaInfoHelper;
-    using MediaInfoHelper.Youtube;
-    using WatchHistory.Implementations;
+﻿using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.MediaInfoHelper.DataObjects;
+using DoenaSoft.MediaInfoHelper.Helpers;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory.Data.Implementations
+{
     internal sealed class YoutubeWatchesProcessor
     {
         private readonly IIOServices _ioServices;
@@ -16,12 +16,12 @@
 
         internal void Update(FileEntry entry)
         {
-            YoutubeVideoInfo info = null;
+            YoutubeVideo info = null;
             if (_ioServices.File.Exists(entry.FullName))
             {
                 try
                 {
-                    info = SerializerHelper.Deserialize<YoutubeVideoInfo>(_ioServices, entry.FullName);
+                    info = SerializerHelper.Deserialize<YoutubeVideo>(_ioServices, entry.FullName);
                 }
                 catch
                 { }

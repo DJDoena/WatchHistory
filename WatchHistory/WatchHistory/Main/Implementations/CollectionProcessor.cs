@@ -1,14 +1,15 @@
-﻿namespace DoenaSoft.WatchHistory.Main.Implementations
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using AbstractionLayer.IOServices;
-    using Data;
-    using ToolBox.Extensions;
-    using WatchHistory.Implementations;
-    using DVDP = DVDProfiler.DVDProfilerXML.Version400;
-    using MIH = MediaInfoHelper.DVDProfiler;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.ToolBox.Extensions;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Implementations;
+using DVDP = DoenaSoft.DVDProfiler.DVDProfilerXML.Version400;
+using MIHDO = DoenaSoft.MediaInfoHelper.DataObjects;
+using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
 
+namespace DoenaSoft.WatchHistory.Main.Implementations
+{
     internal sealed class CollectionProcessor
     {
         private readonly DVDP.Collection _collection;
@@ -51,7 +52,7 @@
 
             _dataManager.RootFolders = folder.Enumerate().Union(_dataManager.RootFolders);
 
-            _dataManager.FileExtensions = MediaInfoHelper.Constants.DvdProfilerFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
+            _dataManager.FileExtensions = MIHC.DvdProfilerFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
 
             this.CreateCollectionFiles(folder);
         }
@@ -91,9 +92,9 @@
 
         private void CreateCollectionFile(string folder, EpisodeTitle title)
         {
-            var fileName = _ioServices.Path.Combine(folder, title.FileName + MediaInfoHelper.Constants.DvdProfilerFileExtension);
+            var fileName = _ioServices.Path.Combine(folder, title.FileName + MIHC.DvdProfilerFileExtension);
 
-            var watches = new MIH.DvdWatches()
+            var watches = new MIHDO.DvdWatches()
             {
                 Title = title.Title,
                 PurchaseDate = title.PurchaseDate.Date,
@@ -116,14 +117,14 @@
             _dataManager.TryCreateEntry(fileEntry);
         }
 
-        private static MIH.Event ToDvdWatch(DVDP.Event source)
+        private static MIHDO.Event ToDvdWatch(DVDP.Event source)
         {
-            var target = new MIH.Event()
+            var target = new MIHDO.Event()
             {
                 Note = source.Note,
                 Timestamp = source.Timestamp,
-                Type = (MIH.EventType)source.Type,
-                User = new MIH.User()
+                Type = (MIHDO.EventType)source.Type,
+                User = new MIHDO.User()
                 {
                     EmailAddress = source.User?.EmailAddress,
                     FirstName = source.User?.FirstName,

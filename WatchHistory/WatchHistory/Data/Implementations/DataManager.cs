@@ -1,14 +1,16 @@
-﻿namespace DoenaSoft.WatchHistory.Data.Implementations
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using AbstractionLayer.IOServices;
-    using MediaInfoHelper;
-    using ToolBox.Extensions;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.MediaInfoHelper.DataObjects;
+using DoenaSoft.MediaInfoHelper.Readers;
+using DoenaSoft.ToolBox.Extensions;
+using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
 
+namespace DoenaSoft.WatchHistory.Data.Implementations
+{
     internal sealed class DataManager : IDataManager
     {
         private readonly IIOServices _ioServices;
@@ -233,18 +235,18 @@
             return creationTime;
         }
 
-        public MediaFileData DetermineVideoLength(FileEntry entry)
+        public MediaFile DetermineVideoLength(FileEntry entry)
         {
-            MediaFileData mediaFileData;
+            MediaFile mediaFileData;
             try
             {
-                mediaFileData = new MediaFileData(entry.FullName, entry.CreationTime, entry.VideoLength);
+                mediaFileData = new MediaFile(entry.FullName, entry.CreationTime, entry.VideoLength);
 
-                (new VideoReader(mediaFileData, false)).DetermineLength();
+                (new VideoReader(mediaFileData)).DetermineLength();
             }
             catch
             {
-                mediaFileData = new MediaFileData(entry.FullName, entry.CreationTime, 0);
+                mediaFileData = new MediaFile(entry.FullName, entry.CreationTime, 0);
             }
 
             return mediaFileData;
@@ -433,7 +435,7 @@
 
         private static bool HasEvents(User user) => user.Watches?.HasItemsWhere(w => w.SourceSpecified == false && w.Value > _turnOfTheCentury) == true;
 
-        private bool IsProtected(FileEntry entry) => entry.FullName.EndsWith(Constants.DvdProfilerFileExtension) && entry.VideoLengthSpecified;
+        private bool IsProtected(FileEntry entry) => entry.FullName.EndsWith(MIHC.DvdProfilerFileExtension) && entry.VideoLengthSpecified;
 
         private bool DriveIsAvailable(FileEntry value)
         {
@@ -513,15 +515,15 @@
                 (new VideoInfoAdder(_ioServices, entry)).Add();
             }
 
-            if (actualFile.EndsWith(Constants.DvdProfilerFileExtension))
+            if (actualFile.EndsWith(MIHC.DvdProfilerFileExtension))
             {
                 (new DvdWatchesProcessor(_ioServices)).Update(entry);
             }
-            else if (actualFile.EndsWith(Constants.YoutubeFileExtension))
+            else if (actualFile.EndsWith(MIHC.YoutubeFileExtension))
             {
                 (new YoutubeWatchesProcessor(_ioServices)).Update(entry);
             }
-            else if (actualFile.EndsWith(Constants.ManualFileExtension))
+            else if (actualFile.EndsWith(MIHC.ManualFileExtension))
             {
                 (new ManualWatchesProcessor(_ioServices)).Update(entry);
             }

@@ -1,13 +1,13 @@
-﻿namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
-{
-    using System;
-    using System.Linq;
-    using System.Net.Http;
-    using System.Text.RegularExpressions;
-    using System.Web;
-    using MediaInfoHelper.Youtube;
-    using Newtonsoft.Json;
+﻿using System;
+using System.Linq;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Web;
+using DoenaSoft.MediaInfoHelper.DataObjects;
+using Newtonsoft.Json;
 
+namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
+{
     internal class YoutubeManager : IYoutubeManager
     {
         private static readonly Regex _youtubeIdRegex;
@@ -31,7 +31,7 @@
 
         #region IAddYoutubeLink
 
-        public YoutubeVideoInfo GetInfo(string youtubeUrl)
+        public YoutubeVideo GetInfo(string youtubeUrl)
         {
             var id = GetYoutubeId(youtubeUrl);
 
@@ -39,7 +39,7 @@
 
             var responseItem = GetResponse(url);
 
-            var info = new YoutubeVideoInfo()
+            var info = new YoutubeVideo()
             {
                 Id = id,
                 Title = responseItem?.snippet?.title ?? id,

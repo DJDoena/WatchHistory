@@ -1,18 +1,19 @@
-﻿namespace DoenaSoft.WatchHistory.AddManualEntry.Implementations
-{
-    using System;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Windows.Input;
-    using AbstractionLayer.IOServices;
-    using AbstractionLayer.UIServices;
-    using Data.Implementations;
-    using MediaInfoHelper;
-    using ToolBox.Commands;
-    using ToolBox.Extensions;
-    using WatchHistory.Data;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Input;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.AbstractionLayer.UIServices;
+using DoenaSoft.MediaInfoHelper.Helpers;
+using DoenaSoft.ToolBox.Commands;
+using DoenaSoft.ToolBox.Extensions;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Data.Implementations;
+using DoenaSoft.WatchHistory.Implementations;
+using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
 
+namespace DoenaSoft.WatchHistory.AddManualEntry.Implementations
+{
     internal sealed class AddManualEntryViewModel : IAddManualEntryViewModel
     {
         private readonly IDataManager _dataManager;
@@ -206,9 +207,9 @@
 
             _dataManager.RootFolders = folder.Enumerate().Union(_dataManager.RootFolders);
 
-            _dataManager.FileExtensions = Constants.ManualFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
+            _dataManager.FileExtensions = MIHC.ManualFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
 
-            var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.{Constants.ManualFileExtensionName}");
+            var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.{MIHC.ManualFileExtensionName}");
 
             var title = this.Title.Trim();
 

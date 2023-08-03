@@ -1,9 +1,9 @@
-﻿namespace DoenaSoft.WatchHistory.Data
-{
-    using System;
-    using System.Collections.Generic;
-    using MediaInfoHelper;
+﻿using System;
+using System.Collections.Generic;
+using DoenaSoft.MediaInfoHelper.DataObjects;
 
+namespace DoenaSoft.WatchHistory.Data
+{
     internal interface IDataManager
     {
         IEnumerable<string> Users { get; set; }
@@ -40,7 +40,7 @@
 
         DateTime GetCreationTime(FileEntry entry);
 
-        MediaFileData DetermineVideoLength(FileEntry entry);
+        MediaFile DetermineVideoLength(FileEntry entry);
 
         FileEntry TryCreateEntry(FileEntry entry);
     }

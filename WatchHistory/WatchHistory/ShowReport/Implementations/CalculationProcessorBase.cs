@@ -1,11 +1,12 @@
-﻿namespace DoenaSoft.WatchHistory.ShowReport.Implementations
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using MediaInfoHelper;
-    using WatchHistory.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DoenaSoft.MediaInfoHelper.DataObjects;
+using DoenaSoft.MediaInfoHelper.Readers;
+using DoenaSoft.WatchHistory.Data;
 
+namespace DoenaSoft.WatchHistory.ShowReport.Implementations
+{
     internal abstract class CalculationProcessorBase
     {
         protected readonly IDataManager _dataManager;
@@ -31,13 +32,13 @@
 
             foreach (var entry in entries)
             {
-                var mediaFileData = new MediaFileData(entry.FullName, entry.CreationTime, entry.VideoLength);
+                var mediaFileData = new MediaFile(entry.FullName, entry.CreationTime, entry.VideoLength);
 
-                (new VideoReader(mediaFileData, false)).DetermineLength();
+                (new VideoReader(mediaFileData)).DetermineLength();
 
                 if (mediaFileData.HasChanged)
                 {
-                    entry.VideoLength = mediaFileData.VideoLength;
+                    entry.VideoLength = mediaFileData.Length;
                     entry.CreationTime = mediaFileData.CreationTime;
                 }
             }

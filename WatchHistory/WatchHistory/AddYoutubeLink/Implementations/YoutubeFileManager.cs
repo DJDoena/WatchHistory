@@ -1,14 +1,15 @@
-﻿namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
-{
-    using System;
-    using System.Linq;
-    using AbstractionLayer.IOServices;
-    using MediaInfoHelper;
-    using MediaInfoHelper.Youtube;
-    using ToolBox.Extensions;
-    using WatchHistory.Data;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.Linq;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.MediaInfoHelper.DataObjects;
+using DoenaSoft.MediaInfoHelper.Helpers;
+using DoenaSoft.ToolBox.Extensions;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Implementations;
+using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
 
+namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
+{
     internal class YoutubeFileManager
     {
         private readonly IDataManager _dataManager;
@@ -24,7 +25,7 @@
             _userName = userName;
         }
 
-        public void Add(YoutubeVideoInfo info, DateTime watchedOn)
+        public void Add(YoutubeVideo info, DateTime watchedOn)
         {
             _dataManager.Suspend();
 
@@ -38,7 +39,7 @@
             }
         }
 
-        private void TryProcess(YoutubeVideoInfo info, DateTime watchedOn)
+        private void TryProcess(YoutubeVideo info, DateTime watchedOn)
         {
             var folder = _ioServices.Path.Combine(WatchHistory.Environment.MyDocumentsFolder, "Youtube");
 
@@ -49,18 +50,18 @@
 
             _dataManager.RootFolders = folder.Enumerate().Union(_dataManager.RootFolders);
 
-            _dataManager.FileExtensions = Constants.YoutubeFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
+            _dataManager.FileExtensions = MIHC.YoutubeFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
 
             this.CreateYoutubeFile(folder, info, watchedOn);
         }
 
-        private void CreateYoutubeFile(string folder, YoutubeVideoInfo info, DateTime watchedOn)
+        private void CreateYoutubeFile(string folder, YoutubeVideo info, DateTime watchedOn)
         {
             var fileName = info.Id;
 
             _ioServices.Path.GetInvalidFileNameChars().ForEach(c => fileName.Replace(c, '_'));
 
-            fileName = _ioServices.Path.Combine(folder, fileName + MediaInfoHelper.Constants.YoutubeFileExtension);
+            fileName = _ioServices.Path.Combine(folder, fileName + MIHC.YoutubeFileExtension);
 
             SerializerHelper.Serialize(_ioServices, fileName, info);
 

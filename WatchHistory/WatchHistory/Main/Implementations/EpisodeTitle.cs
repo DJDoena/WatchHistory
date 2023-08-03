@@ -1,13 +1,13 @@
-﻿namespace DoenaSoft.WatchHistory.Main.Implementations
-{
-    using System;
-    using System.Collections.Generic;
-    using DVDProfiler.DVDProfilerXML.Version400;
-    using ToolBox.Extensions;
+﻿using System;
+using System.Collections.Generic;
+using DoenaSoft.ToolBox.Extensions;
+using DVDP = DoenaSoft.DVDProfiler.DVDProfilerXML.Version400;
 
+namespace DoenaSoft.WatchHistory.Main.Implementations
+{
     internal sealed class EpisodeTitle : IEquatable<EpisodeTitle>
     {
-        private readonly DVD _dvd;
+        private readonly DVDP.DVD _dvd;
 
         internal string ID => _dvd.ID;
 
@@ -17,9 +17,9 @@
 
         internal DateTime PurchaseDate => _dvd.PurchaseInfo?.Date ?? new DateTime(0);
 
-        internal IEnumerable<Event> Watches => CollectionProcessor.GetWatches(_dvd);
+        internal IEnumerable<DVDP.Event> Watches => CollectionProcessor.GetWatches(_dvd);
 
-        public EpisodeTitle(DVD dvd, string caption)
+        public EpisodeTitle(DVDP.DVD dvd, string caption)
         {
             _dvd = dvd;
 

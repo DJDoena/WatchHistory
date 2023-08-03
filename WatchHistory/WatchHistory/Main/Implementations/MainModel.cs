@@ -1,17 +1,18 @@
-﻿namespace DoenaSoft.WatchHistory.Main.Implementations
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using AbstractionLayer.IOServices;
-    using AbstractionLayer.UIServices;
-    using Data;
-    using DVDProfiler.DVDProfilerXML.Version400;
-    using MediaInfoHelper.Youtube;
-    using ToolBox.Extensions;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.AbstractionLayer.UIServices;
+using DoenaSoft.MediaInfoHelper.DataObjects;
+using DoenaSoft.ToolBox.Extensions;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Implementations;
+using DVDP = DoenaSoft.DVDProfiler.DVDProfilerXML.Version400;
+using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
 
+namespace DoenaSoft.WatchHistory.Main.Implementations
+{
     internal sealed class MainModel : ModelBase, IMainModel
     {
         private readonly IIOServices _ioServices;
@@ -51,7 +52,7 @@
 
             var filteredFiles = notIgnoredFiles.Where(ContainsFilter).ToList();
 
-            var unwatchedFiles = IgnoreWatched 
+            var unwatchedFiles = IgnoreWatched
                 ? filteredFiles.Except(filteredFiles.Where(UserHasWatched)).ToList()
                 : filteredFiles;
 
@@ -66,7 +67,7 @@
             {
                 try
                 {
-                    var collection = SerializerHelper.Deserialize<Collection>(_ioServices, fileName);
+                    var collection = SerializerHelper.Deserialize<DVDP.Collection>(_ioServices, fileName);
 
                     var processor = new CollectionProcessor(collection, _dataManager, _ioServices);
 
@@ -81,15 +82,15 @@
             RaiseFilesChanged(EventArgs.Empty);
         }
 
-        public bool CanPlayFile(FileEntry entry) => _ioServices.GetFileInfo(entry.FullName).Exists && entry.FullName.EndsWith(MediaInfoHelper.Constants.DvdProfilerFileExtension) == false;
+        public bool CanPlayFile(FileEntry entry) => _ioServices.GetFileInfo(entry.FullName).Exists && entry.FullName.EndsWith(MIHC.DvdProfilerFileExtension) == false;
 
         public void PlayFile(FileEntry entry)
         {
             if (CanPlayFile(entry))
             {
-                if (entry.FullName.EndsWith(MediaInfoHelper.Constants.YoutubeFileExtension))
+                if (entry.FullName.EndsWith(MIHC.YoutubeFileExtension))
                 {
-                    var info = SerializerHelper.Deserialize<YoutubeVideoInfo>(_ioServices, entry.FullName);
+                    var info = SerializerHelper.Deserialize<YoutubeVideo>(_ioServices, entry.FullName);
 
                     var url = $"https://www.youtube.com/watch?v={info.Id}";
 

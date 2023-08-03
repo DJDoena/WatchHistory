@@ -1,20 +1,21 @@
-﻿namespace DoenaSoft.WatchHistory.Main.Implementations
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Windows.Input;
-    using AbstractionLayer.IOServices;
-    using Data;
-    using Data.Implementations;
-    using DVDProfiler.DVDProfilerHelper;
-    using ToolBox.Commands;
-    using ToolBox.Extensions;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Input;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.DVDProfiler.DVDProfilerHelper;
+using DoenaSoft.ToolBox.Commands;
+using DoenaSoft.ToolBox.Extensions;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Data.Implementations;
+using DoenaSoft.WatchHistory.Implementations;
+using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
 
+namespace DoenaSoft.WatchHistory.Main.Implementations
+{
     internal sealed class MainViewModel : IMainViewModel
     {
         private readonly IMainModel _model;
@@ -524,7 +525,7 @@
 
             var manualFolder = _ioServices.Path.Combine(WatchHistory.Environment.MyDocumentsFolder, "Manual");
 
-            if (fileEntry.FullName.StartsWith(manualFolder) && fileEntry.FullName.EndsWith(MediaInfoHelper.Constants.ManualFileExtension))
+            if (fileEntry.FullName.StartsWith(manualFolder) && fileEntry.FullName.EndsWith(MIHC.ManualFileExtension))
             {
                 var info = (new ManualWatchesProcessor(_ioServices)).TryGetInfo(fileEntry);
 

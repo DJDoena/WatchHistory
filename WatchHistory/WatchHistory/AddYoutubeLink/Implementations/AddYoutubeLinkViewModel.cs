@@ -1,15 +1,15 @@
-﻿namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
-{
-    using System;
-    using System.ComponentModel;
-    using System.Windows.Input;
-    using AbstractionLayer.IOServices;
-    using AbstractionLayer.UIServices;
-    using MediaInfoHelper.Youtube;
-    using ToolBox.Commands;
-    using WatchHistory.Data;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Input;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.AbstractionLayer.UIServices;
+using DoenaSoft.MediaInfoHelper.DataObjects;
+using DoenaSoft.ToolBox.Commands;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
+{
     internal sealed class AddYoutubeLinkViewModel : IAddYoutubeLinkViewModel
     {
         private readonly IYoutubeManager _youtubeManager;
@@ -30,7 +30,7 @@
 
         private byte _minute;
 
-        private YoutubeVideoInfo _videoInfo;
+        private YoutubeVideo _videoInfo;
 
         public AddYoutubeLinkViewModel(IDataManager dataManager, IIOServices ioServices, IUIServices uiServices, IClipboardServices clipboardServices, IYoutubeManager youtubeManager, string userName)
         {

@@ -1,9 +1,9 @@
-﻿namespace DoenaSoft.WatchHistory.AddYoutubeLink
-{
-    using MediaInfoHelper.Youtube;
+﻿using DoenaSoft.MediaInfoHelper.DataObjects;
 
+namespace DoenaSoft.WatchHistory.AddYoutubeLink
+{
     internal interface IYoutubeManager
     {
-        YoutubeVideoInfo GetInfo(string youtubeId);
+        YoutubeVideo GetInfo(string youtubeId);
     }
 }

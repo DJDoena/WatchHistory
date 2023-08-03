@@ -1,11 +1,12 @@
-﻿namespace DoenaSoft.WatchHistory.Data
-{
-    using System;
-    using System.Diagnostics;
-    using System.Xml;
-    using System.Xml.Serialization;
-    using MediaInfoHelper;
+﻿using System;
+using System.Diagnostics;
+using System.Xml;
+using System.Xml.Serialization;
+using DoenaSoft.MediaInfoHelper.Helpers;
+using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
 
+namespace DoenaSoft.WatchHistory.Data
+{
     [XmlRoot]
     public sealed class Files
     {
@@ -121,7 +122,7 @@
             {
                 var parts = fullName.Split('\\');
 
-                var end = fullName.EndsWith(Constants.YoutubeFileExtension)
+                var end = fullName.EndsWith(MIHC.YoutubeFileExtension)
                     ? parts.Length - 1
                     : parts.Length;
 

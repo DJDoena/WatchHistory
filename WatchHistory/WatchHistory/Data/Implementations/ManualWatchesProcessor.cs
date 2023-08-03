@@ -1,10 +1,10 @@
-﻿namespace DoenaSoft.WatchHistory.Data.Implementations
-{
-    using AbstractionLayer.IOServices;
-    using DoenaSoft.AbstractionLayer.IOServices.Implementations;
-    using MediaInfoHelper.Youtube;
-    using WatchHistory.Implementations;
+﻿using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.AbstractionLayer.IOServices.Implementations;
+using DoenaSoft.MediaInfoHelper.DataObjects;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory.Data.Implementations
+{
     internal sealed class ManualWatchesProcessor
     {
         private readonly IIOServices _ioServices;
@@ -33,14 +33,14 @@
             entry.CreationTime = (new FileInfo(entry.FullName)).CreationTimeUtc;
         }
 
-        internal ManualVideoInfo TryGetInfo(FileEntry entry)
+        internal ManualVideo TryGetInfo(FileEntry entry)
         {
-            ManualVideoInfo info = null;
+            ManualVideo info = null;
             if (_ioServices.File.Exists(entry.FullName))
             {
                 try
                 {
-                    info = SerializerHelper.Deserialize<ManualVideoInfo>(_ioServices, entry.FullName);
+                    info = SerializerHelper.Deserialize<ManualVideo>(_ioServices, entry.FullName);
                 }
                 catch
                 { }
@@ -49,7 +49,7 @@
             return info;
         }
 
-        internal static ManualVideoInfo CreateInfo(string title, uint length, string note) => new ManualVideoInfo()
+        internal static ManualVideo CreateInfo(string title, uint length, string note) => new ManualVideo()
         {
             Title = title,
             RunningTime = length,

@@ -1,12 +1,12 @@
-﻿namespace DoenaSoft.WatchHistory.ShowReport.Implementations
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using MediaInfoHelper;
-    using WatchHistory.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using DoenaSoft.MediaInfoHelper.Helpers;
+using DoenaSoft.WatchHistory.Data;
 
+namespace DoenaSoft.WatchHistory.ShowReport.Implementations
+{
     internal sealed class MonthTextProcessor : TextProcessorBase
     {
         internal MonthTextProcessor(DateTime date, IEnumerable<FileEntry> entries, string userName) : base(date, entries, userName)
@@ -24,10 +24,10 @@
             text.AppendLine(Date.ToString("MMMM yyyy"));
 
             text.Append("Total: ");
-            text.AppendLine(Helper.FormatTime(totalLength));
+            text.AppendLine(TimeHelper.FormatTime(totalLength));
 
             text.Append("Average: ");
-            text.Append(Helper.FormatTime(dailyLength));
+            text.Append(TimeHelper.FormatTime(dailyLength));
             text.AppendLine(" per day");
 
             return text.ToString();

@@ -1,15 +1,15 @@
-﻿namespace DoenaSoft.WatchHistory.Main.Implementations
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using DVDProfiler.DVDProfilerXML.Version400;
-    using ToolBox.Extensions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using DoenaSoft.ToolBox.Extensions;
+using DVDP = DoenaSoft.DVDProfiler.DVDProfilerXML.Version400;
 
+namespace DoenaSoft.WatchHistory.Main.Implementations
+{
     internal sealed class EpisodeTitleProcessor
     {
-        private readonly Collection _collection;
+        private readonly DVDP.Collection _collection;
 
-        public EpisodeTitleProcessor(Collection collection)
+        public EpisodeTitleProcessor(DVDP.Collection collection)
         {
             _collection = collection;
         }
@@ -29,11 +29,11 @@
             return titles;
         }
 
-        private IEnumerable<EpisodeTitle> GetEpisodeTitles(DVD dvd, IEnumerable<object> castOrCrew)
+        private IEnumerable<EpisodeTitle> GetEpisodeTitles(DVDP.DVD dvd, IEnumerable<object> castOrCrew)
         {
-            var dividers = castOrCrew.EnsureNotNull().OfType<Divider>();
+            var dividers = castOrCrew.EnsureNotNull().OfType<DVDP.Divider>();
 
-            var episodeDividers = dividers.Where(div => div?.Type == DividerType.Episode);
+            var episodeDividers = dividers.Where(div => div?.Type == DVDP.DividerType.Episode);
 
             var captions = episodeDividers.Select(divider => divider.Caption);
 
