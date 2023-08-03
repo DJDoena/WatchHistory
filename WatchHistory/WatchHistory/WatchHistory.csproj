@@ -276,7 +276,7 @@
       <Version>4.1.8</Version>
     </PackageReference>
     <PackageReference Include="DoenaSoft.MediaInfoHelper">
-      <Version>3.0.2</Version>
+      <Version>3.0.3</Version>
     </PackageReference>
     <PackageReference Include="DoenaSoft.ToolBox">
       <Version>1.0.8</Version>
