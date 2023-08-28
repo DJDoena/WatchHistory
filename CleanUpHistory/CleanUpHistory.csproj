@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net472</TargetFrameworks>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<Platforms>x86;x64</Platforms>
+		<Platforms>x64</Platforms>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>DoenaSoft.WatchHistory</RootNamespace>
 		<AssemblyName>CleanUpHistory</AssemblyName>

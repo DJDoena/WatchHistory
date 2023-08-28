@@ -6,7 +6,7 @@
 		<UseWPF>true</UseWPF>
 		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<Platforms>x86;x64</Platforms>
+		<Platforms>x64</Platforms>
 		<OutputType>WinExe</OutputType>
 		<RootNamespace>DoenaSoft.WatchHistory</RootNamespace>
 		<AssemblyName>WatchHistory</AssemblyName>
