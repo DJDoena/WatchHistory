@@ -1,17 +1,16 @@
-﻿namespace DoenaSoft.WatchHistory.IgnoreEntry.Implementations
-{
-    using System;
-    using System.Collections;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Windows.Input;
-    using AbstractionLayer.IOServices;
-    using Data;
-    using ToolBox.Commands;
-    using WatchHistory.IgnoreEntry;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Input;
+using DoenaSoft.AbstractionLayer.Commands;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory.IgnoreEntry.Implementations
+{
     internal sealed class IgnoreEntryViewModel : IIgnoreEntryViewModel
     {
         private readonly IIgnoreEntryModel _model;

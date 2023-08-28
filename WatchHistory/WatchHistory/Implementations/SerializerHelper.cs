@@ -1,8 +1,8 @@
-﻿namespace DoenaSoft.WatchHistory.Implementations
-{
-    using AbstractionLayer.IOServices;
-    using ToolBox.Generics;
+﻿using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.ToolBox.Generics;
 
+namespace DoenaSoft.WatchHistory.Implementations
+{
     internal static class SerializerHelper
     {
         internal static T Deserialize<T>(IIOServices ioServices, string fileName) where T : class, new()

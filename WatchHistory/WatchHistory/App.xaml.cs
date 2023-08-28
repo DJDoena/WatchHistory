@@ -1,17 +1,15 @@
-﻿namespace DoenaSoft.WatchHistory
-{
-    using System;
-    using System.Diagnostics;
-    using System.Windows;
-    using AbstractionLayer.IOServices;
-    using AbstractionLayer.IOServices.Implementations;
-    using AbstractionLayer.UIServices;
-    using AbstractionLayer.UIServices.Implementations;
-    using Data;
-    using Data.Implementations;
-    using DVDProfiler.DVDProfilerHelper;
-    using Implementations;
+﻿using System;
+using System.Diagnostics;
+using System.Windows;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.AbstractionLayer.UIServices;
+using DoenaSoft.DVDProfiler.DVDProfilerHelper;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Data.Implementations;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory
+{
     public partial class App : Application
     {
         private bool _cancelStartUp;

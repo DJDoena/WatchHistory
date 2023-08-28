@@ -5,9 +5,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using DoenaSoft.AbstractionLayer.Commands;
 using DoenaSoft.AbstractionLayer.IOServices;
 using DoenaSoft.DVDProfiler.DVDProfilerHelper;
-using DoenaSoft.ToolBox.Commands;
 using DoenaSoft.ToolBox.Extensions;
 using DoenaSoft.WatchHistory.Data;
 using DoenaSoft.WatchHistory.Data.Implementations;
@@ -443,6 +443,8 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             fileEntry.VideoLength = runningTime.Value;
 
             _dataManager.SaveDataFile();
+
+            this.OnModelFilesChanged(this, EventArgs.Empty);
         }
 
         private bool CanAddYoutubeLink() => false; //IsNotSynchronizing;
@@ -484,7 +486,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
             var fileEntry = GetFileEntry(parameter);
 
-            var title = _windowFactory.OpenEditTitleWindow(fileEntry.Title);
+            var title = _windowFactory.OpenEditTitleWindow(fileEntry);
 
             if (title == null)
             {
@@ -494,6 +496,8 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             fileEntry.Title = title;
 
             _dataManager.SaveDataFile();
+
+            this.OnModelFilesChanged(this, EventArgs.Empty);
         }
 
         private void ShowReport()

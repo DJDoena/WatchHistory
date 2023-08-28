@@ -1,12 +1,12 @@
-﻿namespace DoenaSoft.WatchHistory.EditNote.Implementations
-{
-    using System;
-    using System.ComponentModel;
-    using System.Windows.Input;
-    using AbstractionLayer.UIServices;
-    using ToolBox.Commands;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Input;
+using DoenaSoft.AbstractionLayer.Commands;
+using DoenaSoft.AbstractionLayer.UIServices;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory.EditNote.Implementations
+{
     internal sealed class EditNoteViewModel : IEditNoteViewModel
     {
         private string _note;

@@ -1,9 +1,9 @@
-﻿namespace DoenaSoft.WatchHistory
-{
-    using System;
-    using System.Collections.Generic;
-    using Data;
+﻿using System;
+using System.Collections.Generic;
+using DoenaSoft.WatchHistory.Data;
 
+namespace DoenaSoft.WatchHistory
+{
     internal interface IWindowFactory
     {
         void OpenSelectUserWindow();
@@ -24,7 +24,7 @@
 
         void OpenAddManualEntryWindow(string userName);
 
-        string OpenEditTitleWindow(string title);
+        string OpenEditTitleWindow(FileEntry entry);
 
         void OpenShowReportWindow(string userName);
 

@@ -1,9 +1,8 @@
-﻿namespace DoenaSoft.WatchHistory.Data.Implementations
-{
-    using AbstractionLayer.IOServices;
-    using AbstractionLayer.IOServices.Implementations;
-    using WatchHistory.Implementations;
+﻿using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory.Data.Implementations
+{
     internal sealed class DataUpgrader
     {
         private readonly IIOServices _ioServices;

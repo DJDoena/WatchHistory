@@ -1,16 +1,16 @@
-﻿namespace DoenaSoft.WatchHistory.ShowReport.Implementations
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Windows.Input;
-    using AbstractionLayer.IOServices;
-    using AbstractionLayer.UIServices;
-    using ToolBox.Commands;
-    using WatchHistory.Data;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Input;
+using DoenaSoft.AbstractionLayer.Commands;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.AbstractionLayer.UIServices;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory.ShowReport.Implementations
+{
     internal sealed class ShowReportViewModel : IShowReportViewModel
     {
         private readonly IDataManager _dataManager;

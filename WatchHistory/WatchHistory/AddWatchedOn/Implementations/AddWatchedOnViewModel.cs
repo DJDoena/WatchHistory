@@ -1,12 +1,12 @@
-﻿namespace DoenaSoft.WatchHistory.AddWatchedOn.Implementations
-{
-    using System;
-    using System.ComponentModel;
-    using System.Windows.Input;
-    using AbstractionLayer.UIServices;
-    using ToolBox.Commands;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Input;
+using DoenaSoft.AbstractionLayer.Commands;
+using DoenaSoft.AbstractionLayer.UIServices;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory.AddWatchedOn.Implementations
+{
     internal sealed class AddWatchedOnViewModel : IAddWatchedOnViewModel
     {
         private static DateTime _date;

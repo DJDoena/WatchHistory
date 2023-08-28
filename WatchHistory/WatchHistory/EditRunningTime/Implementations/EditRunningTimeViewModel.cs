@@ -1,12 +1,12 @@
-﻿namespace DoenaSoft.WatchHistory.EditRunningTime.Implementations
-{
-    using System;
-    using System.ComponentModel;
-    using System.Windows.Input;
-    using AbstractionLayer.UIServices;
-    using ToolBox.Commands;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Input;
+using DoenaSoft.AbstractionLayer.Commands;
+using DoenaSoft.AbstractionLayer.UIServices;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory.EditRunningTime.Implementations
+{
     internal sealed class EditRunningTimeViewModel : IEditRunningTimeViewModel
     {
         private byte _hours;

@@ -1,13 +1,12 @@
-﻿namespace DoenaSoft.WatchHistory
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using AbstractionLayer.IOServices;
-    using AbstractionLayer.IOServices.Implementations;
-    using Data;
-    using WatchHistory.Implementations;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Implementations;
 
+namespace DoenaSoft.WatchHistory
+{
     public static class Program
     {
         private static IIOServices IOServices { get; set; }

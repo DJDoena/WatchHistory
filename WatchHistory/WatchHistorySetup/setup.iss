@@ -1,14 +1,14 @@
 [Setup]
 AppName=WatchHistory
 AppId=WatchHistory
-AppVerName=WatchHistory 1.4.6.10
+AppVerName=WatchHistory 1.4.6.11
 AppCopyright=Copyright © Doena Soft. 2016 - 2023
 AppPublisher=Doena Soft.
 ; AppPublisherURL=http://doena-journal.net/en/dvd-profiler-tools/
 DefaultDirName={commonpf32}\Doena Soft.\WatchHistory
 DefaultGroupName=WatchHistory
 DirExistsWarning=No
-SourceDir=..\WatchHistory\bin\x64\Release\WatchHistory
+SourceDir=..\WatchHistory\bin\x64\Release\net472
 Compression=zip/9
 AppMutex=WatchHistory
 OutputBaseFilename=WatchHistorySetup
@@ -21,7 +21,7 @@ ShowLanguageDialog=no
 VersionInfoCompany=Doena Soft.
 VersionInfoCopyright=2016 - 2023
 VersionInfoDescription=WatchHistory Setup
-VersionInfoVersion=1.4.6.10
+VersionInfoVersion=1.4.6.11
 UninstallDisplayIcon={app}\djdsoft.ico
 
 [Languages]
@@ -35,16 +35,43 @@ Name: "full"; Description: "Full installation"
 
 [Files]
 Source: "djdsoft.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "DoenaSoft.AbstractionLayer.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.AbstractionLayer.IO.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.AbstractionLayer.UI.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.AbstractionLayer.Web.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.AbstractionLayer.WinForms.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.AbstractionLayer.WPF.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DoenaSoft.DVDProfilerHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DoenaSoft.DVDProfilerXML.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.MediaInfoHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.ToolBox.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Xceed.Wpf.Toolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "NReco.VideoInfo.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
-
 Source: "de\DoenaSoft.DVDProfilerHelper.resources.dll"; DestDir: "{app}\de"; Flags: ignoreversion
+
+Source: "Microsoft.Win32.Registry.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "NAudio.Asio.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "NAudio.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "NAudio.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "NAudio.Midi.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "NAudio.Wasapi.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "NAudio.WinForms.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "NAudio.WinMM.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "NReco.VideoInfo.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "policy.2.0.taglib-sharp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "System.Buffers.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "System.Memory.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "System.Numerics.Vectors.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "System.Resources.Extensions.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "System.Runtime.CompilerServices.Unsafe.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "System.Security.AccessControl.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "System.Security.Principal.Windows.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "taglib-sharp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Xceed.Wpf.AvalonDock.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Xceed.Wpf.AvalonDock.Themes.Aero.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Xceed.Wpf.AvalonDock.Themes.Metro.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Xceed.Wpf.AvalonDock.Themes.VS2010.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Xceed.Wpf.Toolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

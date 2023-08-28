@@ -1,13 +1,13 @@
-﻿namespace DoenaSoft.WatchHistory.Implementations
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using AbstractionLayer.IOServices;
-    using AbstractionLayer.UIServices;
-    using Data;
-    using Main.Implementations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using DoenaSoft.AbstractionLayer.IOServices;
+using DoenaSoft.AbstractionLayer.UIServices;
+using DoenaSoft.WatchHistory.Data;
+using DoenaSoft.WatchHistory.Main.Implementations;
 
+namespace DoenaSoft.WatchHistory.Implementations
+{
     internal sealed class WindowFactory : IWindowFactory
     {
         private readonly IIOServices _ioServices;
@@ -167,9 +167,9 @@
             window.ShowDialog();
         }
 
-        public string OpenEditTitleWindow(string title)
+        public string OpenEditTitleWindow(FileEntry entry)
         {
-            var viewModel = new EditTitle.Implementations.EditTitleViewModel(title);
+            var viewModel = new EditTitle.Implementations.EditTitleViewModel(entry);
 
             var window = new EditTitle.Implementations.EditTitleWindow()
             {
