@@ -8,23 +8,23 @@
     {
         public SelectUserWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            ISelectUserViewModel viewModel = (ISelectUserViewModel)DataContext;
+            var viewModel = (ISelectUserViewModel)this.DataContext;
 
-            viewModel.Closing += OnViewModelClosing;
+            viewModel.Closing += this.OnViewModelClosing;
         }
 
         private void OnViewModelClosing(object sender, EventArgs e)
         {
-            ISelectUserViewModel viewModel = (ISelectUserViewModel)DataContext;
+            var viewModel = (ISelectUserViewModel)this.DataContext;
 
-            viewModel.Closing -= OnViewModelClosing;
+            viewModel.Closing -= this.OnViewModelClosing;
 
-            Close();
+            this.Close();
         }
     }
 }

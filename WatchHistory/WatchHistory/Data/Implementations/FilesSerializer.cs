@@ -24,11 +24,11 @@
             IEnumerable<FileEntry> entries;
             try
             {
-                entries = ReadXml(fileName);
+                entries = this.ReadXml(fileName);
             }
             catch
             {
-                entries = TryRestoreDataBackup(fileName);
+                entries = this.TryRestoreDataBackup(fileName);
             }
 
             return entries ?? Enumerable.Empty<FileEntry>();
@@ -52,7 +52,7 @@
                 {
                     try
                     {
-                        entries = ReadXml(newFileName);
+                        entries = this.ReadXml(newFileName);
 
                         break;
                     }
@@ -75,7 +75,7 @@
             }
             catch
             {
-                defaultValues = TryRestoreSettingsBackup(fileName);
+                defaultValues = this.TryRestoreSettingsBackup(fileName);
             }
 
             if (defaultValues == null)
@@ -170,7 +170,7 @@
                     _ioServices.File.Delete(newFileName);
                 }
 
-                for (int backupIndex = MaximumBackups - 1; backupIndex > 0; backupIndex--)
+                for (var backupIndex = MaximumBackups - 1; backupIndex > 0; backupIndex--)
                 {
                     var oldFileName = fileBaseName + "." + backupIndex.ToString() + extension;
 
@@ -195,7 +195,7 @@
 
         #endregion
 
-        private IEnumerable<FileEntry> ReadXml(string fileName) => (IsVersion2File(fileName)) ? ReadVersion2File(fileName) : ReadVersion1File(fileName);
+        private IEnumerable<FileEntry> ReadXml(string fileName) => (this.IsVersion2File(fileName)) ? this.ReadVersion2File(fileName) : this.ReadVersion1File(fileName);
 
         private bool IsVersion2File(string fileName)
         {

@@ -11,7 +11,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         internal string ID => _dvd.ID;
 
-        internal string FileName => $"{ID}  {Title.ReplaceInvalidFileNameChars('_')}";
+        internal string FileName => $"{this.ID}  {this.Title.ReplaceInvalidFileNameChars('_')}";
 
         internal string Title { get; }
 
@@ -23,11 +23,11 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
         {
             _dvd = dvd;
 
-            Title = $"{dvd.Title}: {caption}";
+            this.Title = $"{dvd.Title}: {caption}";
 
             if ((dvd.OriginalTitle.IsNotEmpty()) && (dvd.Title != dvd.OriginalTitle))
             {
-                Title += $" ({dvd.OriginalTitle})";
+                this.Title += $" ({dvd.OriginalTitle})";
             }
         }
 
@@ -40,11 +40,11 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
                 return false;
             }
 
-            bool equals = ID == other.ID;
+            var equals = this.ID == other.ID;
 
             if (equals)
             {
-                equals = Title == other.Title;
+                equals = this.Title == other.Title;
             }
 
             return equals;
@@ -52,8 +52,8 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         #endregion
 
-        public override int GetHashCode() => ID.GetHashCode() ^ Title.GetHashCode();
+        public override int GetHashCode() => this.ID.GetHashCode() ^ this.Title.GetHashCode();
 
-        public override bool Equals(object obj) => Equals(obj as EpisodeTitle);
+        public override bool Equals(object obj) => this.Equals(obj as EpisodeTitle);
     }
 }

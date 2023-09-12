@@ -120,7 +120,7 @@
 
         private static void TryPadName(ref string part)
         {
-            if (uint.TryParse(part, out uint number))
+            if (uint.TryParse(part, out var number))
             {
                 part = number.ToString("D10");
             }

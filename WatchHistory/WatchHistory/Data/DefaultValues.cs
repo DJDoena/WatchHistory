@@ -18,9 +18,9 @@
 
         public DefaultValues()
         {
-            Users = new[] { Constants.DefaultUser };
+            this.Users = new[] { Constants.DefaultUser };
 
-            FileExtensions = new[] { "avi", "mp4", "mkv" };
+            this.FileExtensions = new[] { "avi", "mp4", "mkv" };
         }
     }
 }

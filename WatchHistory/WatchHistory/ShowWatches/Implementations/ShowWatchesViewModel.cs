@@ -10,7 +10,7 @@
         {
             var ordered = watches.OrderByDescending(w => w.Value);
 
-            Watches = ordered.Select(GetWatchViewModel);
+            this.Watches = ordered.Select(this.GetWatchViewModel);
         }
 
         #region IShowWatchesViewModel

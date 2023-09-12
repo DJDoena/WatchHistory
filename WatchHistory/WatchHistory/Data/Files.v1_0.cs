@@ -89,7 +89,7 @@
                     return null;
                 }
 
-                for (int i = 0; i < _watches.Length; i++)
+                for (var i = 0; i < _watches.Length; i++)
                 {
                     _watches[i] = _watches[i].ToUniversalTime();
                 }

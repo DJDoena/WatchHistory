@@ -21,14 +21,14 @@
         {
             var text = new StringBuilder();
 
-            text.AppendLine(Date.ToShortDateString());
+            text.AppendLine(this.Date.ToShortDateString());
 
-            foreach (var entry in Entries)
+            foreach (var entry in this.Entries)
             {
-                text.AppendLine(GetTitle(entry));
+                text.AppendLine(this.GetTitle(entry));
             }
 
-            var totalLength = Entries.Select(GetVideoLength).Sum();
+            var totalLength = this.Entries.Select(this.GetVideoLength).Sum();
 
             text.Append("Total: ");
             text.AppendLine(TimeHelper.FormatTime(totalLength));
@@ -36,7 +36,7 @@
             return text.ToString();
         }
 
-        protected override bool WatchContainsDate(Watch watch) => watch.MatchesDay(Date);
+        protected override bool WatchContainsDate(Watch watch) => watch.MatchesDay(this.Date);
 
         private string GetTitle(FileEntry entry)
         {

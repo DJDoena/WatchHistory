@@ -10,7 +10,7 @@
         {
         }
 
-        internal override IEnumerable<FileEntry> GetEntries() => GetFilteredEntries();
+        internal override IEnumerable<FileEntry> GetEntries() => this.GetFilteredEntries();
 
         protected override bool WatchContainsDate(Watch watch) => watch.MatchesMonth(_date);
     }

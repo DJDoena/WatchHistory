@@ -3,7 +3,6 @@
     using System.Text;
     using AbstractionLayer.IOServices;
     using DoenaSoft.MediaInfoHelper.DataObjects.VideoMetaXml;
-    using MediaInfoHelper;
     using ToolBox.Extensions;
     using WatchHistory.Implementations;
 
@@ -27,7 +26,7 @@
             {
                 try
                 {
-                    TryAddVideoInfo(xmlFile);
+                    this.TryAddVideoInfo(xmlFile);
                 }
                 catch
                 { }

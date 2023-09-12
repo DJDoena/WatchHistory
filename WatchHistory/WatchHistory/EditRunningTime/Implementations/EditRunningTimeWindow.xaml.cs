@@ -8,25 +8,25 @@
     {
         public EditRunningTimeWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            IEditRunningTimeViewModel viewModel = (IEditRunningTimeViewModel)DataContext;
+            var viewModel = (IEditRunningTimeViewModel)this.DataContext;
 
-            viewModel.Closing += OnClosing;
+            viewModel.Closing += this.OnClosing;
         }
 
         private void OnClosing(object sender, CloseEventArgs e)
         {
-            IEditRunningTimeViewModel viewModel = (IEditRunningTimeViewModel)DataContext;
+            var viewModel = (IEditRunningTimeViewModel)this.DataContext;
 
-            viewModel.Closing -= OnClosing;
+            viewModel.Closing -= this.OnClosing;
 
-            DialogResult = e.Result == Result.OK;
+            this.DialogResult = e.Result == Result.OK;
 
-            Close();
+            this.Close();
         }
     }
 }

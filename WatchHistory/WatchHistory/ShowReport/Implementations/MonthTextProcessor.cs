@@ -15,13 +15,13 @@ namespace DoenaSoft.WatchHistory.ShowReport.Implementations
 
         internal override string GetText()
         {
-            var totalLength = Entries.Select(GetVideoLength).Sum();
+            var totalLength = this.Entries.Select(this.GetVideoLength).Sum();
 
-            var dailyLength = GetDailyLength(totalLength);
+            var dailyLength = this.GetDailyLength(totalLength);
 
             var text = new StringBuilder();
 
-            text.AppendLine(Date.ToString("MMMM yyyy"));
+            text.AppendLine(this.Date.ToString("MMMM yyyy"));
 
             text.Append("Total: ");
             text.AppendLine(TimeHelper.FormatTime(totalLength));
@@ -33,13 +33,13 @@ namespace DoenaSoft.WatchHistory.ShowReport.Implementations
             return text.ToString();
         }
 
-        protected override bool WatchContainsDate(Watch watch) => watch.MatchesMonth(Date);
+        protected override bool WatchContainsDate(Watch watch) => watch.MatchesMonth(this.Date);
 
         private uint GetDailyLength(uint totalLength)
         {
-            var daysInMonth = DateTime.DaysInMonth(Date.Year, Date.Month);
+            var daysInMonth = DateTime.DaysInMonth(this.Date.Year, this.Date.Month);
 
-            var lastDayInMonth = new DateTime(Date.Year, Date.Month, daysInMonth);
+            var lastDayInMonth = new DateTime(this.Date.Year, this.Date.Month, daysInMonth);
 
             var today = DateTime.Now.Date;
 

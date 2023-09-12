@@ -39,9 +39,9 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
             _clipboardServices = clipboardServices;
 
             _youtubeFileManager = new YoutubeFileManager(dataManager, ioServices, userName);
-            AcceptCommand = new RelayCommand(Accept);
-            CancelCommand = new RelayCommand(Cancel);
-            ScanCommand = new RelayCommand(Scan);
+            this.AcceptCommand = new RelayCommand(this.Accept);
+            this.CancelCommand = new RelayCommand(this.Cancel);
+            this.ScanCommand = new RelayCommand(this.Scan);
 
             var now = DateTime.Now;
 
@@ -69,7 +69,7 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
                 {
                     _youtubeLink = value;
 
-                    RaisePropertyChanged(nameof(YoutubeLink));
+                    this.RaisePropertyChanged(nameof(this.YoutubeLink));
                 }
             }
         }
@@ -83,7 +83,7 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
                 {
                     _youtubeTitle = value;
 
-                    RaisePropertyChanged(nameof(YoutubeTitle));
+                    this.RaisePropertyChanged(nameof(this.YoutubeTitle));
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
                 {
                     _date = value;
 
-                    RaisePropertyChanged(nameof(Date));
+                    this.RaisePropertyChanged(nameof(this.Date));
                 }
             }
         }
@@ -111,7 +111,7 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
                 {
                     _hour = value;
 
-                    RaisePropertyChanged(nameof(Hour));
+                    this.RaisePropertyChanged(nameof(this.Hour));
                 }
             }
         }
@@ -125,7 +125,7 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
                 {
                     _minute = value;
 
-                    RaisePropertyChanged(nameof(Minute));
+                    this.RaisePropertyChanged(nameof(this.Minute));
                 }
             }
         }
@@ -140,18 +140,18 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
 
         #endregion
 
-        private DateTime WatchedOn => new DateTime(Date.Year, Date.Month, Date.Day, Hour, Minute, 0);
+        private DateTime WatchedOn => new DateTime(this.Date.Year, this.Date.Month, this.Date.Day, this.Hour, this.Minute, 0);
 
         private void Accept()
         {
-            if (_videoInfo == null && !GetYoutubeInfo())
+            if (_videoInfo == null && !this.GetYoutubeInfo())
             {
                 return;
             }
 
-            if (!string.IsNullOrEmpty(YoutubeTitle))
+            if (!string.IsNullOrEmpty(this.YoutubeTitle))
             {
-                _videoInfo.Title = YoutubeTitle; //user input wins
+                _videoInfo.Title = this.YoutubeTitle; //user input wins
             }
 
             if (string.IsNullOrEmpty(_videoInfo.Title))
@@ -161,7 +161,7 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
                 return;
             }
 
-            _youtubeFileManager.Add(_videoInfo, WatchedOn);
+            _youtubeFileManager.Add(_videoInfo, this.WatchedOn);
 
             Closing?.Invoke(this, new CloseEventArgs(Result.OK));
         }
@@ -172,11 +172,11 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
 
         private void Scan()
         {
-            YoutubeTitle = string.Empty;
+            this.YoutubeTitle = string.Empty;
 
-            if (GetYoutubeInfo())
+            if (this.GetYoutubeInfo())
             {
-                YoutubeTitle = _videoInfo.Title;
+                this.YoutubeTitle = _videoInfo.Title;
             }
         }
 
@@ -184,19 +184,19 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
         {
             _videoInfo = null;
 
-            if (string.IsNullOrEmpty(YoutubeLink) && _clipboardServices.ContainsText)
+            if (string.IsNullOrEmpty(this.YoutubeLink) && _clipboardServices.ContainsText)
             {
-                TryGetLinkFromClipboard();
+                this.TryGetLinkFromClipboard();
             }
 
-            if (string.IsNullOrEmpty(YoutubeLink))
+            if (string.IsNullOrEmpty(this.YoutubeLink))
             {
                 _uiServices.ShowMessageBox("You need to enter a valid Youtube URL", "Missing URL", Buttons.OK, Icon.Warning);
             }
 
             try
             {
-                _videoInfo = _youtubeManager.GetInfo(YoutubeLink);
+                _videoInfo = _youtubeManager.GetInfo(this.YoutubeLink);
             }
             catch (YoutubeUrlException ex)
             {
@@ -214,7 +214,7 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
         {
             try
             {
-                YoutubeLink = _clipboardServices.GetText();
+                this.YoutubeLink = _clipboardServices.GetText();
             }
             catch
             { }

@@ -5,8 +5,8 @@ using DoenaSoft.ToolBox.Extensions;
 using DoenaSoft.WatchHistory.Data;
 using DoenaSoft.WatchHistory.Implementations;
 using DVDP = DoenaSoft.DVDProfiler.DVDProfilerXML.Version400;
-using MIHDO = DoenaSoft.MediaInfoHelper.DataObjects;
 using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
+using MIHDO = DoenaSoft.MediaInfoHelper.DataObjects;
 
 namespace DoenaSoft.WatchHistory.Main.Implementations
 {

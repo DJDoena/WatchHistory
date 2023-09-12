@@ -38,7 +38,7 @@
             {
                 if (_created == null)
                 {
-                    GetFileSystemWatchers().ForEach(fsw => fsw.Created += OnFileCreated);
+                    this.GetFileSystemWatchers().ForEach(fsw => fsw.Created += this.OnFileCreated);
                 }
 
                 _created += value;
@@ -49,7 +49,7 @@
 
                 if (_created == null)
                 {
-                    GetFileSystemWatchers().ForEach(fsw => fsw.Created -= OnFileCreated);
+                    this.GetFileSystemWatchers().ForEach(fsw => fsw.Created -= this.OnFileCreated);
                 }
             }
         }
@@ -60,7 +60,7 @@
             {
                 if (_deleted == null)
                 {
-                    GetFileSystemWatchers().ForEach(fsw => fsw.Deleted += OnFileDeleted);
+                    this.GetFileSystemWatchers().ForEach(fsw => fsw.Deleted += this.OnFileDeleted);
                 }
 
                 _deleted += value;
@@ -71,7 +71,7 @@
 
                 if (_deleted == null)
                 {
-                    GetFileSystemWatchers().ForEach(fsw => fsw.Deleted -= OnFileDeleted);
+                    this.GetFileSystemWatchers().ForEach(fsw => fsw.Deleted -= this.OnFileDeleted);
                 }
             }
         }
@@ -82,7 +82,7 @@
             {
                 if (_renamed == null)
                 {
-                    GetFileSystemWatchers().ForEach(fsw => fsw.Renamed += OnFileRenamed);
+                    this.GetFileSystemWatchers().ForEach(fsw => fsw.Renamed += this.OnFileRenamed);
                 }
 
                 _renamed += value;
@@ -93,7 +93,7 @@
 
                 if (_renamed == null)
                 {
-                    GetFileSystemWatchers().ForEach(fsw => fsw.Renamed -= OnFileRenamed);
+                    this.GetFileSystemWatchers().ForEach(fsw => fsw.Renamed -= this.OnFileRenamed);
                 }
             }
         }
@@ -103,16 +103,16 @@
         {
             var watchers = new Dictionary<string, Dictionary<string, IFileSystemWatcher>>();
 
-            rootFolders.ForEach(folder => CreateWatchers(folder, fileExtensions, watchers));
+            rootFolders.ForEach(folder => this.CreateWatchers(folder, fileExtensions, watchers));
 
-            DisposeFileSystemWatchers();
+            this.DisposeFileSystemWatchers();
 
             _fileSystemWatchers = watchers;
         }
 
         public void Suspend()
         {
-            DisposeFileSystemWatchers();
+            this.DisposeFileSystemWatchers();
 
             _fileSystemWatchers = null;
         }
@@ -125,7 +125,7 @@
         {
             if (_ioServices.Folder.Exists(rootFolder))
             {
-                var byExtensionWatchers = CreateWatchers(rootFolder, fileExtensions);
+                var byExtensionWatchers = this.CreateWatchers(rootFolder, fileExtensions);
 
                 byFolderWatchers.Add(rootFolder, byExtensionWatchers);
             }
@@ -136,14 +136,14 @@
         {
             var watchers = new Dictionary<string, IFileSystemWatcher>();
 
-            fileExtensions.ForEach(ext => AddWatcher(watchers, rootFolder, ext));
+            fileExtensions.ForEach(ext => this.AddWatcher(watchers, rootFolder, ext));
 
             return watchers;
         }
 
         private void AddWatcher(Dictionary<string, IFileSystemWatcher> watchers, string rootFolder, string fileExtension)
         {
-            var fsw = CreateWatcher(rootFolder, fileExtension);
+            var fsw = this.CreateWatcher(rootFolder, fileExtension);
 
             watchers.Add(fileExtension, fsw);
         }
@@ -154,42 +154,42 @@
 
             if (_created != null)
             {
-                fsw.Created += OnFileCreated;
+                fsw.Created += this.OnFileCreated;
             }
 
             if (_deleted != null)
             {
-                fsw.Deleted += OnFileDeleted;
+                fsw.Deleted += this.OnFileDeleted;
             }
 
             if (_renamed != null)
             {
-                fsw.Renamed += OnFileRenamed;
+                fsw.Renamed += this.OnFileRenamed;
             }
 
-            fsw.EnableRaisingEvents = (IsSuspended == false);
+            fsw.EnableRaisingEvents = (this.IsSuspended == false);
             fsw.IncludeSubFolders = true;
 
             return fsw;
         }
 
-        private void DisposeFileSystemWatchers() => GetFileSystemWatchers().ForEach(DisposeFileSystemWatcher);
+        private void DisposeFileSystemWatchers() => this.GetFileSystemWatchers().ForEach(this.DisposeFileSystemWatcher);
 
         private void DisposeFileSystemWatcher(IFileSystemWatcher fsw)
         {
             if (_created != null)
             {
-                fsw.Created -= OnFileCreated;
+                fsw.Created -= this.OnFileCreated;
             }
 
             if (_deleted != null)
             {
-                fsw.Deleted -= OnFileDeleted;
+                fsw.Deleted -= this.OnFileDeleted;
             }
 
             if (_renamed != null)
             {
-                fsw.Renamed -= OnFileRenamed;
+                fsw.Renamed -= this.OnFileRenamed;
             }
 
             fsw.EnableRaisingEvents = false;

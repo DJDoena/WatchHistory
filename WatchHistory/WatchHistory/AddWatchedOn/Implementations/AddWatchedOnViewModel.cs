@@ -28,10 +28,10 @@ namespace DoenaSoft.WatchHistory.AddWatchedOn.Implementations
 
         public AddWatchedOnViewModel()
         {
-            AcceptCommand = new RelayCommand(Accept);
-            CancelCommand = new RelayCommand(Cancel);
+            this.AcceptCommand = new RelayCommand(this.Accept);
+            this.CancelCommand = new RelayCommand(this.Cancel);
 
-            var lastWatched = new DateTime(_date.Year, _date.Month, Date.Day, _hour, _minute, 0);
+            var lastWatched = new DateTime(_date.Year, _date.Month, this.Date.Day, _hour, _minute, 0);
 
             if (lastWatched != new DateTime(2000, 1, 1, 0, 0, 0))
             {
@@ -60,7 +60,7 @@ namespace DoenaSoft.WatchHistory.AddWatchedOn.Implementations
                 {
                     _date = value;
 
-                    RaisePropertyChanged(nameof(Date));
+                    this.RaisePropertyChanged(nameof(this.Date));
                 }
             }
         }
@@ -74,7 +74,7 @@ namespace DoenaSoft.WatchHistory.AddWatchedOn.Implementations
                 {
                     _hour = value;
 
-                    RaisePropertyChanged(nameof(Hour));
+                    this.RaisePropertyChanged(nameof(this.Hour));
                 }
             }
         }
@@ -88,12 +88,12 @@ namespace DoenaSoft.WatchHistory.AddWatchedOn.Implementations
                 {
                     _minute = value;
 
-                    RaisePropertyChanged(nameof(Minute));
+                    this.RaisePropertyChanged(nameof(this.Minute));
                 }
             }
         }
 
-        public DateTime WatchedOn => new DateTime(Date.Year, Date.Month, Date.Day, Hour, Minute, 0);
+        public DateTime WatchedOn => new DateTime(this.Date.Year, this.Date.Month, this.Date.Day, this.Hour, this.Minute, 0);
 
         public event EventHandler<CloseEventArgs> Closing;
 

@@ -7,6 +7,6 @@
     {
         public Result Result { get; }
 
-        public CloseEventArgs(Result result) => Result = result;
+        public CloseEventArgs(Result result) => this.Result = result;
     }
 }

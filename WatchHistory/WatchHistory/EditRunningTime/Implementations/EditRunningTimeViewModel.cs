@@ -17,8 +17,8 @@ namespace DoenaSoft.WatchHistory.EditRunningTime.Implementations
 
         public EditRunningTimeViewModel(uint seconds)
         {
-            AcceptCommand = new RelayCommand(Accept);
-            CancelCommand = new RelayCommand(Cancel);
+            this.AcceptCommand = new RelayCommand(this.Accept);
+            this.CancelCommand = new RelayCommand(this.Cancel);
 
             _hours = (byte)(seconds / 3600);
 
@@ -44,7 +44,7 @@ namespace DoenaSoft.WatchHistory.EditRunningTime.Implementations
                 {
                     _hours = value;
 
-                    RaisePropertyChanged(nameof(Hours));
+                    this.RaisePropertyChanged(nameof(this.Hours));
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace DoenaSoft.WatchHistory.EditRunningTime.Implementations
                 {
                     _minutes = value;
 
-                    RaisePropertyChanged(nameof(Minutes));
+                    this.RaisePropertyChanged(nameof(this.Minutes));
                 }
             }
         }
@@ -72,12 +72,12 @@ namespace DoenaSoft.WatchHistory.EditRunningTime.Implementations
                 {
                     _seconds = value;
 
-                    RaisePropertyChanged(nameof(Seconds));
+                    this.RaisePropertyChanged(nameof(this.Seconds));
                 }
             }
         }
 
-        public uint RunningTime => (uint)(new TimeSpan(Hours, Minutes, Seconds)).TotalSeconds;
+        public uint RunningTime => (uint)(new TimeSpan(this.Hours, this.Minutes, this.Seconds)).TotalSeconds;
 
         public event EventHandler<CloseEventArgs> Closing;
 

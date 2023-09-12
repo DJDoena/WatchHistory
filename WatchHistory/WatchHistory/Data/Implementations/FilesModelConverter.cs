@@ -18,7 +18,7 @@
         {
             newFiles.Entries = new FileEntry[oldFiles.Entries.Length];
 
-            for (int entryIndex = 0; entryIndex < oldFiles.Entries.Length; entryIndex++)
+            for (var entryIndex = 0; entryIndex < oldFiles.Entries.Length; entryIndex++)
             {
                 CopyEntry(oldFiles, newFiles, entryIndex);
             }
@@ -53,7 +53,7 @@
         {
             newEntry.Users = new User[oldEntry.Users.Length];
 
-            for (int userIndex = 0; userIndex < oldEntry.Users.Length; userIndex++)
+            for (var userIndex = 0; userIndex < oldEntry.Users.Length; userIndex++)
             {
                 CopyUser(oldEntry, newEntry, userIndex);
             }
@@ -92,7 +92,7 @@
         {
             newUser.Watches = new Watch[oldUser.Watches.Length];
 
-            for (int watchIndex = 0; watchIndex < oldUser.Watches.Length; watchIndex++)
+            for (var watchIndex = 0; watchIndex < oldUser.Watches.Length; watchIndex++)
             {
                 var oldWatch = oldUser.Watches[watchIndex];
 

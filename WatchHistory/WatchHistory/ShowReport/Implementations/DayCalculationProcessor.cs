@@ -12,9 +12,9 @@
 
         internal override IEnumerable<FileEntry> GetEntries()
         {
-            var entries = GetFilteredEntries();
+            var entries = this.GetFilteredEntries();
 
-            entries.Sort(CompareWatchDates);
+            entries.Sort(this.CompareWatchDates);
 
             return entries;
         }

@@ -48,7 +48,7 @@ namespace DoenaSoft.WatchHistory.Implementations
             {
                 var user = _dataManager.Users.FirstOrDefault() ?? Constants.DefaultUser;
 
-                OpenMainWindow(user);
+                this.OpenMainWindow(user);
             }
         }
 

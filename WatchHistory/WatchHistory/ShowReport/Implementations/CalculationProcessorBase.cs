@@ -28,7 +28,7 @@ namespace DoenaSoft.WatchHistory.ShowReport.Implementations
 
         protected List<FileEntry> GetFilteredEntries()
         {
-            var entries = _dataManager.GetFiles().Where(ContainsUserWithWatchedDate).ToList();
+            var entries = _dataManager.GetFiles().Where(this.ContainsUserWithWatchedDate).ToList();
 
             foreach (var entry in entries)
             {
@@ -46,6 +46,6 @@ namespace DoenaSoft.WatchHistory.ShowReport.Implementations
             return entries;
         }
 
-        private bool ContainsUserWithWatchedDate(FileEntry entry) => entry.GetWatchesByUserAndWatchDate(_userName, WatchContainsDate).Any();
+        private bool ContainsUserWithWatchedDate(FileEntry entry) => entry.GetWatchesByUserAndWatchDate(_userName, this.WatchContainsDate).Any();
     }
 }

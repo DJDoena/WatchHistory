@@ -15,7 +15,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
 
         internal void Update(FileEntry entry)
         {
-            var info = TryGetInfo(entry);
+            var info = this.TryGetInfo(entry);
 
             if (info == null)
             {

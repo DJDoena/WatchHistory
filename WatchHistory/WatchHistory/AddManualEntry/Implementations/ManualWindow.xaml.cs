@@ -8,27 +8,27 @@
     {
         public AddManualEntryWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var viewModel = (IAddManualEntryViewModel)DataContext;
+            var viewModel = (IAddManualEntryViewModel)this.DataContext;
 
-            viewModel.Closing += OnClosing;
+            viewModel.Closing += this.OnClosing;
         }
 
         private void OnClosing(object sender, CloseEventArgs e)
         {
-            var viewModel = (IAddManualEntryViewModel)DataContext;
+            var viewModel = (IAddManualEntryViewModel)this.DataContext;
 
-            viewModel.Closing -= OnClosing;
+            viewModel.Closing -= this.OnClosing;
 
-            DialogResult = e.Result == Result.OK
+            this.DialogResult = e.Result == Result.OK
                 ? true
                 : false;
 
-            Close();
+            this.Close();
         }
     }
 }

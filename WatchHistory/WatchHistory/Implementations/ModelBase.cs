@@ -37,7 +37,7 @@
                 {
                     _filter = value;
 
-                    RaiseFilesChanged(EventArgs.Empty);
+                    this.RaiseFilesChanged(EventArgs.Empty);
                 }
             }
         }
@@ -51,7 +51,7 @@
                 {
                     _searchInPath = value;
 
-                    RaiseFilesChanged(EventArgs.Empty);
+                    this.RaiseFilesChanged(EventArgs.Empty);
                 }
             }
         }
@@ -62,7 +62,7 @@
             {
                 if (_filesChanged == null)
                 {
-                    _dataManager.FilesChanged += OnDataManagerFilesChanged;
+                    _dataManager.FilesChanged += this.OnDataManagerFilesChanged;
                 }
 
                 _filesChanged += value;
@@ -73,16 +73,16 @@
 
                 if (_filesChanged == null)
                 {
-                    _dataManager.FilesChanged -= OnDataManagerFilesChanged;
+                    _dataManager.FilesChanged -= this.OnDataManagerFilesChanged;
                 }
             }
         }
 
         #region UserIgnores
 
-        protected bool UserIgnores(FileEntry file) => file.Users?.HasItemsWhere(UserIgnores) == true;
+        protected bool UserIgnores(FileEntry file) => file.Users?.HasItemsWhere(this.UserIgnores) == true;
 
-        private bool UserIgnores(User user) => IsUser(user) && user.Ignore;
+        private bool UserIgnores(User user) => this.IsUser(user) && user.Ignore;
 
         #endregion
 
@@ -90,17 +90,17 @@
 
         #region ContainsFilter
 
-        protected bool ContainsFilter(FileEntry file) => ContainsFilter(file, Filter.Trim().Split(' '));
+        protected bool ContainsFilter(FileEntry file) => this.ContainsFilter(file, this.Filter.Trim().Split(' '));
 
-        private bool ContainsFilter(FileEntry file, IEnumerable<string> filters) => filters.All(filter => ContainsFilter(file, filter));
+        private bool ContainsFilter(FileEntry file, IEnumerable<string> filters) => filters.All(filter => this.ContainsFilter(file, filter));
 
         private bool ContainsFilter(FileEntry file, string filter)
         {
             var contains = file.TitleSpecified
                   ? ContainsFilter(file.Title, filter)
-                  : ContainsFilterInFileName(file, filter);
+                  : this.ContainsFilterInFileName(file, filter);
 
-            if (!contains && SearchInPath)
+            if (!contains && this.SearchInPath)
             {
                 contains = ContainsFilter(file.FullName, filter);
             }
@@ -110,7 +110,7 @@
 
         private bool ContainsFilterInFileName(FileEntry file, string filter)
         {
-            var fileName = CutRootFolders(file.FullName);
+            var fileName = this.CutRootFolders(file.FullName);
 
             var contains = ContainsFilter(fileName, filter);
 
@@ -128,7 +128,7 @@
 
         #endregion
 
-        private void OnDataManagerFilesChanged(object sender, EventArgs e) => RaiseFilesChanged(e);
+        private void OnDataManagerFilesChanged(object sender, EventArgs e) => this.RaiseFilesChanged(e);
 
         protected void RaiseFilesChanged(EventArgs e) => _filesChanged?.Invoke(this, e);
     }

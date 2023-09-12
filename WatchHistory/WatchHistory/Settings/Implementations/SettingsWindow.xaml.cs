@@ -7,23 +7,23 @@
     {
         public SettingsWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            ISettingsViewModel viewModel = (ISettingsViewModel)DataContext;
+            var viewModel = (ISettingsViewModel)this.DataContext;
 
-            viewModel.Closing += OnClosing;
+            viewModel.Closing += this.OnClosing;
         }
 
         private void OnClosing(object sender, EventArgs e)
         {
-            ISettingsViewModel viewModel = (ISettingsViewModel)DataContext;
+            var viewModel = (ISettingsViewModel)this.DataContext;
 
-            viewModel.Closing -= OnClosing;
+            viewModel.Closing -= this.OnClosing;
 
-            Close();
+            this.Close();
         }
     }
 }

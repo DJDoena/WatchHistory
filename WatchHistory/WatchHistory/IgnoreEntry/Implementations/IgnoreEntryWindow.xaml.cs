@@ -6,7 +6,7 @@
     {
         public IgnoreEntryWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

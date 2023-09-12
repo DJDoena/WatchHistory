@@ -32,7 +32,7 @@ namespace DoenaSoft.WatchHistory.IgnoreEntry.Implementations
             _ioServices = ioServices;
             _userName = userName;
 
-            UndoIgnoreCommand = new ParameterizedRelayCommand(UndoIgnore);
+            this.UndoIgnoreCommand = new ParameterizedRelayCommand(this.UndoIgnore);
         }
 
         #region INotifyPropertyChanged
@@ -43,7 +43,7 @@ namespace DoenaSoft.WatchHistory.IgnoreEntry.Implementations
             {
                 if (_propertyChanged == null)
                 {
-                    _model.FilesChanged += OnModelFilesChanged;
+                    _model.FilesChanged += this.OnModelFilesChanged;
                 }
 
                 _propertyChanged += value;
@@ -54,7 +54,7 @@ namespace DoenaSoft.WatchHistory.IgnoreEntry.Implementations
 
                 if (_propertyChanged == null)
                 {
-                    _model.FilesChanged -= OnModelFilesChanged;
+                    _model.FilesChanged -= this.OnModelFilesChanged;
                 }
             }
         }
@@ -72,7 +72,7 @@ namespace DoenaSoft.WatchHistory.IgnoreEntry.Implementations
                 {
                     _model.Filter = value;
 
-                    RaisePropertyChanged(nameof(Filter));
+                    this.RaisePropertyChanged(nameof(this.Filter));
                 }
             }
         }
@@ -86,7 +86,7 @@ namespace DoenaSoft.WatchHistory.IgnoreEntry.Implementations
                 {
                     _model.SearchInPath = value;
 
-                    RaisePropertyChanged(nameof(SearchInPath));
+                    this.RaisePropertyChanged(nameof(this.SearchInPath));
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace DoenaSoft.WatchHistory.IgnoreEntry.Implementations
             _dataManager.SaveDataFile();
         }
 
-        private void OnModelFilesChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(Entries));
+        private void OnModelFilesChanged(object sender, EventArgs e) => this.RaisePropertyChanged(nameof(this.Entries));
 
         private void RaisePropertyChanged(string attribute) => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }

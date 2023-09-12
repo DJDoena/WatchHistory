@@ -13,8 +13,8 @@ namespace DoenaSoft.WatchHistory.EditNote.Implementations
 
         public EditNoteViewModel(string note)
         {
-            AcceptCommand = new RelayCommand(Accept);
-            CancelCommand = new RelayCommand(Cancel);
+            this.AcceptCommand = new RelayCommand(this.Accept);
+            this.CancelCommand = new RelayCommand(this.Cancel);
 
             _note = note;
         }
@@ -34,7 +34,7 @@ namespace DoenaSoft.WatchHistory.EditNote.Implementations
                 {
                     _note = value?.Trim();
 
-                    RaisePropertyChanged(nameof(Note));
+                    this.RaisePropertyChanged(nameof(this.Note));
                 }
             }
         }

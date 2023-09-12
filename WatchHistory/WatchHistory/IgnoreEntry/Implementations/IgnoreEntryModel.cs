@@ -16,9 +16,9 @@
         {
             var allFiles = _dataManager.GetFiles();
 
-            var ignoredFiles = allFiles.Where(UserIgnores);
+            var ignoredFiles = allFiles.Where(this.UserIgnores);
 
-            var filteredFiles = ignoredFiles.Where(ContainsFilter);
+            var filteredFiles = ignoredFiles.Where(this.ContainsFilter);
 
             var result = filteredFiles.ToList();
 

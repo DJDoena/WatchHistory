@@ -126,7 +126,7 @@ namespace DoenaSoft.WatchHistory.Data
                     ? parts.Length - 1
                     : parts.Length;
 
-                for (int partIndex = 0; partIndex < end; partIndex++)
+                for (var partIndex = 0; partIndex < end; partIndex++)
                 {
                     parts[partIndex] = parts[partIndex].ToLowerInvariant().TrimEnd('.');
                 }
@@ -146,7 +146,7 @@ namespace DoenaSoft.WatchHistory.Data
                 return false;
             }
 
-            bool equals = this.Key == other.Key;
+            var equals = this.Key == other.Key;
 
             return equals;
         }

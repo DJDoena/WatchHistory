@@ -24,12 +24,12 @@
 
         public FileEntryViewModel(FileEntry entry, string userName, IDataManager dataManager, IIOServices ioServices)
         {
-            Entry = entry;
+            this.Entry = entry;
             _userName = userName;
             _dataManager = dataManager;
             _ioServices = ioServices;
 
-            _user = TryGetUser();
+            _user = this.TryGetUser();
         }
 
         #region INotifyPropertyChanged
@@ -42,14 +42,14 @@
                 {
                     if (_user != null)
                     {
-                        _user.WatchesChanged += OnWatchesChanged;
+                        _user.WatchesChanged += this.OnWatchesChanged;
                     }
                     else
                     {
-                        Entry.UsersChanged += OnUsersChanged;
+                        this.Entry.UsersChanged += this.OnUsersChanged;
                     }
 
-                    Entry.VideoLengthChanged += OnVideoLengthChanged;
+                    this.Entry.VideoLengthChanged += this.OnVideoLengthChanged;
                 }
 
                 _propertyChanged += value;
@@ -60,15 +60,15 @@
 
                 if (_propertyChanged == null)
                 {
-                    Entry.VideoLengthChanged -= OnVideoLengthChanged;
+                    this.Entry.VideoLengthChanged -= this.OnVideoLengthChanged;
 
                     if (_user != null)
                     {
-                        _user.WatchesChanged -= OnWatchesChanged;
+                        _user.WatchesChanged -= this.OnWatchesChanged;
                     }
                     else
                     {
-                        Entry.UsersChanged -= OnUsersChanged;
+                        this.Entry.UsersChanged -= this.OnUsersChanged;
                     }
                 }
             }
@@ -84,12 +84,12 @@
         {
             get
             {
-                if (Entry.TitleSpecified)
+                if (this.Entry.TitleSpecified)
                 {
-                    return (Entry.Title);
+                    return (this.Entry.Title);
                 }
 
-                var fileInfo = _ioServices.GetFileInfo(Entry.FullName);
+                var fileInfo = _ioServices.GetFileInfo(this.Entry.FullName);
 
                 var folderName = fileInfo.FolderName;
 
@@ -118,7 +118,7 @@
         {
             get
             {
-                var lastWatched = _dataManager.GetLastWatched(Entry, _userName);
+                var lastWatched = _dataManager.GetLastWatched(this.Entry, _userName);
 
                 var text = string.Empty;
 
@@ -135,7 +135,7 @@
         {
             get
             {
-                var creationTime = Entry.GetCreationTime(_dataManager);
+                var creationTime = this.Entry.GetCreationTime(_dataManager);
 
                 var text = string.Empty;
 
@@ -152,7 +152,7 @@
         {
             get
             {
-                var runningTime = Entry.GetVideoLength(_dataManager);
+                var runningTime = this.Entry.GetVideoLength(_dataManager);
 
                 var text = string.Empty;
 
@@ -165,30 +165,30 @@
             }
         }
 
-        public Brush Color => _ioServices.File.Exists(Entry.FullName) ? Brushes.Black : Brushes.Red;
+        public Brush Color => _ioServices.File.Exists(this.Entry.FullName) ? Brushes.Black : Brushes.Red;
 
         #endregion
 
-        private User TryGetUser() => Entry.Users?.Where(item => item.UserName == _userName).FirstOrDefault();
+        private User TryGetUser() => this.Entry.Users?.Where(item => item.UserName == _userName).FirstOrDefault();
 
         private void OnUsersChanged(object sender, EventArgs e)
         {
-            _user = TryGetUser();
+            _user = this.TryGetUser();
 
             if (_user != null)
             {
                 if (_propertyChanged != null)
                 {
-                    Entry.UsersChanged -= OnUsersChanged;
+                    this.Entry.UsersChanged -= this.OnUsersChanged;
 
-                    _user.WatchesChanged += OnWatchesChanged;
+                    _user.WatchesChanged += this.OnWatchesChanged;
                 }
             }
         }
 
-        private void OnWatchesChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(LastWatched));
+        private void OnWatchesChanged(object sender, EventArgs e) => this.RaisePropertyChanged(nameof(this.LastWatched));
 
-        private void OnVideoLengthChanged(object sender, EventArgs e) => RaisePropertyChanged(nameof(RunningTime));
+        private void OnVideoLengthChanged(object sender, EventArgs e) => this.RaisePropertyChanged(nameof(this.RunningTime));
 
         private void RaisePropertyChanged(string attribute) => _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
     }

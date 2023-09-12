@@ -15,9 +15,9 @@
 
         protected TextProcessorBase(DateTime date, IEnumerable<FileEntry> entries, string userName)
         {
-            Date = date.Date;
-            Entries = entries;
-            UserName = userName;
+            this.Date = date.Date;
+            this.Entries = entries;
+            this.UserName = userName;
         }
 
         internal abstract string GetText();
@@ -26,13 +26,13 @@
 
         protected uint GetVideoLength(FileEntry entry)
         {
-            var watches = entry.GetWatchesByUserAndWatchDate(UserName, WatchContainsDate).ToList();
+            var watches = entry.GetWatchesByUserAndWatchDate(this.UserName, this.WatchContainsDate).ToList();
 
             var singleLength = entry.VideoLength;
 
             var fullLength = (uint)(singleLength * watches.Count);
 
             return fullLength;
-        }        
+        }
     }
 }

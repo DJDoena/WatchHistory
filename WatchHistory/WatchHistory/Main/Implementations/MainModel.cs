@@ -25,7 +25,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
         {
             _ioServices = ioServices;
             _uiServices = uiServices;
-            IgnoreWatched = true;
+            this.IgnoreWatched = true;
         }
 
         #region IMainModel
@@ -39,7 +39,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
                 {
                     _ignoreWatched = value;
 
-                    RaiseFilesChanged(EventArgs.Empty);
+                    this.RaiseFilesChanged(EventArgs.Empty);
                 }
             }
         }
@@ -48,12 +48,12 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
         {
             var allFiles = _dataManager.GetFiles().ToList();
 
-            var notIgnoredFiles = allFiles.Except(allFiles.Where(UserIgnores));
+            var notIgnoredFiles = allFiles.Except(allFiles.Where(this.UserIgnores));
 
-            var filteredFiles = notIgnoredFiles.Where(ContainsFilter).ToList();
+            var filteredFiles = notIgnoredFiles.Where(this.ContainsFilter).ToList();
 
-            var unwatchedFiles = IgnoreWatched
-                ? filteredFiles.Except(filteredFiles.Where(UserHasWatched)).ToList()
+            var unwatchedFiles = this.IgnoreWatched
+                ? filteredFiles.Except(filteredFiles.Where(this.UserHasWatched)).ToList()
                 : filteredFiles;
 
             return unwatchedFiles;
@@ -79,14 +79,14 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
                 }
             }
 
-            RaiseFilesChanged(EventArgs.Empty);
+            this.RaiseFilesChanged(EventArgs.Empty);
         }
 
         public bool CanPlayFile(FileEntry entry) => _ioServices.GetFileInfo(entry.FullName).Exists && entry.FullName.EndsWith(MIHC.DvdProfilerFileExtension) == false;
 
         public void PlayFile(FileEntry entry)
         {
-            if (CanPlayFile(entry))
+            if (this.CanPlayFile(entry))
             {
                 if (entry.FullName.EndsWith(MIHC.YoutubeFileExtension))
                 {
@@ -107,7 +107,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         public void OpenFileLocation(FileEntry entry)
         {
-            if (CanOpenFileLocation(entry))
+            if (this.CanOpenFileLocation(entry))
             {
                 Process.Start("explorer.exe", $"/select, \"{entry.FullName}\"");
             }
@@ -117,9 +117,9 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
         #region UserHasWatched
 
-        private bool UserHasWatched(FileEntry file) => file.Users?.HasItemsWhere(UserHasWatched) == true;
+        private bool UserHasWatched(FileEntry file) => file.Users?.HasItemsWhere(this.UserHasWatched) == true;
 
-        private bool UserHasWatched(Data.User user) => (IsUser(user)) && (user.Watches?.HasItems() == true);
+        private bool UserHasWatched(Data.User user) => (this.IsUser(user)) && (user.Watches?.HasItems() == true);
 
         #endregion
 

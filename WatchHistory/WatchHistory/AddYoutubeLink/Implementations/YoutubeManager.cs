@@ -43,7 +43,7 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
             {
                 Id = id,
                 Title = responseItem?.snippet?.title ?? id,
-                RunningTime = GetRunningTime(responseItem?.contentDetails?.duration),
+                RunningTime = this.GetRunningTime(responseItem?.contentDetails?.duration),
                 Published = responseItem?.snippet?.publishedAt ?? DateTime.UtcNow,
             };
 
@@ -115,11 +115,11 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
                 return 0;
             }
 
-            var hours = TryGetNumber(match.Groups["Hours"]);
+            var hours = this.TryGetNumber(match.Groups["Hours"]);
 
-            var minutes = TryGetNumber(match.Groups["Minutes"]);
+            var minutes = this.TryGetNumber(match.Groups["Minutes"]);
 
-            var seconds = TryGetNumber(match.Groups["Seconds"]);
+            var seconds = this.TryGetNumber(match.Groups["Seconds"]);
 
             var runningTime = (uint)(new TimeSpan(hours, minutes, seconds)).TotalSeconds;
 

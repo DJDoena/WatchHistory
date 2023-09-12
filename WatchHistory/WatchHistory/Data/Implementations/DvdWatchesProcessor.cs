@@ -50,21 +50,21 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
 
             if (watches.Watches?.Length > 0)
             {
-                UpdateFromDvdWatches(entry, watches.Watches);
+                this.UpdateFromDvdWatches(entry, watches.Watches);
             }
         }
 
         private void UpdateFromDvdWatches(FileEntry entry, IEnumerable<MIH.Event> dvdWatches)
         {
-            ExistingWatches = new Dictionary<User, HashSet<Watch>>();
+            this.ExistingWatches = new Dictionary<User, HashSet<Watch>>();
 
             var entryUsers = entry.Users.EnsureNotNull().ToList();
 
-            entryUsers.ForEach(AddExistingWatches);
+            entryUsers.ForEach(this.AddExistingWatches);
 
-            dvdWatches.ForEach(UpdateFromDvdWatch);
+            dvdWatches.ForEach(this.UpdateFromDvdWatch);
 
-            ExistingWatches.ForEach(kvp => UpdateEntryWatches(entryUsers, kvp.Key, kvp.Value));
+            this.ExistingWatches.ForEach(kvp => UpdateEntryWatches(entryUsers, kvp.Key, kvp.Value));
 
             entry.Users = entryUsers.Count > 0
                 ? entryUsers.ToArray()
@@ -103,11 +103,11 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
                 UserName = string.Join(" ", dvdWatch.User?.FirstName, dvdWatch.User?.LastName).Trim(),
             };
 
-            if (ExistingWatches.TryGetValue(user, out HashSet<Watch> entryWatches) == false)
+            if (this.ExistingWatches.TryGetValue(user, out var entryWatches) == false)
             {
                 entryWatches = new HashSet<Watch>();
 
-                ExistingWatches.Add(user, entryWatches);
+                this.ExistingWatches.Add(user, entryWatches);
             }
 
             var entryWatch = new Watch()
@@ -125,7 +125,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
 
             if (watches.HasItems())
             {
-                AddExistingWatches(user, watches);
+                this.AddExistingWatches(user, watches);
             }
         }
 
@@ -133,7 +133,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         {
             var hashed = new HashSet<Watch>();
 
-            ExistingWatches.Add(user, hashed);
+            this.ExistingWatches.Add(user, hashed);
 
             watches.ForEach(watch => hashed.Add(watch));
         }

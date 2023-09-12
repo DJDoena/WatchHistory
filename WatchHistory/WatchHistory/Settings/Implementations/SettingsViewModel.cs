@@ -27,19 +27,19 @@ namespace DoenaSoft.WatchHistory.Settings.Implementations
             _dataManager = dataManager;
             _uiServices = uiServices;
 
-            Users = new ObservableCollection<ISettingsListBoxItemViewModel>(_dataManager.Users.Select(item => new SettingsListBoxItemViewModel(item)));
+            this.Users = new ObservableCollection<ISettingsListBoxItemViewModel>(_dataManager.Users.Select(item => new SettingsListBoxItemViewModel(item)));
 
-            RootFolders = new ObservableCollection<string>(_dataManager.RootFolders);
+            this.RootFolders = new ObservableCollection<string>(_dataManager.RootFolders);
 
-            FileExtensions = new ObservableCollection<ISettingsListBoxItemViewModel>(_dataManager.FileExtensions.Select(item => new SettingsListBoxItemViewModel(item)));
+            this.FileExtensions = new ObservableCollection<ISettingsListBoxItemViewModel>(_dataManager.FileExtensions.Select(item => new SettingsListBoxItemViewModel(item)));
 
-            AddUserCommand = new RelayCommand(AddUser);
-            RemoveUserCommand = new RelayCommand(RemoveUser, CanRemoveUser);
-            AddRootFolderCommand = new RelayCommand(AddRootFolder);
-            RemoveRootFolderCommand = new RelayCommand(RemoveRootFolder, CanRemoveRootFolder);
-            AddFileExtensionCommand = new RelayCommand(AddFileExtension);
-            RemoveFileExtensionCommand = new RelayCommand(RemoveFileExtension, CanRemoveFileExtension);
-            AcceptCommand = new RelayCommand(Accept);
+            this.AddUserCommand = new RelayCommand(this.AddUser);
+            this.RemoveUserCommand = new RelayCommand(this.RemoveUser, this.CanRemoveUser);
+            this.AddRootFolderCommand = new RelayCommand(this.AddRootFolder);
+            this.RemoveRootFolderCommand = new RelayCommand(this.RemoveRootFolder, this.CanRemoveRootFolder);
+            this.AddFileExtensionCommand = new RelayCommand(this.AddFileExtension);
+            this.RemoveFileExtensionCommand = new RelayCommand(this.RemoveFileExtension, this.CanRemoveFileExtension);
+            this.AcceptCommand = new RelayCommand(this.Accept);
         }
 
         #region INotifyPropertyChanged
@@ -61,7 +61,7 @@ namespace DoenaSoft.WatchHistory.Settings.Implementations
                 {
                     _selectedUser = value;
 
-                    RaisePropertyChanged(nameof(SelectedUser));
+                    this.RaisePropertyChanged(nameof(this.SelectedUser));
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace DoenaSoft.WatchHistory.Settings.Implementations
                 {
                     _selectedRootFolder = value;
 
-                    RaisePropertyChanged(nameof(SelectedRootFolder));
+                    this.RaisePropertyChanged(nameof(this.SelectedRootFolder));
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace DoenaSoft.WatchHistory.Settings.Implementations
                 {
                     _selectedFileExtension = value;
 
-                    RaisePropertyChanged(nameof(SelectedFileExtension));
+                    this.RaisePropertyChanged(nameof(this.SelectedFileExtension));
                 }
             }
         }
@@ -116,41 +116,41 @@ namespace DoenaSoft.WatchHistory.Settings.Implementations
 
         #endregion
 
-        private void AddUser() => Users.Add(new SettingsListBoxItemViewModel(string.Empty));
+        private void AddUser() => this.Users.Add(new SettingsListBoxItemViewModel(string.Empty));
 
-        private bool CanRemoveUser() => SelectedUser != null;
+        private bool CanRemoveUser() => this.SelectedUser != null;
 
-        private void RemoveUser() => Users.Remove(SelectedUser);
+        private void RemoveUser() => this.Users.Remove(this.SelectedUser);
 
         private void AddRootFolder()
         {
-            if (_uiServices.ShowFolderBrowserDialog(new FolderBrowserDialogOptions(), out string rootFolder))
+            if (_uiServices.ShowFolderBrowserDialog(new FolderBrowserDialogOptions(), out var rootFolder))
             {
-                RootFolders.Add(rootFolder);
+                this.RootFolders.Add(rootFolder);
             }
         }
 
-        private bool CanRemoveRootFolder() => SelectedRootFolder != null;
+        private bool CanRemoveRootFolder() => this.SelectedRootFolder != null;
 
-        private void RemoveRootFolder() => RootFolders.Remove(SelectedRootFolder);
+        private void RemoveRootFolder() => this.RootFolders.Remove(this.SelectedRootFolder);
 
-        private void AddFileExtension() => FileExtensions.Add(new SettingsListBoxItemViewModel(string.Empty));
+        private void AddFileExtension() => this.FileExtensions.Add(new SettingsListBoxItemViewModel(string.Empty));
 
-        private bool CanRemoveFileExtension() => SelectedFileExtension != null;
+        private bool CanRemoveFileExtension() => this.SelectedFileExtension != null;
 
-        private void RemoveFileExtension() => FileExtensions.Remove(SelectedFileExtension);
+        private void RemoveFileExtension() => this.FileExtensions.Remove(this.SelectedFileExtension);
 
         private void Accept()
         {
-            var users = new HashSet<string>(Users.Select(item => item.Value));
+            var users = new HashSet<string>(this.Users.Select(item => item.Value));
 
             _dataManager.Users = users.Where(item => string.IsNullOrEmpty(item) == false);
 
-            var rootFolders = new HashSet<string>(RootFolders);
+            var rootFolders = new HashSet<string>(this.RootFolders);
 
             _dataManager.RootFolders = rootFolders.Where(item => string.IsNullOrEmpty(item) == false);
 
-            var fileExtensions = new HashSet<string>(FileExtensions.Select(item => item.Value));
+            var fileExtensions = new HashSet<string>(this.FileExtensions.Select(item => item.Value));
 
             _dataManager.FileExtensions = fileExtensions.Where(item => string.IsNullOrEmpty(item) == false);
 

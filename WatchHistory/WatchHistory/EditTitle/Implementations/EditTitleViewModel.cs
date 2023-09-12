@@ -15,8 +15,8 @@ namespace DoenaSoft.WatchHistory.EditTitle.Implementations
 
         public EditTitleViewModel(FileEntry entry)
         {
-            AcceptCommand = new RelayCommand(Accept);
-            CancelCommand = new RelayCommand(Cancel);
+            this.AcceptCommand = new RelayCommand(this.Accept);
+            this.CancelCommand = new RelayCommand(this.Cancel);
 
             _title = GetCurrentTitle(entry);
         }
@@ -36,7 +36,7 @@ namespace DoenaSoft.WatchHistory.EditTitle.Implementations
                 {
                     _title = value;
 
-                    RaisePropertyChanged(nameof(Title));
+                    this.RaisePropertyChanged(nameof(this.Title));
                 }
             }
         }

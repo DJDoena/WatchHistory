@@ -33,9 +33,9 @@ namespace DoenaSoft.WatchHistory.ShowReport.Implementations
             _clipboardServices = clipboardServices;
             _userName = userName;
 
-            ReportDayCommand = new RelayCommand(ReportDay);
-            ReportMonthCommand = new RelayCommand(ReportMonth);
-            CancelCommand = new RelayCommand(Cancel);
+            this.ReportDayCommand = new RelayCommand(this.ReportDay);
+            this.ReportMonthCommand = new RelayCommand(this.ReportMonth);
+            this.CancelCommand = new RelayCommand(this.Cancel);
 
             _date = DateTime.Now.Date;
         }
@@ -57,7 +57,7 @@ namespace DoenaSoft.WatchHistory.ShowReport.Implementations
                 {
                     _date = value;
 
-                    RaisePropertyChanged(nameof(Date));
+                    this.RaisePropertyChanged(nameof(this.Date));
                 }
             }
         }
@@ -74,9 +74,9 @@ namespace DoenaSoft.WatchHistory.ShowReport.Implementations
 
         private void ReportDay()
         {
-            var entries = GetFilteredEntries(new DayCalculationProcessor(_dataManager, _userName, Date));
+            var entries = this.GetFilteredEntries(new DayCalculationProcessor(_dataManager, _userName, this.Date));
 
-            var success = CopyReportToClipboard(new DayTextProcessor(_ioServices, Date, entries, _userName));
+            var success = this.CopyReportToClipboard(new DayTextProcessor(_ioServices, this.Date, entries, _userName));
 
             if (success)
             {
@@ -86,9 +86,9 @@ namespace DoenaSoft.WatchHistory.ShowReport.Implementations
 
         private void ReportMonth()
         {
-            var entries = GetFilteredEntries(new MonthCalculationProcessor(_dataManager, _userName, Date));
+            var entries = this.GetFilteredEntries(new MonthCalculationProcessor(_dataManager, _userName, this.Date));
 
-            var success = CopyReportToClipboard(new MonthTextProcessor(Date, entries, _userName));
+            var success = this.CopyReportToClipboard(new MonthTextProcessor(this.Date, entries, _userName));
 
             if (success)
             {

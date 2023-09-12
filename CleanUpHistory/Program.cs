@@ -41,28 +41,28 @@ namespace DoenaSoft.WatchHistory
 
         private static void CreateBackup()
         {
-            String file = Environment.DataFile;
+            var file = Environment.DataFile;
 
-            Int32 lastIndexOf = file.LastIndexOf(".");
+            var lastIndexOf = file.LastIndexOf(".");
 
-            String extension = file.Substring(lastIndexOf);
+            var extension = file.Substring(lastIndexOf);
 
-            String fileBaseName = file.Substring(0, lastIndexOf);
+            var fileBaseName = file.Substring(0, lastIndexOf);
 
             try
             {
                 const Int32 MaximumBackups = 9;
 
-                String fileName = fileBaseName + "." + MaximumBackups.ToString() + extension;
+                var fileName = fileBaseName + "." + MaximumBackups.ToString() + extension;
 
                 if (IOServices.File.Exists(fileName))
                 {
                     IOServices.File.Delete(fileName);
                 }
 
-                for (Int32 i = MaximumBackups - 1; i > 0; i--)
+                for (var i = MaximumBackups - 1; i > 0; i--)
                 {
-                    String fileName2 = fileBaseName + "." + i.ToString() + extension;
+                    var fileName2 = fileBaseName + "." + i.ToString() + extension;
 
                     if (IOServices.File.Exists(fileName2))
                     {
@@ -83,9 +83,9 @@ namespace DoenaSoft.WatchHistory
 
         private static FileEntry[] Clean(FileEntry[] input)
         {
-            List<FileEntry> output = new List<FileEntry>(input);
+            var output = new List<FileEntry>(input);
 
-            for (Int32 index = output.Count - 1; index >= 0; index--)
+            for (var index = output.Count - 1; index >= 0; index--)
             {
                 TryClean(output, index);
             }

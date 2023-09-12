@@ -23,7 +23,7 @@ namespace DoenaSoft.WatchHistory.SelectUser.Implementations
 
             _selectedUser = _dataManager.Users.First();
 
-            SelectCommand = new RelayCommand(Select);
+            this.SelectCommand = new RelayCommand(this.Select);
         }
 
         #region INotifyPropertyChanged
@@ -45,7 +45,7 @@ namespace DoenaSoft.WatchHistory.SelectUser.Implementations
                 {
                     _selectedUser = value;
 
-                    RaisePropertyChanged(nameof(SelectedUser));
+                    this.RaisePropertyChanged(nameof(this.SelectedUser));
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace DoenaSoft.WatchHistory.SelectUser.Implementations
 
         private void Select()
         {
-            _windowFactory.OpenMainWindow(SelectedUser);
+            _windowFactory.OpenMainWindow(this.SelectedUser);
 
             Closing?.Invoke(this, EventArgs.Empty);
         }

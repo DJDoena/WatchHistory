@@ -18,9 +18,9 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
         {
             var dvds = _collection.DVDList.EnsureNotNull();
 
-            var castTitles = dvds.Select(dvd => GetEpisodeTitles(dvd, dvd.CastList));
+            var castTitles = dvds.Select(dvd => this.GetEpisodeTitles(dvd, dvd.CastList));
 
-            var crewTitles = dvds.Select(dvd => GetEpisodeTitles(dvd, dvd.CrewList));
+            var crewTitles = dvds.Select(dvd => this.GetEpisodeTitles(dvd, dvd.CrewList));
 
             var castAndCrewTitles = castTitles.Union(crewTitles);
 

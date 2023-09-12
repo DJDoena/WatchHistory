@@ -20,7 +20,7 @@
                 {
                     _value = value;
 
-                    RaisePropertyChanged(nameof(Value));
+                    this.RaisePropertyChanged(nameof(this.Value));
                 }
             }
         }

@@ -8,25 +8,25 @@
     {
         public EditTitleWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var viewModel = (IEditTitleViewModel)DataContext;
+            var viewModel = (IEditTitleViewModel)this.DataContext;
 
-            viewModel.Closing += OnClosing;
+            viewModel.Closing += this.OnClosing;
         }
 
         private void OnClosing(object sender, CloseEventArgs e)
         {
-            var viewModel = (IEditTitleViewModel)DataContext;
+            var viewModel = (IEditTitleViewModel)this.DataContext;
 
-            viewModel.Closing -= OnClosing;
+            viewModel.Closing -= this.OnClosing;
 
-            DialogResult = e.Result == Result.OK;
+            this.DialogResult = e.Result == Result.OK;
 
-            Close();
+            this.Close();
         }
     }
 }
