@@ -1,16 +1,16 @@
-﻿namespace DoenaSoft.WatchHistory.Data
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DoenaSoft.WatchHistory.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    internal static class FilesExtensions
+    public static class FilesExtensions
     {
-        internal static User TryGetUser(this FileEntry entry, string userName) => entry.Users?.FirstOrDefault(user => user.UserName == userName);
+        public static User TryGetUser(this FileEntry entry, string userName) => entry.Users?.FirstOrDefault(user => user.UserName == userName);
 
-        internal static IEnumerable<Watch> GetWatches(this FileEntry entry, string userName) => TryGetUser(entry, userName)?.Watches ?? Enumerable.Empty<Watch>();
+        public static IEnumerable<Watch> GetWatches(this FileEntry entry, string userName) => TryGetUser(entry, userName)?.Watches ?? Enumerable.Empty<Watch>();
 
-        internal static bool MatchesDay(this Watch watch, DateTime date)
+        public static bool MatchesDay(this Watch watch, DateTime date)
         {
             if (!string.IsNullOrWhiteSpace(watch.Source))
             {
@@ -24,7 +24,7 @@
             return dayIsMatch;
         }
 
-        internal static bool MatchesMonth(this Watch watch, DateTime date)
+        public static bool MatchesMonth(this Watch watch, DateTime date)
         {
             if (!string.IsNullOrWhiteSpace(watch.Source))
             {
@@ -38,7 +38,7 @@
             return monthIsMatch;
         }
 
-        internal static bool MatchesYear(this Watch watch, DateTime date)
+        public static bool MatchesYear(this Watch watch, DateTime date)
         {
             if (!string.IsNullOrWhiteSpace(watch.Source))
             {
@@ -52,13 +52,13 @@
             return yearIsMatch;
         }
 
-        internal static IEnumerable<FileEntry> GetEntriesByUserAndWatchDate(this IEnumerable<FileEntry> entries, string userName, Func<Watch, bool> watchContainsDate)
+        public static IEnumerable<FileEntry> GetEntriesByUserAndWatchDate(this IEnumerable<FileEntry> entries, string userName, Func<Watch, bool> watchContainsDate)
         {
             var filteredEntries = entries.Where(entry => entry.GetWatchesByUserAndWatchDate(userName, watchContainsDate).Any());
 
             return filteredEntries;
         }
 
-        internal static IEnumerable<Watch> GetWatchesByUserAndWatchDate(this FileEntry entry, string userName, Func<Watch, bool> isValidWatch) => entry.GetWatches(userName).Where(isValidWatch);
+        public static IEnumerable<Watch> GetWatchesByUserAndWatchDate(this FileEntry entry, string userName, Func<Watch, bool> isValidWatch) => entry.GetWatches(userName).Where(isValidWatch);
     }
 }

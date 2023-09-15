@@ -22,9 +22,12 @@
 	  <PackageReference Include="DoenaSoft.AbstractionLayer.IO" Version="1.0.3" />
 	  <PackageReference Include="DoenaSoft.AbstractionLayer.WPF" Version="1.1.5" />
 	  <PackageReference Include="DoenaSoft.DVDProfilerXML" Version="5.0.4" />
-	  <PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.1" />
 	  <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.1" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\WatchHistoryXml\WatchHistoryXml.csproj" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

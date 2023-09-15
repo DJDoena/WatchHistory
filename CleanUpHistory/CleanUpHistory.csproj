@@ -12,7 +12,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Include="..\WatchHistory\WatchHistory\Data\Files.v2_4.cs" Link="Files.v2_4.cs" />
 	  <Compile Include="..\WatchHistory\WatchHistory\Environment.cs" Link="Environment.cs" />
 	  <Compile Include="..\WatchHistory\WatchHistory\Implementations\SerializerHelper.cs" Link="SerializerHelper.cs" />
 	</ItemGroup>
@@ -25,6 +24,10 @@
 	  <PackageReference Include="DoenaSoft.AbstractionLayer.IO" Version="1.0.3" />
 	  <PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.1" />
 	  <PackageReference Include="DoenaSoft.ToolBox" Version="2.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\WatchHistory\WatchHistoryXml\WatchHistoryXml.csproj" />
 	</ItemGroup>
 
 </Project>

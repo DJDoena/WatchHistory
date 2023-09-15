@@ -106,7 +106,7 @@ namespace DoenaSoft.WatchHistory.Data
         public XmlElement[] AnyElements;
 
         [XmlIgnore]
-        internal DateTime? CreationTimeValue;
+        public DateTime? CreationTimeValue;
 
         [XmlIgnore]
         public string Key => GetKey(FullName);

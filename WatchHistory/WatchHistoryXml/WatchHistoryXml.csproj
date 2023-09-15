@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net472</TargetFrameworks>
+		<Platforms>AnyCPU</Platforms>
+		<Configurations>Debug;Release</Configurations>
+		<OutputType>Library</OutputType>
+		<RootNamespace>DoenaSoft.WatchHistory</RootNamespace>
+		<AssemblyName>DoenaSoft.WatchHistoryXml</AssemblyName>
+		<Copyright>Copyright © Doena Soft. 2016 - 2023</Copyright>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<NoWarn>1701;1702;1591</NoWarn>
+		<Title>DoenaSoft.WatchHistoryXml</Title>
+		<Company>Doena Soft.</Company>
+		<Authors>DJ Doena</Authors>
+		<Description>XML schemas for handling WatchHistory</Description>
+		<PackageProjectUrl>https://github.com/DJDoena/CopySeries</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/DJDoena/CopySeries</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Version>1.0.0</Version>
+		<FileVersion>1.0.0</FileVersion>
+		<PackageIcon>djdsoft.png</PackageIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\djdsoft.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.1" />
+	</ItemGroup>
+
+</Project>
