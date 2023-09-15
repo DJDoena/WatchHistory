@@ -18,10 +18,26 @@
 		<RepositoryUrl>https://github.com/DJDoena/CopySeries</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.0</Version>
-		<FileVersion>1.0.0</FileVersion>
+		<Version>1.0.1</Version>
+		<FileVersion>1.0.1</FileVersion>
 		<PackageIcon>djdsoft.png</PackageIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Data\Files.v2_0.xsd" />
+	  <None Remove="Data\Files.v2_1.xsd" />
+	  <None Remove="Data\Files.v2_2.xsd" />
+	  <None Remove="Data\Files.v2_3.xsd" />
+	  <None Remove="Data\Files.v2_4.xsd" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Data\Files.v2_0.xsd" />
+	  <Content Include="Data\Files.v2_1.xsd" />
+	  <Content Include="Data\Files.v2_2.xsd" />
+	  <Content Include="Data\Files.v2_3.xsd" />
+	  <Content Include="Data\Files.v2_4.xsd" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <None Include="..\..\djdsoft.png">
