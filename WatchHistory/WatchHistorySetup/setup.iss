@@ -40,14 +40,14 @@ Source: "DoenaSoft.AbstractionLayer.UI.dll"; DestDir: "{app}"; Flags: ignorevers
 Source: "DoenaSoft.AbstractionLayer.Web.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DoenaSoft.AbstractionLayer.WinForms.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DoenaSoft.AbstractionLayer.WPF.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "DoenaSoft.DVDProfilerHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "DoenaSoft.DVDProfilerXML.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.DVDProfiler.Helper.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.DVDProfiler.Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DoenaSoft.MediaInfoHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DoenaSoft.ToolBox.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DoenaSoft.WatchHistory.Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "de\DoenaSoft.DVDProfilerHelper.resources.dll"; DestDir: "{app}\de"; Flags: ignoreversion
+Source: "de\DoenaSoft.DVDProfiler.Helper.resources.dll"; DestDir: "{app}\de"; Flags: ignoreversion
 
 Source: "Microsoft.Win32.Registry.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "NAudio.Asio.dll"; DestDir: "{app}"; Flags: ignoreversion
