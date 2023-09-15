@@ -44,7 +44,7 @@ Source: "DoenaSoft.DVDProfilerHelper.dll"; DestDir: "{app}"; Flags: ignoreversio
 Source: "DoenaSoft.DVDProfilerXML.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DoenaSoft.MediaInfoHelper.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DoenaSoft.ToolBox.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "DoenaSoft.WatchHistoryXml.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DoenaSoft.WatchHistory.Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "WatchHistory.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: "de\DoenaSoft.DVDProfilerHelper.resources.dll"; DestDir: "{app}\de"; Flags: ignoreversion

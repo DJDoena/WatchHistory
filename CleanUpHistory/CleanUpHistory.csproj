@@ -27,7 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\WatchHistory\WatchHistoryXml\WatchHistoryXml.csproj" />
+	  <ProjectReference Include="..\WatchHistory\WatchHistoryXml\WatchHistory.Xml.csproj" />
 	</ItemGroup>
 
 </Project>

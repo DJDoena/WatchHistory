@@ -6,11 +6,11 @@
 		<Configurations>Debug;Release</Configurations>
 		<OutputType>Library</OutputType>
 		<RootNamespace>DoenaSoft.WatchHistory</RootNamespace>
-		<AssemblyName>DoenaSoft.WatchHistoryXml</AssemblyName>
+		<AssemblyName>DoenaSoft.WatchHistory.Xml</AssemblyName>
 		<Copyright>Copyright © Doena Soft. 2016 - 2023</Copyright>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<NoWarn>1701;1702;1591</NoWarn>
-		<Title>DoenaSoft.WatchHistoryXml</Title>
+		<Title>DoenaSoft.WatchHistory.Xml</Title>
 		<Company>Doena Soft.</Company>
 		<Authors>DJ Doena</Authors>
 		<Description>XML schemas for handling WatchHistory</Description>
@@ -18,8 +18,8 @@
 		<RepositoryUrl>https://github.com/DJDoena/CopySeries</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.1</Version>
-		<FileVersion>1.0.1</FileVersion>
+		<Version>1.0.2</Version>
+		<FileVersion>1.0.2</FileVersion>
 		<PackageIcon>djdsoft.png</PackageIcon>
 	</PropertyGroup>
 

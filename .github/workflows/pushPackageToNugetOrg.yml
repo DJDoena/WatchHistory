@@ -10,7 +10,7 @@ on:
       
 env:
   SOURCE_URL: https://api.nuget.org/v3/index.json
-  PROJECT_FILE: WatchHistoryXml.csproj
+  PROJECT_FILE: WatchHistory.Xml.csproj
   PROJECT_FOLDER: WatchHistory\WatchHistoryXml
   BUILD_CONFIGURATION: Release
   

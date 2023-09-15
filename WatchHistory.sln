@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{757D0591
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanUpHistory", "CleanUpHistory\CleanUpHistory.csproj", "{0095D0DA-710B-4A9D-9488-D978B1999E5A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchHistoryXml", "WatchHistory\WatchHistoryXml\WatchHistoryXml.csproj", "{D480B921-0F24-4B90-97E1-795FE7E1AAB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchHistory.Xml", "WatchHistory\WatchHistoryXml\WatchHistory.Xml.csproj", "{D480B921-0F24-4B90-97E1-795FE7E1AAB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
