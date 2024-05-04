@@ -56,13 +56,13 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
         {
             _ioServices.Folder.CreateFolder(_myDocumentsFolder);
 
-            var oldFiles = _ioServices.Folder.GetFileInfos(_appDataFolder, searchOption: System.IO.SearchOption.AllDirectories);
+            var oldFiles = _ioServices.Folder.GetFiles(_appDataFolder, searchOption: System.IO.SearchOption.AllDirectories);
 
             foreach (var oldFile in oldFiles)
             {
                 var newFileName = oldFile.FullName.Replace(_appDataFolder, _myDocumentsFolder).Replace(_appDataFolderWithoutDot, _myDocumentsFolder);
 
-                var newFile = new FileInfo(newFileName);
+                var newFile = _ioServices.GetFileInfo(newFileName);
 
                 if (!newFile.Folder.Exists)
                 {

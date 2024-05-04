@@ -18,8 +18,8 @@
 		<RepositoryUrl>https://github.com/DJDoena/CopySeries</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.3</Version>
-		<FileVersion>1.0.3</FileVersion>
+		<Version>1.0.4</Version>
+		<FileVersion>1.0.4</FileVersion>
 		<PackageIcon>djdsoft.png</PackageIcon>
 	</PropertyGroup>
 
@@ -47,7 +47,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.2" />
+		<PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.5" />
 	</ItemGroup>
 
 </Project>
