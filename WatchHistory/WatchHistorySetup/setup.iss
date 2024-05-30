@@ -1,8 +1,8 @@
 [Setup]
 AppName=WatchHistory
 AppId=WatchHistory
-AppVerName=WatchHistory 1.4.6.11
-AppCopyright=Copyright © Doena Soft. 2016 - 2023
+AppVerName=WatchHistory 1.4.6.12
+AppCopyright=Copyright © Doena Soft. 2016 - 2024
 AppPublisher=Doena Soft.
 ; AppPublisherURL=http://doena-journal.net/en/dvd-profiler-tools/
 DefaultDirName={commonpf32}\Doena Soft.\WatchHistory
@@ -19,9 +19,9 @@ WizardStyle=modern
 DisableReadyPage=yes
 ShowLanguageDialog=no
 VersionInfoCompany=Doena Soft.
-VersionInfoCopyright=2016 - 2023
+VersionInfoCopyright=2016 - 2024
 VersionInfoDescription=WatchHistory Setup
-VersionInfoVersion=1.4.6.11
+VersionInfoVersion=1.4.6.12
 UninstallDisplayIcon={app}\djdsoft.ico
 
 [Languages]

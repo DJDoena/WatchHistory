@@ -165,7 +165,11 @@
             }
         }
 
-        public Brush Color => _ioServices.File.Exists(this.Entry.FullName) ? Brushes.Black : Brushes.Red;
+        public Brush Color => _ioServices.File.Exists(this.Entry.FullName)
+            ? Brushes.Black
+            : Brushes.Red;
+
+        public string FullPath => this.Entry.FullName;
 
         #endregion
 

@@ -45,9 +45,18 @@
                     }
             }
 
+            if (sortColumn != SortColumn.FullPath && compare == 0)
+            {
+                compare = ascending
+                    ? CompareName(left, right)
+                    : CompareName(right, left);
+            }
+
             if (compare == 0)
             {
-                compare = ascending ? CompareName(left, right) : CompareName(right, left);
+                compare = ascending
+                    ? left.FullPath.CompareTo(right.FullPath)
+                    : right.FullPath.CompareTo(right.FullPath);
             }
 
             return compare;

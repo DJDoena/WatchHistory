@@ -16,5 +16,7 @@
         string RunningTime { get; }
 
         Brush Color { get; }
+
+        string FullPath { get; }
     }
 }

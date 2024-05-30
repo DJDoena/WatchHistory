@@ -111,6 +111,11 @@
                         <GridViewColumn DisplayMemberBinding="{Binding RunningTime}" Width="100">
                             <GridViewColumnHeader Content="Running Time" />
                         </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding FullPath}" Width="Auto">
+                            <GridViewColumnHeader Content="Full Path"
+                                                  Command="{Binding SortCommand}" 
+                                                  CommandParameter="FullPath" />
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>

@@ -7,7 +7,7 @@ using System.Windows;
 [assembly: AssemblyTitle("Watch History")]
 [assembly: AssemblyCompany("Doena Soft.")]
 [assembly: AssemblyProduct("Watch History")]
-[assembly: AssemblyCopyright("Copyright © Doena Soft. 2016 - 2023")]
+[assembly: AssemblyCopyright("Copyright © Doena Soft. 2016 - 2024")]
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
@@ -18,5 +18,5 @@ using System.Windows;
                                               // app, or any theme specific resource dictionaries)
 )]
 
-[assembly: AssemblyVersion("1.4.6.11")]
-[assembly: AssemblyFileVersion("1.4.6.11")]
+[assembly: AssemblyVersion("1.4.6.12")]
+[assembly: AssemblyFileVersion("1.4.6.12")]

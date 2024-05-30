@@ -45,7 +45,9 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             get => _sortColumn;
             set
             {
-                this.SortAscending = (value != _sortColumn) ? true : (this.SortAscending == false);
+                this.SortAscending = (value != _sortColumn)
+                    ? true
+                    : (this.SortAscending == false);
 
                 _sortColumn = value;
 

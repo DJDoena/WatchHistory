@@ -60,6 +60,9 @@
                     <GridViewColumn DisplayMemberBinding="{Binding RunningTime}" Width="100">
                         <GridViewColumnHeader Content="Running Time" />
                     </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding FullPath}" Width="Auto">
+                        <GridViewColumnHeader Content="Full Path" />
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

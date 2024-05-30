@@ -7,5 +7,7 @@
         LastWatched,
 
         CreationTime,
+
+        FullPath,
     }
 }
