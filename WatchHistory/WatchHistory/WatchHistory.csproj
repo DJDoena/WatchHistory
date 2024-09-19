@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net472</TargetFrameworks>
-		<UseWindowsForms>true</UseWindowsForms>
-		<UseWPF>true</UseWPF>
-		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<Platforms>x64</Platforms>
-		<OutputType>WinExe</OutputType>
-		<RootNamespace>DoenaSoft.WatchHistory</RootNamespace>
 		<AssemblyName>WatchHistory</AssemblyName>
-		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+		<RootNamespace>DoenaSoft.WatchHistory</RootNamespace>
+		<OutputType>WinExe</OutputType>
+		<TargetFrameworks>net472</TargetFrameworks>
+		<Platforms>x64</Platforms>
 		<ApplicationIcon>djdsoft.ico</ApplicationIcon>
+		<UseWindowsForms>true</UseWindowsForms>
+		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+		<UseWPF>true</UseWPF>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

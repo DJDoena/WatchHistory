@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net472</TargetFrameworks>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<Platforms>x64</Platforms>
-		<OutputType>Exe</OutputType>
-		<RootNamespace>DoenaSoft.WatchHistory</RootNamespace>
 		<AssemblyName>CleanUpHistory</AssemblyName>
-		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+		<RootNamespace>DoenaSoft.WatchHistory</RootNamespace>
+		<OutputType>Exe</OutputType>
+		<TargetFrameworks>net472</TargetFrameworks>
+		<Platforms>x64</Platforms>
 		<ApplicationIcon>djdsoft.ico</ApplicationIcon>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

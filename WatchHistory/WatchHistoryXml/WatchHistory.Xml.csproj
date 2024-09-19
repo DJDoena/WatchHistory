@@ -1,26 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<AssemblyName>DoenaSoft.WatchHistory.Xml</AssemblyName>
+		<RootNamespace>DoenaSoft.WatchHistory</RootNamespace>
+		<OutputType>Library</OutputType>
 		<TargetFrameworks>net472</TargetFrameworks>
 		<Platforms>AnyCPU</Platforms>
 		<Configurations>Debug;Release</Configurations>
-		<OutputType>Library</OutputType>
-		<RootNamespace>DoenaSoft.WatchHistory</RootNamespace>
-		<AssemblyName>DoenaSoft.WatchHistory.Xml</AssemblyName>
-		<Copyright>Copyright © Doena Soft. 2016 - 2023</Copyright>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<NoWarn>1701;1702;1591</NoWarn>
 		<Title>DoenaSoft.WatchHistory.Xml</Title>
-		<Company>Doena Soft.</Company>
-		<Authors>DJ Doena</Authors>
-		<Description>XML schemas for handling WatchHistory</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/DJDoena/CopySeries</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/DJDoena/CopySeries</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageIcon>djdsoft.png</PackageIcon>
+		<Description>XML schemas for handling WatchHistory</Description>
+		<Company>Doena Soft.</Company>
+		<Authors>DJ Doena</Authors>
+		<Copyright>Copyright © Doena Soft. 2016 - 2023</Copyright>
 		<Version>1.0.4</Version>
 		<FileVersion>1.0.4</FileVersion>
-		<PackageIcon>djdsoft.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
