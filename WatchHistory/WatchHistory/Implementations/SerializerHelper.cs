@@ -9,7 +9,7 @@ namespace DoenaSoft.WatchHistory.Implementations
         {
             using (var fs = ioServices.GetFileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
             {
-                return Serializer<T>.Deserialize(fs);
+                return XmlSerializer<T>.Deserialize(fs);
             }
         }
 
@@ -17,7 +17,7 @@ namespace DoenaSoft.WatchHistory.Implementations
         {
             using (var fs = ioServices.GetFileStream(fileName, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read))
             {
-                Serializer<T>.Serialize(fs, instance);
+                XmlSerializer<T>.Serialize(fs, instance);
             }
         }
     }
