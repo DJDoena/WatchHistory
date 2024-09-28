@@ -18,9 +18,9 @@
 		<Description>XML schemas for handling WatchHistory</Description>
 		<Company>Doena Soft.</Company>
 		<Authors>DJ Doena</Authors>
-		<Copyright>Copyright © Doena Soft. 2016 - 2023</Copyright>
-		<Version>1.0.4</Version>
-		<FileVersion>1.0.4</FileVersion>
+		<Copyright>Copyright © Doena Soft. 2016 - 2024</Copyright>
+		<Version>1.0.5</Version>
+		<FileVersion>1.0.5</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -47,7 +47,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.5" />
+		<PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.6" />
 	</ItemGroup>
 
 </Project>
