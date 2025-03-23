@@ -89,7 +89,7 @@
                     return (this.Entry.Title);
                 }
 
-                var fileInfo = _ioServices.GetFileInfo(this.Entry.FullName);
+                var fileInfo = _ioServices.GetFile(this.Entry.FullName);
 
                 var folderName = fileInfo.FolderName;
 

@@ -46,7 +46,7 @@
             }
             else
             {
-                var title = _ioServices.GetFileInfo(entry.FullName).NameWithoutExtension;
+                var title = _ioServices.GetFile(entry.FullName).NameWithoutExtension;
 
                 return title;
             }

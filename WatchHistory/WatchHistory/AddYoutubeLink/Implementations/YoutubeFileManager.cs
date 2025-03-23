@@ -65,7 +65,7 @@ namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations
 
             SerializerHelper.Serialize(_ioServices, fileName, info);
 
-            var fi = _ioServices.GetFileInfo(fileName);
+            var fi = _ioServices.GetFile(fileName);
 
             fi.CreationTimeUtc = info.Published.ToUniversalTime().Conform();
 

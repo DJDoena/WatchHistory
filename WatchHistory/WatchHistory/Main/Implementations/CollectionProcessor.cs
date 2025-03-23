@@ -104,7 +104,7 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
 
             SerializerHelper.Serialize(_ioServices, fileName, watches);
 
-            var fi = _ioServices.GetFileInfo(fileName);
+            var fi = _ioServices.GetFile(fileName);
 
             fi.CreationTime = title.PurchaseDate.Date;
 

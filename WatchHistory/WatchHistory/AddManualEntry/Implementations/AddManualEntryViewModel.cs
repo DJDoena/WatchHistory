@@ -223,7 +223,7 @@ namespace DoenaSoft.WatchHistory.AddManualEntry.Implementations
 
             var watchedOn = this.WatchedOn.ToUniversalTime().Conform();
 
-            var fi = _ioServices.GetFileInfo(fileName);
+            var fi = _ioServices.GetFile(fileName);
 
             fi.CreationTimeUtc = watchedOn;
 

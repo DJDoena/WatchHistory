@@ -82,7 +82,8 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             this.RaiseFilesChanged(EventArgs.Empty);
         }
 
-        public bool CanPlayFile(FileEntry entry) => _ioServices.GetFileInfo(entry.FullName).Exists && entry.FullName.EndsWith(MIHC.DvdProfilerFileExtension) == false;
+        public bool CanPlayFile(FileEntry entry)
+            => _ioServices.GetFile(entry.FullName).Exists && entry.FullName.EndsWith(MIHC.DvdProfilerFileExtension) == false;
 
         public void PlayFile(FileEntry entry)
         {
@@ -103,7 +104,8 @@ namespace DoenaSoft.WatchHistory.Main.Implementations
             }
         }
 
-        public bool CanOpenFileLocation(FileEntry entry) => _ioServices.GetFileInfo(entry.FullName).Exists;
+        public bool CanOpenFileLocation(FileEntry entry)
+            => _ioServices.GetFile(entry.FullName).Exists;
 
         public void OpenFileLocation(FileEntry entry)
         {

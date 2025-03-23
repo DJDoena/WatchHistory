@@ -223,7 +223,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
 
         public DateTime GetCreationTime(FileEntry entry)
         {
-            var fi = _ioServices.GetFileInfo(entry.FullName);
+            var fi = _ioServices.GetFile(entry.FullName);
 
             var creationTime = new DateTime(0, DateTimeKind.Utc);
 

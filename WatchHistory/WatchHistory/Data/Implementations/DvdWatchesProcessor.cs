@@ -21,7 +21,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
 
         internal void Update(FileEntry entry)
         {
-            var fi = _ioServices.GetFileInfo(entry.FullName);
+            var fi = _ioServices.GetFile(entry.FullName);
 
             if (!fi.Exists)
             {

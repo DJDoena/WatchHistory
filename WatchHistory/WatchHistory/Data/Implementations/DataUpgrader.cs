@@ -62,7 +62,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
             {
                 var newFileName = oldFile.FullName.Replace(_appDataFolder, _myDocumentsFolder).Replace(_appDataFolderWithoutDot, _myDocumentsFolder);
 
-                var newFile = _ioServices.GetFileInfo(newFileName);
+                var newFile = _ioServices.GetFile(newFileName);
 
                 if (!newFile.Folder.Exists)
                 {

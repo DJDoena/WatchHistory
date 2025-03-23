@@ -29,7 +29,7 @@ namespace DoenaSoft.WatchHistory.Data.Implementations
                 entry.VideoLength = info.RunningTime;
             }
 
-            entry.CreationTime = (_ioServices.GetFileInfo(entry.FullName)).CreationTimeUtc;
+            entry.CreationTime = (_ioServices.GetFile(entry.FullName)).CreationTimeUtc;
         }
 
         internal ManualVideo TryGetInfo(FileEntry entry)
