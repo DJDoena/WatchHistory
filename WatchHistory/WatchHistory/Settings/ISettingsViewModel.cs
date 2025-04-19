@@ -1,38 +1,38 @@
-﻿namespace DoenaSoft.WatchHistory.Settings
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Input;
+
+namespace DoenaSoft.WatchHistory.Settings;
+
+internal interface ISettingsViewModel : INotifyPropertyChanged
 {
-    using System;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Windows.Input;
+    ObservableCollection<ISettingsListBoxItemViewModel> Users { get; }
 
-    internal interface ISettingsViewModel : INotifyPropertyChanged
-    {
-        ObservableCollection<ISettingsListBoxItemViewModel> Users { get; }
+    ISettingsListBoxItemViewModel SelectedUser { get; set; }
 
-        ISettingsListBoxItemViewModel SelectedUser { get; set; }
+    ICommand AddUserCommand { get; }
 
-        ICommand AddUserCommand { get; }
+    ICommand RemoveUserCommand { get; }
 
-        ICommand RemoveUserCommand { get; }
+    ObservableCollection<string> RootFolders { get; }
 
-        ObservableCollection<string> RootFolders { get; }
+    string SelectedRootFolder { get; set; }
 
-        string SelectedRootFolder { get; set; }
+    ICommand AddRootFolderCommand { get; }
 
-        ICommand AddRootFolderCommand { get; }
+    ICommand RemoveRootFolderCommand { get; }
 
-        ICommand RemoveRootFolderCommand { get; }
+    ObservableCollection<ISettingsListBoxItemViewModel> FileExtensions { get; }
 
-        ObservableCollection<ISettingsListBoxItemViewModel> FileExtensions { get; }
+    ISettingsListBoxItemViewModel SelectedFileExtension { get; set; }
 
-        ISettingsListBoxItemViewModel SelectedFileExtension { get; set; }
+    ICommand AddFileExtensionCommand { get; }
 
-        ICommand AddFileExtensionCommand { get; }
+    ICommand RemoveFileExtensionCommand { get; }
 
-        ICommand RemoveFileExtensionCommand { get; }
+    ICommand AcceptCommand { get; }
 
-        ICommand AcceptCommand { get; }
+    event EventHandler Closing;
 
-        event EventHandler Closing;
-    }
+    bool HideDeleted { get; set; }
 }

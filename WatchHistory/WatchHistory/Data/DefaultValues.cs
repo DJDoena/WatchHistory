@@ -1,26 +1,29 @@
-﻿namespace DoenaSoft.WatchHistory.Data
+﻿using System.Xml.Serialization;
+
+namespace DoenaSoft.WatchHistory.Data;
+
+public sealed class DefaultValues
 {
-    using System.Xml.Serialization;
+    [XmlArray("Users")]
+    [XmlArrayItem("User")]
+    public string[] Users { get; set; }
 
-    public sealed class DefaultValues
+    [XmlArray("RootFolders")]
+    [XmlArrayItem("RootFolder")]
+    public string[] RootFolders { get; set; }
+
+    [XmlArray("FileExtensions")]
+    [XmlArrayItem("FileExtension")]
+    public string[] FileExtensions { get; set; }
+
+    public DefaultValues()
     {
-        [XmlArray("Users")]
-        [XmlArrayItem("User")]
-        public string[] Users { get; set; }
+        this.Users = [Constants.DefaultUser];
 
-        [XmlArray("RootFolders")]
-        [XmlArrayItem("RootFolder")]
-        public string[] RootFolders { get; set; }
+        this.FileExtensions = ["avi", "mp4", "mkv"];
 
-        [XmlArray("FileExtensions")]
-        [XmlArrayItem("FileExtension")]
-        public string[] FileExtensions { get; set; }
-
-        public DefaultValues()
-        {
-            this.Users = new[] { Constants.DefaultUser };
-
-            this.FileExtensions = new[] { "avi", "mp4", "mkv" };
-        }
+        this.HideDeleted = true;
     }
+
+    public bool HideDeleted { get; set; }
 }

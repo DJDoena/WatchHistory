@@ -1,47 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using DoenaSoft.MediaInfoHelper.DataObjects;
+﻿using DoenaSoft.MediaInfoHelper.DataObjects;
 
-namespace DoenaSoft.WatchHistory.Data
+namespace DoenaSoft.WatchHistory.Data;
+
+internal interface IDataManager
 {
-    internal interface IDataManager
-    {
-        IEnumerable<string> Users { get; set; }
+    IEnumerable<string> Users { get; set; }
 
-        IEnumerable<string> RootFolders { get; set; }
+    IEnumerable<string> RootFolders { get; set; }
 
-        IEnumerable<string> FileExtensions { get; set; }
+    IEnumerable<string> FileExtensions { get; set; }
 
-        bool IsSynchronizing { get; }
+    bool IsSynchronizing { get; }
 
-        event EventHandler IsSynchronizingChanged;
+    bool HideDeleted { get; set; }
 
-        event EventHandler FilesChanged;
+    event EventHandler IsSynchronizingChanged;
 
-        IEnumerable<FileEntry> GetFiles();
+    event EventHandler FilesChanged;
 
-        void AddWatched(FileEntry entry, string userName);
+    IEnumerable<FileEntry> GetFiles();
 
-        void AddWatched(FileEntry entry, string userName, DateTime watchedOn);
+    void AddWatched(FileEntry entry, string userName);
 
-        void AddIgnore(FileEntry entry, string userName);
+    void AddWatched(FileEntry entry, string userName, DateTime watchedOn);
 
-        void UndoIgnore(FileEntry entry, string userName);
+    void AddIgnore(FileEntry entry, string userName);
 
-        DateTime GetLastWatched(FileEntry entry, string userName);
+    void UndoIgnore(FileEntry entry, string userName);
 
-        void SaveSettingsFile();
+    DateTime GetLastWatched(FileEntry entry, string userName);
 
-        void SaveDataFile();
+    void SaveSettingsFile();
 
-        void Suspend();
+    void SaveDataFile();
 
-        void Resume();
+    void Suspend();
 
-        DateTime GetCreationTime(FileEntry entry);
+    void Resume();
 
-        MediaFile DetermineVideoLength(FileEntry entry);
+    DateTime GetCreationTime(FileEntry entry);
 
-        FileEntry TryCreateEntry(FileEntry entry);
-    }
+    MediaFile DetermineVideoLength(FileEntry entry);
+
+    FileEntry TryCreateEntry(FileEntry entry);
 }

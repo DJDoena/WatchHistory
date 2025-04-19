@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Windows.Input;
 using DoenaSoft.AbstractionLayer.Commands;
 using DoenaSoft.AbstractionLayer.IOServices;
@@ -10,259 +8,259 @@ using DoenaSoft.ToolBox.Extensions;
 using DoenaSoft.WatchHistory.Data;
 using DoenaSoft.WatchHistory.Data.Implementations;
 using DoenaSoft.WatchHistory.Implementations;
+using Icon = DoenaSoft.AbstractionLayer.UIServices.Icon;
 using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
 
-namespace DoenaSoft.WatchHistory.AddManualEntry.Implementations
+namespace DoenaSoft.WatchHistory.AddManualEntry.Implementations;
+
+internal sealed class AddManualEntryViewModel : IAddManualEntryViewModel
 {
-    internal sealed class AddManualEntryViewModel : IAddManualEntryViewModel
+    private readonly IDataManager _dataManager;
+
+    private readonly IIOServices _ioServices;
+
+    private readonly IUIServices _uiServices;
+
+    private readonly string _userName;
+
+    private DateTime _watchedDate;
+
+    private byte _watchedHour;
+
+    private byte _watchedMinute;
+
+    private byte _lengtHours;
+
+    private byte _lengthMinutes;
+
+    private byte _lengthSeconds;
+
+    private string _title;
+
+    private string _note;
+
+    public AddManualEntryViewModel(IDataManager dataManager
+        , IIOServices ioServices
+        , IUIServices uiServices
+        , string userName)
     {
-        private readonly IDataManager _dataManager;
+        _dataManager = dataManager;
+        _ioServices = ioServices;
+        _uiServices = uiServices;
+        _userName = userName;
 
-        private readonly IIOServices _ioServices;
+        this.AcceptCommand = new RelayCommand(this.Accept);
+        this.CancelCommand = new RelayCommand(this.Cancel);
 
-        private readonly IUIServices _uiServices;
+        var now = DateTime.Now;
 
-        private readonly string _userName;
+        _watchedDate = now.Date;
 
-        private DateTime _watchedDate;
+        _watchedHour = (byte)(now.Hour);
 
-        private byte _watchedHour;
+        _watchedMinute = (byte)(now.Minute);
+    }
 
-        private byte _watchedMinute;
+    #region IAddManualEntryViewModel
 
-        private byte _lengtHours;
+    public ICommand AcceptCommand { get; }
 
-        private byte _lengthMinutes;
+    public ICommand CancelCommand { get; }
 
-        private byte _lengthSeconds;
-
-        private string _title;
-
-        private string _note;
-
-        public AddManualEntryViewModel(IDataManager dataManager
-            , IIOServices ioServices
-            , IUIServices uiServices
-            , string userName)
+    public DateTime WatchedDate
+    {
+        get => _watchedDate;
+        set
         {
-            _dataManager = dataManager;
-            _ioServices = ioServices;
-            _uiServices = uiServices;
-            _userName = userName;
-
-            this.AcceptCommand = new RelayCommand(this.Accept);
-            this.CancelCommand = new RelayCommand(this.Cancel);
-
-            var now = DateTime.Now;
-
-            _watchedDate = now.Date;
-
-            _watchedHour = (byte)(now.Hour);
-
-            _watchedMinute = (byte)(now.Minute);
-        }
-
-        #region IAddManualEntryViewModel
-
-        public ICommand AcceptCommand { get; }
-
-        public ICommand CancelCommand { get; }
-
-        public DateTime WatchedDate
-        {
-            get => _watchedDate;
-            set
+            if (_watchedDate != value)
             {
-                if (_watchedDate != value)
-                {
-                    _watchedDate = value;
+                _watchedDate = value;
 
-                    this.RaisePropertyChanged(nameof(this.WatchedDate));
-                }
+                this.RaisePropertyChanged(nameof(this.WatchedDate));
             }
         }
+    }
 
-        public byte WatchedHour
+    public byte WatchedHour
+    {
+        get => _watchedHour;
+        set
         {
-            get => _watchedHour;
-            set
+            if (_watchedHour != value)
             {
-                if (_watchedHour != value)
-                {
-                    _watchedHour = value;
+                _watchedHour = value;
 
-                    this.RaisePropertyChanged(nameof(this.WatchedHour));
-                }
+                this.RaisePropertyChanged(nameof(this.WatchedHour));
             }
         }
+    }
 
-        public byte WatchedMinute
+    public byte WatchedMinute
+    {
+        get => _watchedMinute;
+        set
         {
-            get => _watchedMinute;
-            set
+            if (_watchedMinute != value)
             {
-                if (_watchedMinute != value)
-                {
-                    _watchedMinute = value;
+                _watchedMinute = value;
 
-                    this.RaisePropertyChanged(nameof(this.WatchedMinute));
-                }
+                this.RaisePropertyChanged(nameof(this.WatchedMinute));
             }
         }
+    }
 
-        public byte LengthHours
+    public byte LengthHours
+    {
+        get => _lengtHours;
+        set
         {
-            get => _lengtHours;
-            set
+            if (_lengtHours != value)
             {
-                if (_lengtHours != value)
-                {
-                    _lengtHours = value;
+                _lengtHours = value;
 
-                    this.RaisePropertyChanged(nameof(this.LengthHours));
-                }
+                this.RaisePropertyChanged(nameof(this.LengthHours));
             }
         }
+    }
 
-        public byte LengthMinutes
+    public byte LengthMinutes
+    {
+        get => _lengthMinutes;
+        set
         {
-            get => _lengthMinutes;
-            set
+            if (_lengthMinutes != value)
             {
-                if (_lengthMinutes != value)
-                {
-                    _lengthMinutes = value;
+                _lengthMinutes = value;
 
-                    this.RaisePropertyChanged(nameof(this.LengthMinutes));
-                }
+                this.RaisePropertyChanged(nameof(this.LengthMinutes));
             }
         }
+    }
 
-        public byte LengthSeconds
+    public byte LengthSeconds
+    {
+        get => _lengthSeconds;
+        set
         {
-            get => _lengthSeconds;
-            set
+            if (_lengthSeconds != value)
             {
-                if (_lengthSeconds != value)
-                {
-                    _lengthSeconds = value;
+                _lengthSeconds = value;
 
-                    this.RaisePropertyChanged(nameof(this.LengthSeconds));
-                }
+                this.RaisePropertyChanged(nameof(this.LengthSeconds));
             }
         }
+    }
 
-        public string Title
+    public string Title
+    {
+        get => _title ?? string.Empty;
+        set
         {
-            get => _title ?? string.Empty;
-            set
+            if (_title != value)
             {
-                if (_title != value)
-                {
-                    _title = value;
+                _title = value;
 
-                    this.RaisePropertyChanged(nameof(this.Title));
-                }
+                this.RaisePropertyChanged(nameof(this.Title));
             }
         }
+    }
 
-        public string Note
+    public string Note
+    {
+        get => _note ?? string.Empty;
+        set
         {
-            get => _note ?? string.Empty;
-            set
+            if (_note != value)
             {
-                if (_note != value)
-                {
-                    _note = value;
+                _note = value;
 
-                    this.RaisePropertyChanged(nameof(this.Note));
-                }
+                this.RaisePropertyChanged(nameof(this.Note));
             }
         }
+    }
 
-        public event EventHandler<CloseEventArgs> Closing;
+    public event EventHandler<CloseEventArgs> Closing;
 
-        #endregion
+    #endregion
 
-        #region INotifyPropertyChanged
+    #region INotifyPropertyChanged
 
-        public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler PropertyChanged;
 
-        #endregion
+    #endregion
 
-        private DateTime WatchedOn => new DateTime(this.WatchedDate.Year, this.WatchedDate.Month, this.WatchedDate.Day, this.WatchedHour, this.WatchedMinute, 0);
+    private DateTime WatchedOn => new DateTime(this.WatchedDate.Year, this.WatchedDate.Month, this.WatchedDate.Day, this.WatchedHour, this.WatchedMinute, 0);
 
-        private void Accept()
+    private void Accept()
+    {
+        if (string.IsNullOrWhiteSpace(this.Title))
         {
-            if (string.IsNullOrWhiteSpace(this.Title))
+            _uiServices.ShowMessageBox("You need to enter a title", "Title Missing", Buttons.OK, Icon.Warning);
+
+            return;
+        }
+
+        var folder = _ioServices.Path.Combine(WatchHistory.Environment.MyDocumentsFolder, "Manual");
+
+        _ioServices.Folder.CreateFolder(folder);
+
+        _dataManager.RootFolders = folder.Enumerate().Union(_dataManager.RootFolders);
+
+        _dataManager.FileExtensions = MIHC.ManualFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
+
+        var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.{MIHC.ManualFileExtensionName}");
+
+        var title = this.Title.Trim();
+
+        var length = (uint)(new TimeSpan(this.LengthHours, this.LengthMinutes, this.LengthSeconds)).TotalSeconds;
+
+        var note = this.Note.Trim();
+
+        var info = ManualWatchesProcessor.CreateInfo(title, length, note);
+
+        SerializerHelper.Serialize(_ioServices, fileName, info);
+
+        var watchedOn = this.WatchedOn.ToUniversalTime().Conform();
+
+        var fi = _ioServices.GetFile(fileName);
+
+        fi.CreationTimeUtc = watchedOn;
+
+        var entry = new FileEntry()
+        {
+            FullName = fileName,
+            Title = title,
+            VideoLength = length,
+            CreationTime = watchedOn,
+            Users = new User[]
             {
-                _uiServices.ShowMessageBox("You need to enter a title", "Title Missing", Buttons.OK, Icon.Warning);
-
-                return;
-            }
-
-            var folder = _ioServices.Path.Combine(WatchHistory.Environment.MyDocumentsFolder, "Manual");
-
-            _ioServices.Folder.CreateFolder(folder);
-
-            _dataManager.RootFolders = folder.Enumerate().Union(_dataManager.RootFolders);
-
-            _dataManager.FileExtensions = MIHC.ManualFileExtensionName.Enumerate().Union(_dataManager.FileExtensions);
-
-            var fileName = _ioServices.Path.Combine(folder, $"{Guid.NewGuid()}.{MIHC.ManualFileExtensionName}");
-
-            var title = this.Title.Trim();
-
-            var length = (uint)(new TimeSpan(this.LengthHours, this.LengthMinutes, this.LengthSeconds)).TotalSeconds;
-
-            var note = this.Note.Trim();
-
-            var info = ManualWatchesProcessor.CreateInfo(title, length, note);
-
-            SerializerHelper.Serialize(_ioServices, fileName, info);
-
-            var watchedOn = this.WatchedOn.ToUniversalTime().Conform();
-
-            var fi = _ioServices.GetFile(fileName);
-
-            fi.CreationTimeUtc = watchedOn;
-
-            var entry = new FileEntry()
-            {
-                FullName = fileName,
-                Title = title,
-                VideoLength = length,
-                CreationTime = watchedOn,
-                Users = new User[]
+                new User()
                 {
-                    new User()
+                    UserName = _userName,
+                    Watches = new Watch[]
                     {
-                        UserName = _userName,
-                        Watches = new Watch[]
+                        new Watch()
                         {
-                            new Watch()
-                            {
-                                 Value = watchedOn,
-                            },
+                             Value = watchedOn,
                         },
                     },
                 },
-            };
+            },
+        };
 
-            if (!string.IsNullOrEmpty(note))
-            {
-                entry.Note = note;
-            }
-
-            _dataManager.TryCreateEntry(entry);
-
-            Closing?.Invoke(this, new CloseEventArgs(Result.OK));
+        if (!string.IsNullOrEmpty(note))
+        {
+            entry.Note = note;
         }
 
-        private void Cancel()
-            => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
+        _dataManager.TryCreateEntry(entry);
 
-        private void RaisePropertyChanged(string attribute)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+        Closing?.Invoke(this, new CloseEventArgs(Result.OK));
     }
+
+    private void Cancel()
+        => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
+
+    private void RaisePropertyChanged(string attribute)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
 }

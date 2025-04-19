@@ -1,133 +1,130 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Windows.Input;
 using DoenaSoft.AbstractionLayer.Commands;
 using DoenaSoft.AbstractionLayer.IOServices;
 using DoenaSoft.AbstractionLayer.UIServices;
 using DoenaSoft.WatchHistory.Data;
 using DoenaSoft.WatchHistory.Implementations;
+using Icon = DoenaSoft.AbstractionLayer.UIServices.Icon;
 
-namespace DoenaSoft.WatchHistory.ShowReport.Implementations
+namespace DoenaSoft.WatchHistory.ShowReport.Implementations;
+
+internal sealed class ShowReportViewModel : IShowReportViewModel
 {
-    internal sealed class ShowReportViewModel : IShowReportViewModel
+    private readonly IDataManager _dataManager;
+
+    private readonly IIOServices _ioServices;
+
+    private readonly IUIServices _uiServices;
+
+    private readonly IClipboardServices _clipboardServices;
+
+    private readonly string _userName;
+
+    private DateTime _date;
+
+    public ShowReportViewModel(IDataManager dataManager, IIOServices ioServices, IUIServices uiServices, IClipboardServices clipboardServices, string userName)
     {
-        private readonly IDataManager _dataManager;
+        _dataManager = dataManager;
+        _ioServices = ioServices;
+        _uiServices = uiServices;
+        _clipboardServices = clipboardServices;
+        _userName = userName;
 
-        private readonly IIOServices _ioServices;
+        this.ReportDayCommand = new RelayCommand(this.ReportDay);
+        this.ReportMonthCommand = new RelayCommand(this.ReportMonth);
+        this.CancelCommand = new RelayCommand(this.Cancel);
 
-        private readonly IUIServices _uiServices;
+        _date = DateTime.Now.Date;
+    }
 
-        private readonly IClipboardServices _clipboardServices;
+    #region IShowReportViewModel
 
-        private readonly string _userName;
+    public ICommand ReportDayCommand { get; }
 
-        private DateTime _date;
+    public ICommand ReportMonthCommand { get; }
 
-        public ShowReportViewModel(IDataManager dataManager, IIOServices ioServices, IUIServices uiServices, IClipboardServices clipboardServices, string userName)
+    public ICommand CancelCommand { get; }
+
+    public DateTime Date
+    {
+        get => _date;
+        set
         {
-            _dataManager = dataManager;
-            _ioServices = ioServices;
-            _uiServices = uiServices;
-            _clipboardServices = clipboardServices;
-            _userName = userName;
-
-            this.ReportDayCommand = new RelayCommand(this.ReportDay);
-            this.ReportMonthCommand = new RelayCommand(this.ReportMonth);
-            this.CancelCommand = new RelayCommand(this.Cancel);
-
-            _date = DateTime.Now.Date;
-        }
-
-        #region IShowReportViewModel
-
-        public ICommand ReportDayCommand { get; }
-
-        public ICommand ReportMonthCommand { get; }
-
-        public ICommand CancelCommand { get; }
-
-        public DateTime Date
-        {
-            get => _date;
-            set
+            if (_date != value)
             {
-                if (_date != value)
-                {
-                    _date = value;
+                _date = value;
 
-                    this.RaisePropertyChanged(nameof(this.Date));
-                }
+                this.RaisePropertyChanged(nameof(this.Date));
             }
         }
+    }
 
-        public event EventHandler<CloseEventArgs> Closing;
+    public event EventHandler<CloseEventArgs> Closing;
 
-        #endregion
+    #endregion
 
-        #region INotifyPropertyChanged
+    #region INotifyPropertyChanged
 
-        public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler PropertyChanged;
 
-        #endregion
+    #endregion
 
-        private void ReportDay()
+    private void ReportDay()
+    {
+        var entries = this.GetFilteredEntries(new DayCalculationProcessor(_dataManager, _userName, this.Date));
+
+        var success = this.CopyReportToClipboard(new DayTextProcessor(_ioServices, this.Date, entries, _userName));
+
+        if (success)
         {
-            var entries = this.GetFilteredEntries(new DayCalculationProcessor(_dataManager, _userName, this.Date));
+            Closing?.Invoke(this, new CloseEventArgs(Result.OK));
+        }
+    }
 
-            var success = this.CopyReportToClipboard(new DayTextProcessor(_ioServices, this.Date, entries, _userName));
+    private void ReportMonth()
+    {
+        var entries = this.GetFilteredEntries(new MonthCalculationProcessor(_dataManager, _userName, this.Date));
 
-            if (success)
-            {
-                Closing?.Invoke(this, new CloseEventArgs(Result.OK));
-            }
+        var success = this.CopyReportToClipboard(new MonthTextProcessor(this.Date, entries, _userName));
+
+        if (success)
+        {
+            Closing?.Invoke(this, new CloseEventArgs(Result.OK));
+        }
+    }
+
+    private void Cancel() => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
+
+    private void RaisePropertyChanged(string attribute) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
+
+    private IEnumerable<FileEntry> GetFilteredEntries(CalculationProcessorBase calculationProcessor)
+    {
+        var entries = calculationProcessor.GetEntries();
+
+        if (entries.Any(fileEntry => !fileEntry.VideoLengthSpecified))
+        {
+            _uiServices.ShowMessageBox("At least one entry does not have a running time specified. Calculated watch time will be incorrect.", "Incorrect Watch Time", Buttons.OK, Icon.Warning);
         }
 
-        private void ReportMonth()
+        return entries;
+    }
+
+    private bool CopyReportToClipboard(TextProcessorBase textProcessor)
+    {
+        var text = textProcessor.GetText();
+
+        var success = _clipboardServices.SetText(text);
+
+        if (success)
         {
-            var entries = this.GetFilteredEntries(new MonthCalculationProcessor(_dataManager, _userName, this.Date));
-
-            var success = this.CopyReportToClipboard(new MonthTextProcessor(this.Date, entries, _userName));
-
-            if (success)
-            {
-                Closing?.Invoke(this, new CloseEventArgs(Result.OK));
-            }
+            _uiServices.ShowMessageBox("Report successfully copied to clipboard.", "Success", Buttons.OK, Icon.Information);
+        }
+        else
+        {
+            _uiServices.ShowMessageBox("Report could not be copied to clipboard. Please try again", "Clipboard Error", Buttons.OK, Icon.Warning);
         }
 
-        private void Cancel() => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
-
-        private void RaisePropertyChanged(string attribute) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
-
-        private IEnumerable<FileEntry> GetFilteredEntries(CalculationProcessorBase calculationProcessor)
-        {
-            var entries = calculationProcessor.GetEntries();
-
-            if (entries.Any(fileEntry => !fileEntry.VideoLengthSpecified))
-            {
-                _uiServices.ShowMessageBox("At least one entry does not have a running time specified. Calculated watch time will be incorrect.", "Incorrect Watch Time", Buttons.OK, Icon.Warning);
-            }
-
-            return entries;
-        }
-
-        private bool CopyReportToClipboard(TextProcessorBase textProcessor)
-        {
-            var text = textProcessor.GetText();
-
-            var success = _clipboardServices.SetText(text);
-
-            if (success)
-            {
-                _uiServices.ShowMessageBox("Report successfully copied to clipboard.", "Success", Buttons.OK, Icon.Information);
-            }
-            else
-            {
-                _uiServices.ShowMessageBox("Report could not be copied to clipboard. Please try again", "Clipboard Error", Buttons.OK, Icon.Warning);
-            }
-
-            return success;
-        }
+        return success;
     }
 }

@@ -12,6 +12,8 @@
 		<UseWPF>true</UseWPF>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>12.0</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
