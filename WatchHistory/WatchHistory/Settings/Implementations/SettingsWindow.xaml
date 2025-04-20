@@ -106,12 +106,12 @@
 
         <Label Grid.Column="0" Grid.Row="9"
                 Content="Hide Deleted"
-                Margin="5,5,5,5" />
+                Margin="5,5,5,5" VerticalAlignment="Center" />
 
         <CheckBox Grid.Column="1" Grid.Row="9"
                 IsChecked="{Binding HideDeleted}"
                 Content="Hide Deleted"
-                Margin="5,5,5,5" />
+                Margin="5,5,5,5" VerticalAlignment="Center" />
 
         <Button Grid.Column="0" Grid.Row="10"
                 Command="{Binding AcceptCommand}" Content="Accept"
