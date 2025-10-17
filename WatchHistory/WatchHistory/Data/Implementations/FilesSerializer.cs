@@ -31,7 +31,7 @@
                 entries = this.TryRestoreDataBackup(fileName);
             }
 
-            return entries ?? Enumerable.Empty<FileEntry>();
+            return entries ?? [];
         }
 
         private IEnumerable<FileEntry> TryRestoreDataBackup(string fileName)
@@ -85,17 +85,17 @@
 
             if (defaultValues.Users == null)
             {
-                defaultValues.Users = new string[0];
+                defaultValues.Users = [];
             }
 
             if (defaultValues.RootFolders == null)
             {
-                defaultValues.RootFolders = new string[0];
+                defaultValues.RootFolders = [];
             }
 
             if (defaultValues.FileExtensions == null)
             {
-                defaultValues.FileExtensions = new string[0];
+                defaultValues.FileExtensions = [];
             }
 
             return defaultValues;
@@ -137,10 +137,34 @@
         {
             var files = new Files()
             {
-                Entries = entries.ToArray(),
+                Entries = [.. entries],
             };
 
             SerializerHelper.Serialize(_ioServices, fileName, files);
+
+            //this.SaveAsJson(fileName, files);
+        }
+
+        private void SaveAsJson(string xmlFileName, Files files)
+        {
+            try
+            {
+                var xmlFileInfo = _ioServices.GetFile(xmlFileName);
+
+                var jsonFileName = _ioServices.Path.Combine(xmlFileInfo.FolderName, xmlFileInfo.NameWithoutExtension + ".json");
+
+                using var fileStream = _ioServices.GetFileStream(jsonFileName, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.Read);
+
+                using var textWriter = new System.IO.StreamWriter(fileStream, Encoding.UTF8);
+
+                using var jsonWriter = new Newtonsoft.Json.JsonTextWriter(textWriter);
+
+                jsonWriter.Formatting = Newtonsoft.Json.Formatting.Indented;
+                jsonWriter.Indentation = 2;
+
+                Newtonsoft.Json.JsonSerializer.Create().Serialize(jsonWriter, files);
+            }
+            catch { }
         }
 
         public void SaveSettings(string fileName, DefaultValues defaultValues)
@@ -190,7 +214,6 @@
             catch (System.IO.IOException)
             { }
         }
-
 
 
         #endregion

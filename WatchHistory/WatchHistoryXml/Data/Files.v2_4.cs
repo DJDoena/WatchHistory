@@ -17,9 +17,11 @@ namespace DoenaSoft.WatchHistory.Data
         [XmlAttribute]
         public decimal Version;
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlAnyElement]
         public XmlElement[] AnyElements;
 
@@ -87,6 +89,7 @@ namespace DoenaSoft.WatchHistory.Data
             }
         }
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlIgnore]
         public bool VideoLengthSpecified => this.VideoLength > 0;
 
@@ -96,18 +99,23 @@ namespace DoenaSoft.WatchHistory.Data
         [XmlAttribute]
         public bool FileExists = true;
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlIgnore]
         public bool TitleSpecified => !string.IsNullOrWhiteSpace(Title);
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlAnyElement]
         public XmlElement[] AnyElements;
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlIgnore]
         public DateTime? CreationTimeValue;
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlIgnore]
         public string Key => GetKey(FullName);
 
@@ -167,6 +175,7 @@ namespace DoenaSoft.WatchHistory.Data
         [XmlAttribute]
         public bool Ignore;
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlIgnore]
         public bool IgnoreSpecified => Ignore;
 
@@ -191,9 +200,11 @@ namespace DoenaSoft.WatchHistory.Data
             }
         }
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlAnyElement]
         public XmlElement[] AnyElements;
 
@@ -221,12 +232,15 @@ namespace DoenaSoft.WatchHistory.Data
         [XmlAttribute]
         public string Source;
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlIgnore]
         public bool SourceSpecified => !string.IsNullOrWhiteSpace(Source);
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlAnyAttribute]
         public XmlAttribute[] AnyAttributes;
 
+        //[Newtonsoft.Json.JsonIgnore]
         [XmlAnyElement]
         public XmlElement[] AnyElements;
 
