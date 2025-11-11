@@ -24,8 +24,8 @@
 	  <PackageReference Include="DoenaSoft.AbstractionLayer.IO" Version="3.0.1" />
 	  <PackageReference Include="DoenaSoft.AbstractionLayer.WPF" Version="2.0.1" />
 	  <PackageReference Include="DoenaSoft.DVDProfiler.Xml" Version="5.0.11" />
-	  <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="Extended.Wpf.Toolkit" Version="5.0.0" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -23,7 +23,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="DoenaSoft.AbstractionLayer.IO" Version="3.0.1" />
-	  <PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.6" />
+	  <PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.7" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,0 +1,17 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Setup/">
+    <File Path="WatchHistory/WatchHistorySetup/setup.iss" />
+  </Folder>
+  <Folder Name="/Tools/">
+    <Project Path="CleanUpHistory/CleanUpHistory.csproj">
+      <Platform Project="x64" />
+    </Project>
+  </Folder>
+  <Project Path="WatchHistory/WatchHistory/WatchHistory.csproj">
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="WatchHistory/WatchHistoryXml/WatchHistory.Xml.csproj" />
+</Solution>
