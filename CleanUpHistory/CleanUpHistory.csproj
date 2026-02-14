@@ -9,7 +9,7 @@
 		<ApplicationIcon>djdsoft.ico</ApplicationIcon>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
-		<LangVersion>12.0</LangVersion>
+		<LangVersion>14.0</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,7 +23,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="DoenaSoft.AbstractionLayer.IO" Version="3.0.1" />
-	  <PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.9" />
+	  <PackageReference Include="DoenaSoft.MediaInfoHelper" Version="3.1.10" />
 	</ItemGroup>
 
 	<ItemGroup>
