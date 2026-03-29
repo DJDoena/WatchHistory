@@ -254,11 +254,11 @@ internal sealed class AddManualEntryViewModel : IAddManualEntryViewModel
 
         _dataManager.TryCreateEntry(entry);
 
-        Closing?.Invoke(this, new CloseEventArgs(Result.OK));
+        Closing?.Invoke(this, new CloseEventArgs(MessageResult.OK));
     }
 
     private void Cancel()
-        => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
+        => Closing?.Invoke(this, new CloseEventArgs(MessageResult.Cancel));
 
     private void RaisePropertyChanged(string attribute)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));

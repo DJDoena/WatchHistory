@@ -163,10 +163,10 @@ internal sealed class AddYoutubeLinkViewModel : IAddYoutubeLinkViewModel
 
         _youtubeFileManager.Add(_videoInfo, this.WatchedOn);
 
-        Closing?.Invoke(this, new CloseEventArgs(Result.OK));
+        Closing?.Invoke(this, new CloseEventArgs(MessageResult.OK));
     }
 
-    private void Cancel() => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
+    private void Cancel() => Closing?.Invoke(this, new CloseEventArgs(MessageResult.Cancel));
 
     private void RaisePropertyChanged(string attribute) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
 

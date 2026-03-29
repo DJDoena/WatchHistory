@@ -24,7 +24,7 @@
 
             viewModel.Closing -= this.OnClosing;
 
-            this.DialogResult = e.Result == Result.OK
+            this.DialogResult = e.Result == MessageResult.OK
                 ? true
                 : false;
 

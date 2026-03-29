@@ -77,7 +77,7 @@ internal sealed class ShowReportViewModel : IShowReportViewModel
 
         if (success)
         {
-            Closing?.Invoke(this, new CloseEventArgs(Result.OK));
+            Closing?.Invoke(this, new CloseEventArgs(MessageResult.OK));
         }
     }
 
@@ -89,11 +89,11 @@ internal sealed class ShowReportViewModel : IShowReportViewModel
 
         if (success)
         {
-            Closing?.Invoke(this, new CloseEventArgs(Result.OK));
+            Closing?.Invoke(this, new CloseEventArgs(MessageResult.OK));
         }
     }
 
-    private void Cancel() => Closing?.Invoke(this, new CloseEventArgs(Result.Cancel));
+    private void Cancel() => Closing?.Invoke(this, new CloseEventArgs(MessageResult.Cancel));
 
     private void RaisePropertyChanged(string attribute) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(attribute));
 

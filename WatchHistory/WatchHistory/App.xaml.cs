@@ -30,7 +30,7 @@ public partial class App : System.Windows.Application
         if (processes.Length > 1)
         {
             if (this.UIServices.ShowMessageBox("There's already an instance running. If you start another one, you could invalidate your cache. Continue?"
-                , "Continue?", MessageButtons.YesNo, MessageIcon.Error) == Result.No)
+                , "Continue?", MessageButtons.YesNo, MessageIcon.Error) == MessageResult.No)
             {
                 _cancelStartUp = true;
 

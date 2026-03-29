@@ -1,12 +1,11 @@
-﻿namespace DoenaSoft.WatchHistory.Implementations
+﻿using System;
+using DoenaSoft.AbstractionLayer.UIServices;
+
+namespace DoenaSoft.WatchHistory.Implementations;
+
+internal sealed class CloseEventArgs : EventArgs
 {
-    using System;
-    using AbstractionLayer.UIServices;
+    public MessageResult Result { get; }
 
-    internal sealed class CloseEventArgs : EventArgs
-    {
-        public Result Result { get; }
-
-        public CloseEventArgs(Result result) => this.Result = result;
-    }
+    public CloseEventArgs(MessageResult result) => this.Result = result;
 }
