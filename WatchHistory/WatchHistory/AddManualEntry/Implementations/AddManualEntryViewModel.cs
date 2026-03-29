@@ -8,7 +8,6 @@ using DoenaSoft.ToolBox.Extensions;
 using DoenaSoft.WatchHistory.Data;
 using DoenaSoft.WatchHistory.Data.Implementations;
 using DoenaSoft.WatchHistory.Implementations;
-using Icon = DoenaSoft.AbstractionLayer.UIServices.Icon;
 using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
 
 namespace DoenaSoft.WatchHistory.AddManualEntry.Implementations;
@@ -195,7 +194,7 @@ internal sealed class AddManualEntryViewModel : IAddManualEntryViewModel
     {
         if (string.IsNullOrWhiteSpace(this.Title))
         {
-            _uiServices.ShowMessageBox("You need to enter a title", "Title Missing", Buttons.OK, Icon.Warning);
+            _uiServices.ShowMessageBox("You need to enter a title", "Title Missing", MessageButtons.OK, MessageIcon.Warning);
 
             return;
         }

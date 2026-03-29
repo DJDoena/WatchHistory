@@ -7,7 +7,6 @@ using DoenaSoft.AbstractionLayer.UIServices;
 using DoenaSoft.MediaInfoHelper.DataObjects;
 using DoenaSoft.WatchHistory.Data;
 using DoenaSoft.WatchHistory.Implementations;
-using Icon = DoenaSoft.AbstractionLayer.UIServices.Icon;
 
 namespace DoenaSoft.WatchHistory.AddYoutubeLink.Implementations;
 
@@ -157,7 +156,7 @@ internal sealed class AddYoutubeLinkViewModel : IAddYoutubeLinkViewModel
 
         if (string.IsNullOrEmpty(_videoInfo.Title))
         {
-            _uiServices.ShowMessageBox("You need to enter a title", "Title Missing", Buttons.OK, Icon.Warning);
+            _uiServices.ShowMessageBox("You need to enter a title", "Title Missing", MessageButtons.OK, MessageIcon.Warning);
 
             return;
         }
@@ -192,7 +191,7 @@ internal sealed class AddYoutubeLinkViewModel : IAddYoutubeLinkViewModel
 
         if (string.IsNullOrEmpty(this.YoutubeLink))
         {
-            _uiServices.ShowMessageBox("You need to enter a valid Youtube URL", "Missing URL", Buttons.OK, Icon.Warning);
+            _uiServices.ShowMessageBox("You need to enter a valid Youtube URL", "Missing URL", MessageButtons.OK, MessageIcon.Warning);
         }
 
         try
@@ -201,11 +200,11 @@ internal sealed class AddYoutubeLinkViewModel : IAddYoutubeLinkViewModel
         }
         catch (YoutubeUrlException ex)
         {
-            _uiServices.ShowMessageBox(ex.Message, "Error", Buttons.OK, Icon.Error);
+            _uiServices.ShowMessageBox(ex.Message, "Error", MessageButtons.OK, MessageIcon.Error);
         }
         catch (Exception ex)
         {
-            _uiServices.ShowMessageBox(ex.Message, "Unexpected Error", Buttons.OK, Icon.Error);
+            _uiServices.ShowMessageBox(ex.Message, "Unexpected Error", MessageButtons.OK, MessageIcon.Error);
         }
 
         return _videoInfo != null;

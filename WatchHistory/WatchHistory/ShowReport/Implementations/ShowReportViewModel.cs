@@ -5,7 +5,6 @@ using DoenaSoft.AbstractionLayer.IOServices;
 using DoenaSoft.AbstractionLayer.UIServices;
 using DoenaSoft.WatchHistory.Data;
 using DoenaSoft.WatchHistory.Implementations;
-using Icon = DoenaSoft.AbstractionLayer.UIServices.Icon;
 
 namespace DoenaSoft.WatchHistory.ShowReport.Implementations;
 
@@ -104,7 +103,7 @@ internal sealed class ShowReportViewModel : IShowReportViewModel
 
         if (entries.Any(fileEntry => !fileEntry.VideoLengthSpecified))
         {
-            _uiServices.ShowMessageBox("At least one entry does not have a running time specified. Calculated watch time will be incorrect.", "Incorrect Watch Time", Buttons.OK, Icon.Warning);
+            _uiServices.ShowMessageBox("At least one entry does not have a running time specified. Calculated watch time will be incorrect.", "Incorrect Watch Time", MessageButtons.OK, MessageIcon.Warning);
         }
 
         return entries;
@@ -118,11 +117,11 @@ internal sealed class ShowReportViewModel : IShowReportViewModel
 
         if (success)
         {
-            _uiServices.ShowMessageBox("Report successfully copied to clipboard.", "Success", Buttons.OK, Icon.Information);
+            _uiServices.ShowMessageBox("Report successfully copied to clipboard.", "Success", MessageButtons.OK, MessageIcon.Information);
         }
         else
         {
-            _uiServices.ShowMessageBox("Report could not be copied to clipboard. Please try again", "Clipboard Error", Buttons.OK, Icon.Warning);
+            _uiServices.ShowMessageBox("Report could not be copied to clipboard. Please try again", "Clipboard Error", MessageButtons.OK, MessageIcon.Warning);
         }
 
         return success;

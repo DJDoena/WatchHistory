@@ -6,7 +6,6 @@ using DoenaSoft.DVDProfiler.DVDProfilerHelper;
 using DoenaSoft.WatchHistory.Data;
 using DoenaSoft.WatchHistory.Data.Implementations;
 using DoenaSoft.WatchHistory.Implementations;
-using Icon = DoenaSoft.AbstractionLayer.UIServices.Icon;
 
 namespace DoenaSoft.WatchHistory;
 
@@ -31,7 +30,7 @@ public partial class App : System.Windows.Application
         if (processes.Length > 1)
         {
             if (this.UIServices.ShowMessageBox("There's already an instance running. If you start another one, you could invalidate your cache. Continue?"
-                , "Continue?", Buttons.YesNo, Icon.Error) == Result.No)
+                , "Continue?", MessageButtons.YesNo, MessageIcon.Error) == Result.No)
             {
                 _cancelStartUp = true;
 
@@ -79,11 +78,11 @@ public partial class App : System.Windows.Application
 
             SerializerHelper.Serialize(this.IOServices, fileName, exceptionXml);
 
-            this.UIServices.ShowMessageBox(ex.Message, string.Empty, Buttons.OK, Icon.Error);
+            this.UIServices.ShowMessageBox(ex.Message, string.Empty, MessageButtons.OK, MessageIcon.Error);
         }
         else
         {
-            this.UIServices.ShowMessageBox(e.ExceptionObject?.ToString() ?? "Error", string.Empty, Buttons.OK, Icon.Error);
+            this.UIServices.ShowMessageBox(e.ExceptionObject?.ToString() ?? "Error", string.Empty, MessageButtons.OK, MessageIcon.Error);
         }
     }
 }

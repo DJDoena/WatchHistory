@@ -6,7 +6,6 @@ using DoenaSoft.ToolBox.Extensions;
 using DoenaSoft.WatchHistory.Data;
 using DoenaSoft.WatchHistory.Implementations;
 using DVDP = DoenaSoft.DVDProfiler.DVDProfilerXML.Version400;
-using Icon = DoenaSoft.AbstractionLayer.UIServices.Icon;
 using MIHC = DoenaSoft.MediaInfoHelper.Helpers.Constants;
 
 namespace DoenaSoft.WatchHistory.Main.Implementations;
@@ -77,7 +76,7 @@ internal sealed class MainModel : ModelBase, IMainModel
             }
             catch
             {
-                _uiServices.ShowMessageBox("Collection file could not be read", string.Empty, Buttons.OK, Icon.Warning);
+                _uiServices.ShowMessageBox("Collection file could not be read", string.Empty, MessageButtons.OK, MessageIcon.Warning);
             }
         }
 
