@@ -7,14 +7,13 @@
 		<TargetFrameworks>net472</TargetFrameworks>
 		<Platforms>x64</Platforms>
 		<ApplicationIcon>djdsoft.ico</ApplicationIcon>
-		<LangVersion>latest</LangVersion>
 		<UseWindowsForms>true</UseWindowsForms>
 		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 		<UseWPF>true</UseWPF>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<GenerateDocumentationFile>False</GenerateDocumentationFile>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<LangVersion>12.0</LangVersion>
+		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

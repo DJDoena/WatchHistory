@@ -6,9 +6,8 @@
 		<OutputType>Library</OutputType>
 		<TargetFrameworks>net472</TargetFrameworks>
 		<Platforms>AnyCPU</Platforms>
-		<LangVersion>latest</LangVersion>
-		<Configurations>Debug;Release</Configurations>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<LangVersion>latest</LangVersion>
 		<NoWarn>1701;1702;1591</NoWarn>
 		<Title>DoenaSoft.WatchHistory.Xml</Title>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
